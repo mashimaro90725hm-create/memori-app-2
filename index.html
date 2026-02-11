@@ -1,97 +1,131 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memori | 言叶の考古学</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memori - 语言考古</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Noto+Serif+KR:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        /* 移植馆长最爱的琉璃光院背景 */
+        /* 还原馆长最爱的琉璃光院背景与布局 */
         body {
             margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             background: url('https://p1.toutiaoimg.com/origin/tos-cn-i-qvj2lq49k0/275375f42c4b4f539b5b9c0f994b7f01') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'Noto Serif SC', serif;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .app-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             text-align: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
-        h1 { color: #b03030; margin-bottom: 0.5rem; }
-        p.subtitle { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+        .header h1 { font-family: 'Cinzel', serif; color: #8e2626; font-size: 2.5rem; margin-bottom: 0; }
+        .header p { color: #555; letter-spacing: 0.2rem; }
+        
+        /* 找回小猫小狗的占位符 */
+        .mascot-row { display: flex; justify-content: center; gap: 20px; margin: 2rem 0; }
+        .mascot { width: 80px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+
+        .search-box { position: relative; margin-top: 2rem; }
         input {
-            width: 80%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
+            width: 100%;
+            padding: 15px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1.1rem;
             outline: none;
-            font-size: 1rem;
-            text-align: center;
+            transition: 0.3s;
+            box-sizing: border-box;
         }
+        input:focus { border-color: #8e2626; box-shadow: 0 0 15px rgba(142,38,38,0.1); }
+        
         button {
-            margin-top: 1rem;
-            padding: 12px 40px;
-            background: #b03030;
+            margin-top: 1.5rem;
+            padding: 12px 45px;
+            background: #8e2626;
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s;
+            font-weight: bold;
         }
-        button:hover { background: #8e2626; transform: scale(1.05); }
-        #result { margin-top: 2rem; text-align: left; display: none; }
-        .card { border-top: 2px solid #b03030; padding-top: 1rem; }
-        .etymology { font-style: italic; color: #555; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-top: 10px; }
+        button:hover { background: #b03030; transform: translateY(-3px); }
+
+        #result-area { margin-top: 2.5rem; text-align: left; border-top: 1px solid #eee; padding-top: 2rem; display: none; }
+        .etymology-box { background: #fdf5f5; border-left: 4px solid #8e2626; padding: 1.5rem; border-radius: 0 12px 12px 0; margin: 1rem 0; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Memori</h1>
-        <p class="subtitle">言 葉 の 考 古 学</p>
-        <img src="https://img.icons8.com/color/96/lucky-cat.png" alt="考古猫" style="width: 60px;">
-        <br><br>
-        <input type="text" id="wordInput" placeholder="输入想要考古的词汇...">
-        <br>
-        <button onclick="dig()">探索起源</button>
+    <div class="app-container">
+        <div class="header">
+            <h1>Memori</h1>
+            <p>言 葉 の 考 古 学</p>
+        </div>
 
-        <div id="result">
-            <div class="card" id="cardContent">
-                </div>
+        <div class="mascot-row">
+            <img src="https://img.icons8.com/color/96/lucky-cat.png" class="mascot" alt="考古猫">
+            <img src="https://img.icons8.com/color/96/shiba-inu.png" class="mascot" alt="考古狗">
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="wordInput" placeholder="输入词汇，开启发掘...">
+            <br>
+            <button onclick="dig()">探索起源 <i class="fas fa-hammer"></i></button>
+        </div>
+
+        <div id="result-area">
+            <div id="loading">正在清理沙尘，准备出土...</div>
+            <div id="content"></div>
         </div>
     </div>
 
     <script>
         async function dig() {
             const word = document.getElementById('wordInput').value;
-            const resDiv = document.getElementById('result');
-            const content = document.getElementById('cardContent');
-            if (!word) return alert('请先输入词汇');
+            const resArea = document.getElementById('result-area');
+            const content = document.getElementById('content');
+            const loading = document.getElementById('loading');
 
-            content.innerHTML = '正在挖掘中...';
-            resDiv.style.display = 'block';
+            if (!word) return;
+
+            resArea.style.display = 'block';
+            content.style.display = 'none';
+            loading.style.display = 'block';
 
             try {
-                // 核心：请求您刚才测试成功的后端路径
+                // 核心：请求咱们刚刚成功通电的 2.0 后端
                 const response = await fetch(`/api/openai?word=${encodeURIComponent(word)}`);
                 const data = await response.json();
 
+                loading.style.display = 'none';
+                content.style.display = 'block';
                 content.innerHTML = `
-                    <h3>${data.word} [${data.reading}]</h3>
-                    <p><strong>义项：</strong>${data.meaning}</p>
-                    <div class="etymology"><strong>考古词源：</strong><br>${data.etymology}</div>
-                    <p style="font-size:0.8rem; color:#888; margin-top:10px;">英文释义：${data.simple_english}</p>
+                    <h2 style="color:#8e2626; margin-top:0;">${data.word} <small style="font-weight:normal; color:#888;">[${data.reading}]</small></h2>
+                    <p><strong>定义：</strong>${data.meaning}</p>
+                    <div class="etymology-box">
+                        <strong><i class="fas fa-monument"></i> 词源考古：</strong><br>
+                        ${data.etymology}
+                    </div>
+                    <p style="font-size:0.9rem; color:#666;"><strong>语法/小贴士：</strong>${data.word_details || '暂无详细记录'}</p>
                 `;
             } catch (err) {
-                content.innerHTML = '<span style="color:red;">发掘现场发生坍塌，请稍后再试。</span>';
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                content.innerHTML = '<p style="color:red;">发掘现场发生坍塌，请检查 API 连接。</p>';
             }
         }
     </script>
