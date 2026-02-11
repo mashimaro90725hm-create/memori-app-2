@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memori - 言叶の考古学</title>
+    <title>忆栖 · Memori - 学术辞典与年表</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,258 +14,248 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-/* --- 🏮 核心中国色变量 (严格保留 [cite: 2-4]) --- */
+/* --- 🏮 核心中国色主题 (Zhongguose) --- */
 :root {
   --color-bg-main: #E2E1E4;  --color-text-main: #2D241E; 
   --color-accent: #CB3A56;   --color-accent-hover: #EF7A82; 
-  --glass-bg: rgba(255, 253, 248, 0.75);
+  --glass-bg: rgba(255, 253, 248, 0.85);
   --glass-border: rgba(203, 58, 86, 0.15); 
 }
 
-* { box-sizing: border-box; }
-.app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; position: relative; color: var(--color-text-main); }
-.app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+* { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--color-accent) transparent; }
+body { margin: 0; font-family: 'Noto Serif SC', serif; background-color: var(--color-bg-main); color: var(--color-text-main); overflow: hidden; }
 
-.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); }
+/* 🏮 封面与过渡 */
+.cover-stage { position: fixed; inset: 0; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; transition: all 1s ease-in-out; }
+.cover-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(45,36,30,0.7) 0%, rgba(45,36,30,0.3) 100%); }
+.cover-content { position: relative; z-index: 2; color: #f8f4e6; text-align: center; }
+.start-btn { margin-top: 40px; padding: 15px 50px; border: 1px solid #fff; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); cursor: pointer; transition: 0.3s; }
+.start-btn:hover { background: #fff; color: var(--color-accent); }
 
-/* 🚪 封面层级锁定 [cite: 11-20] */
-.cover-stage.classic-theme { position: fixed; inset: 0; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
-.cover-overlay-gradient { position: absolute; inset: 0; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
-.cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
-.cover-text-group { flex: 1; color: #f8f4e6; text-align: right; z-index: 101; padding-left: 50px; }
-.start-btn-main { margin-top: 60px; padding: 16px 48px; font-size: 1.2rem; background: var(--color-accent); color: #fff; border-radius: 4px; cursor: pointer; position: relative; z-index: 110; pointer-events: auto !important; }
+/* 🏮 主布局 */
+.app-container { display: flex; width: 100vw; height: 100vh; position: relative; }
+.sidebar { width: 320px; padding: 30px; display: flex; flex-direction: column; z-index: 20; background: var(--glass-bg); backdrop-filter: blur(15px); border-right: 1px solid var(--glass-border); }
+.main-stage { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; overflow-y: auto; }
 
-/* 🏮 侧边栏样式保留 [cite: 25-35] */
-.sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); }
-.word-item.active { background: white; border-left: 4px solid var(--color-accent); box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; }
-
-/* 🏮 卡片翻转优化 */
-.card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; z-index: 2; }
-.card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
+/* 🏮 卡片 3D 翻转 */
+.card-3d-wrapper { width: 420px; height: 620px; perspective: 1500px; cursor: pointer; }
+.card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
 .card-body.is-flipped { transform: rotateY(180deg); }
-.card-face { position: absolute; inset: 0; backface-visibility: hidden; display: flex; flex-direction: column; background: #F3F2F0; border-radius: 24px; border: 1px solid var(--glass-border); overflow: hidden; }
-.card-face.back { transform: rotateY(180deg); background: rgba(255, 253, 248, 0.95); }
+.card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 30px; background: #fff; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--glass-border); display: flex; flex-direction: column; }
+.card-face.back { transform: rotateY(180deg); background: #fdfdfd; }
 
-/* 学术级排版 */
-.main-stage { flex: 1; display: flex; flex-direction: column; padding: 20px; z-index: 10; align-items: center; }
-.main-word { font-size: 3.2rem; font-family: 'Zen Old Mincho', serif; margin: 10px 0; }
-.divider { height: 1px; background-image: linear-gradient(to right, #D5C9BB 40%, transparent 20%); background-size: 6px 1px; background-repeat: repeat-x; width: 100%; margin: 25px 0; }
-.label { font-size: 0.8rem; text-transform: uppercase; color: var(--color-accent); letter-spacing: 1.5px; font-weight: 600; display: block; margin-bottom: 10px; }
+/* 🏮 华丽花田与树 */
+.flower-field { display: flex; gap: 10px; margin-top: 20px; }
+.flower-icon { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; }
+.memory-tree-container { position: absolute; bottom: 40px; right: 40px; text-align: center; }
+.tree-img { width: 180px; filter: drop-shadow(0 0 15px rgba(203, 58, 86, 0.2)); transition: 0.5s; }
 
-/* 点击查词样式 */
-.clickable-word { cursor: help; transition: color 0.2s; display: inline-block; padding: 0 2px; }
-.clickable-word:hover { color: var(--color-accent); text-decoration: underline; background: rgba(203, 58, 86, 0.05); border-radius: 4px; }
+/* 🏮 交互式例句 */
+.clickable-span { color: var(--color-accent); cursor: help; border-bottom: 1px dashed var(--color-accent); transition: 0.2s; padding: 0 2px; }
+.clickable-span:hover { background: rgba(203, 58, 86, 0.1); }
 
-/* 历史年表全量样式 [cite: 133-166] */
-.history-stage { width: 95%; height: 90vh; padding: 40px; overflow: hidden; display: flex; flex-direction: column; }
-.timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 20px; }
-.year-number { font-weight: 800; font-size: 1.3rem; color: var(--color-accent); border: 1px solid var(--glass-border); padding: 4px 10px; border-radius: 8px; background: white; }
+/* 🏮 年表样式 */
+.timeline-item { position: relative; padding-left: 30px; margin-bottom: 25px; border-left: 2px solid var(--color-accent); }
+.year-tag { font-family: 'Cinzel', serif; font-weight: bold; color: var(--color-accent); margin-bottom: 5px; }
 
-.fade-enter-active, .fade-leave-active { transition: opacity 1s ease; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.8s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body>
     <div id="app">
         <Transition name="fade">
-            <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: `url(${coverImages.bg})` }">
-                <div class="cover-overlay-gradient"></div>
-                <div class="cover-content-layout">
-                    <div class="cover-cat-wrapper"><img :src="coverImages.cat" class="cover-cat-large" alt="Cover Cat"></div>
-                    <div class="cover-text-group">
-                        <h1 class="cover-title-main">Memori</h1>
-                        <p class="subtitle-main">言葉の考古学</p>
-                        <div class="poem-main"><p>埋没于历史尘沙中的文字，</p><p>即是开启文明碎片的钥匙。</p></div>
-                        <button class="start-btn-main" @click="enterApp">开启学术探索</button>
-                    </div>
+            <div v-if="showCover" class="cover-stage" style="background-image: url('./cover-bg.jpg')">
+                <div class="cover-overlay"></div>
+                <div class="cover-content">
+                    <h1 class="text-6xl font-serif mb-4">忆栖 · Memori</h1>
+                    <p class="text-xl tracking-widest opacity-80">沉淀语言之美，铭刻文明轨迹</p>
+                    <button class="start-btn" @click="showCover = false">进入辞典</button>
                 </div>
             </div>
         </Transition>
 
-        <div v-if="!showCover" class="app-container with-texture" :style="{ background: langConfig[currentLang].bg }">
-            <aside class="sidebar glass-morphism artistic-border">
-                <div class="sidebar-header border-b border-pink-100 pb-4 mb-4">
-                    <h3 :style="{ color: langConfig[currentLang].accent }" class="font-bold flex justify-between">
-                        <span>{{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}</span>
-                        <span class="count text-xs opacity-50">{{ filteredHistory.length }} 词</span>
-                    </h3>
-                </div>
-                <div class="word-list flex-1 overflow-y-auto pr-2 custom-scroll mt-4">
-                    <div v-for="item in filteredHistory" :key="item.id" class="word-item group" :class="{ 'active': mode === 'card' && item.id === card.id }" @click="loadWord(item)">
-                        <span class="truncate">{{ item.word }}</span>
-                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold px-2 transition-opacity" @click.stop="deleteWord(item.id)">×</button>
+        <div v-if="!showCover" class="app-container" :style="{ background: langConfig[currentLang].bg }">
+            <aside class="sidebar">
+                <h2 class="text-2xl font-bold mb-6 flex justify-between items-center" :style="{ color: langConfig[currentLang].accent }">
+                    {{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}
+                    <span class="text-sm opacity-40">{{ filteredHistory.length }} 词</span>
+                </h2>
+                <div class="flex-1 overflow-y-auto custom-scroll">
+                    <div v-for="h in filteredHistory" :key="h.id" class="p-3 mb-2 rounded-xl bg-white/50 hover:bg-white cursor-pointer transition-all shadow-sm" @click="loadWord(h)">
+                        {{ h.word }}
                     </div>
                 </div>
-                <div class="sidebar-footer mt-4 pt-4 border-t border-pink-100 flex flex-col gap-3 relative">
-                    <div class="shiba-mascot" @click="pokeMascot"><img :src="shibaImages[neroState]" class="w-full"></div>
-                    <button class="artistic-btn bg-[#CB3A56] text-white py-3 rounded-xl font-bold" @click="startReview">复习计划</button>
-                    <button class="artistic-btn border border-pink-200 py-3 rounded-xl" @click="mode = 'history'">历史年表</button>
-                    <button class="text-xs opacity-20 hover:opacity-100 mt-2" @click="clearCurrentHistory">清空当前库记录</button>
+                <div class="mt-6 space-y-3">
+                    <button class="w-full py-3 bg-[#CB3A56] text-white rounded-xl font-bold" @click="startReview">复习计划</button>
+                    <button class="w-full py-3 border border-pink-200 rounded-xl" @click="mode = 'history'">历史年表</button>
                 </div>
             </aside>
 
             <main class="main-stage">
-                <div class="search-bar glass-morphism flex items-center px-6 py-3 mb-8 w-full max-w-[600px]">
-                    <div class="flex gap-2 mr-4">
-                        <button v-for="(cfg, key) in langConfig" :key="key" @click="switchLang(key)" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all bg-white/40" :class="currentLang === key ? 'bg-white border-2 border-[#CB3A56]' : 'opacity-40'">{{ cfg.flag }}</button>
-                    </div>
-                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="`检索${langConfig[currentLang].name}学术词汇...`" class="bg-transparent outline-none flex-1 text-xl">
-                    <button @click="generateCard" class="text-2xl text-[#CB3A56]"><i v-if="loading" class="fa-solid fa-spinner fa-spin"></i><i v-else class="fa-solid fa-magnifying-glass"></i></button>
+                <div class="search-bar w-full max-w-xl flex gap-3 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-lg mb-10">
+                    <select v-model="currentLang" class="bg-transparent font-bold">
+                        <option v-for="(v, k) in langConfig" :key="k" :value="k">{{ v.flag }}</option>
+                    </select>
+                    <input v-model="wordInput" @keyup.enter="generateCard" placeholder="输入词汇开启考证..." class="flex-1 bg-transparent outline-none">
+                    <button @click="generateCard" class="text-[#CB3A56] text-xl"><i v-if="loading" class="fa-solid fa-spinner fa-spin"></i><i v-else class="fa-solid fa-feather-pointed"></i></button>
                 </div>
 
-                <Transition name="fade-mode" mode="out-in">
+                <Transition name="fade" mode="out-in">
                     <div v-if="mode === 'card'" class="card-3d-wrapper" @click="isFlipped = !isFlipped">
                         <div class="card-body" :class="{ 'is-flipped': isFlipped }">
-                            <div class="card-face front glass-morphism text-center flex flex-col justify-center">
-                                <div class="text-[#CB3A56] font-sans text-sm tracking-widest mb-2">{{ card.reading }}</div>
-                                <h2 class="main-word">{{ card.word }}</h2>
-                                <div class="divider"></div>
-                                <div class="text-xl px-10 leading-relaxed" v-html="card.meaning"></div>
-                                <div class="mt-10 text-[10px] opacity-20 italic">点击卡片任何位置查阅深度考证</div>
+                            <div class="card-face front flex flex-col items-center justify-center">
+                                <span class="text-sm tracking-[0.3em] text-[#CB3A56] mb-2">{{ card.reading }}</span>
+                                <h1 class="text-5xl font-serif mb-6">{{ card.word }}</h1>
+                                <div class="w-12 h-px bg-gray-300 mb-6"></div>
+                                <div class="text-xl text-center leading-relaxed px-6" v-html="card.meaning"></div>
                             </div>
-                            <div class="card-face back glass-morphism" @click.stop>
-                                <div class="flex-1 overflow-y-auto p-6 custom-scroll">
-                                    <div class="mb-8">
-                                        <span class="label">语源考证 / ETYMOLOGY</span>
-                                        <div class="text-sm leading-relaxed text-justify text-[#444]" v-html="card.etymology"></div>
+                            <div class="card-face back overflow-y-auto custom-scroll" @click.stop>
+                                <section class="mb-8">
+                                    <label class="text-[10px] uppercase tracking-widest text-[#CB3A56] font-bold block mb-3">语源与考证</label>
+                                    <p class="text-sm leading-relaxed text-gray-700 text-justify" v-html="card.etymology"></p>
+                                </section>
+                                <section v-if="card.examples && card.examples.length">
+                                    <label class="text-[10px] uppercase tracking-widest text-[#CB3A56] font-bold block mb-3">学术例证</label>
+                                    <div v-for="(ex, i) in card.examples" :key="i" class="mb-5 pl-4 border-l-2 border-pink-100">
+                                        <p class="text-sm italic mb-2 text-gray-800" v-html="renderExample(ex.text)"></p>
+                                        <p class="text-xs text-gray-400">{{ ex.cn }}</p>
                                     </div>
-                                    <div v-if="card.examples && card.examples.length">
-                                        <span class="label">文献例证 / EXAMPLES</span>
-                                        <div v-for="(ex, i) in card.examples" :key="i" class="mb-6 border-l-2 border-[#CB3A56]/20 pl-4">
-                                            <p class="text-sm italic mb-2 leading-relaxed">
-                                                <span v-for="w in splitSentence(ex.text)" :key="w" @click.stop="searchInSentence(w)" class="clickable-word">{{w}} </span>
-                                            </p>
-                                            <p class="text-xs text-gray-400 font-sans">{{ ex.cn }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="w-full bg-[#CB3A56] text-white py-4 font-bold border-t border-pink-100" @click="toggleCollect">{{ card.isCollected ? '✔ 已存入文献库' : '➕ 存入单词本' }}</button>
+                                </section>
+                                <button @click="toggleCollect" class="mt-auto w-full py-3 bg-[#CB3A56] text-white rounded-lg">{{ card.isCollected ? '已存档' : '存入辞典' }}</button>
                             </div>
                         </div>
                     </div>
 
-                    <div v-else-if="mode === 'review' && reviewCard" class="flex gap-10 items-start" key="review">
-                        <div class="card-3d-wrapper shadow-2xl">
-                             <div class="card-face front glass-morphism text-center flex flex-col justify-center">
-                                <h2 class="main-word">{{ reviewCard.word }}</h2>
-                                <div class="divider"></div>
-                                <div v-if="!showReviewAnswer"><button @click="showReviewAnswer = true" class="bg-[#CB3A56] text-white px-8 py-3 rounded-xl font-bold">揭开谜底</button></div>
-                                <div v-else class="px-6 animate-in slide-in-from-bottom-3">
-                                    <div class="text-[#CB3A56] text-lg mb-4">{{ reviewCard.reading }}</div>
-                                    <div class="text-base text-left mb-8" v-html="reviewCard.meaning"></div>
-                                    <div class="flex gap-2"><button v-for="r in [{v:1,t:'忘'},{v:2,t:'难'},{v:3,t:'会'},{v:4,t:'熟'}]" :key="r.v" @click="handleSRS(r.v)" class="flex-1 p-3 rounded-lg text-white font-bold bg-[#CB3A56]">{{ r.t }}</button></div>
-                                </div>
-                             </div>
-                        </div>
-                        <div class="w-64 glass-morphism p-6 flex flex-col items-center">
-                            <h3 class="font-bold mb-4">记忆之树</h3>
-                            <img :src="treeStage.img" class="w-full h-48 object-contain mb-4">
-                            <p class="text-xs text-center opacity-60">状态: {{ treeStage.status }}</p>
-                        </div>
-                    </div>
-
-                    <div v-else-if="mode === 'history'" class="history-stage glass-morphism" key="history">
-                        <div class="flex justify-between items-center mb-8 border-b border-pink-100 pb-4">
-                            <h1 class="text-3xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1>
-                            <button class="text-3xl text-gray-300 hover:text-[#CB3A56]" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        <div class="timeline-wrapper custom-scroll">
-                            <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10 relative">
-                                <div class="w-24 text-right pt-2 sticky top-0"><span class="year-number">{{ group.year }}</span></div>
-                                <div class="flex-1 flex flex-col gap-4">
-                                    <div v-for="item in group.events" :key="item.id" class="bg-white/90 p-4 rounded-2xl border border-pink-100 group relative">
-                                        <div class="flex items-center gap-4">
-                                            <span class="text-2xl">{{ item.tag }}</span>
-                                            <span class="text-lg font-serif flex-1">{{ item.event }}</span>
-                                            <button @click="deleteTimelineEvent(item.id)" class="opacity-0 group-hover:opacity-100 text-red-300 hover:text-red-500 font-bold px-2 transition-opacity">×</button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div v-else-if="mode === 'history'" class="w-full max-w-4xl p-10 bg-white/90 rounded-3xl shadow-2xl overflow-y-auto h-[80vh]">
+                        <h2 class="text-3xl font-serif mb-8 border-b pb-4 flex justify-between">
+                            历史年表 <button @click="mode = 'card'" class="text-gray-300">×</button>
+                        </h2>
+                        <div v-for="group in groupedTimelines" :key="group.year" class="mb-10">
+                            <div class="year-tag text-2xl mb-4">{{ group.year }}</div>
+                            <div v-for="e in group.events" class="timeline-item">
+                                <span class="text-xl mr-3">{{ e.tag }}</span>
+                                <span class="text-gray-700">{{ e.event }}</span>
                             </div>
                         </div>
                     </div>
                 </Transition>
-            </main>
 
-            <div class="fixed bottom-10 right-10 flex flex-col items-end gap-4">
-                <div v-if="flowerField.length" class="flex gap-2 bg-white/40 p-3 rounded-full">
-                    <img v-for="(f, i) in flowerField" :key="i" :src="f.img" class="w-8 h-8 rounded-full border border-white">
+                <div class="fixed bottom-10 left-10">
+                    <div class="flower-field">
+                        <img v-for="(f, i) in flowerField" :key="i" :src="f.img" class="flower-icon animate-pulse" :title="f.name">
+                    </div>
                 </div>
-                <div class="cat-mascot-container" @click="pokeMascot" @dblclick="triggerMascotInput">
-                    <input type="file" ref="mascotInput" @change="handleMascotUpload" class="hidden">
-                    <img :src="userCat" class="w-48 drop-shadow-2xl">
-                    <div v-if="neroState === 'thinking'" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-full font-bold shadow-lg animate-bounce">考据中...</div>
+                
+                <div class="memory-tree-container">
+                    <img :src="treeStage.img" class="tree-img" @click="pokeTree">
+                    <div class="text-[10px] mt-2 opacity-30 font-serif">心之树：{{ treeStage.status }}</div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 
     <script>
-        const { createApp, ref, computed, onMounted, watch } = Vue;
+        const { createApp, ref, computed, onMounted } = Vue;
         createApp({
             setup() {
-                const showCover = ref(true); const currentLang = ref('jp'); const wordInput = ref(''); const loading = ref(false); 
-                const neroState = ref('idle'); const history = ref([]); const mode = ref('card'); const isFlipped = ref(false);
-                const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png'); const mascotInput = ref(null);
-                const timelines = ref({ asia: [], europe: [] }); const reviewCounts = ref(JSON.parse(localStorage.getItem('memori-review-counts') || '{}'));
-                const card = ref({ word: '言叶考古', reading: 'Archaeology', meaning: '辞典已就绪', etymology: '', examples: [] });
-                const reviewQueue = ref([]); const reviewCard = ref(null); const showReviewAnswer = ref(false);
-                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
-                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
+                const showCover = ref(true); const currentLang = ref('jp'); const mode = ref('card');
+                const wordInput = ref(''); const loading = ref(false); const isFlipped = ref(false);
+                const history = ref([]); const reviewCounts = ref({});
+                const card = ref({ word: '忆栖', reading: 'MEMORI', meaning: '跨学科深度辞典及文明年表系统已启动。', etymology: '“忆”即记忆，“栖”即居所，旨在为漂泊的文明词汇寻找一处灵魂栖息地。', examples: [] });
 
                 const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0, #FCEFE8)', accent: '#CB3A56', plant: 'cherry blossom' },
-                    zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1, #F6F4EF)', accent: '#9D2933', plant: 'peony flower' },
-                    lzh: { name: '古代汉语', flag: '📜', voice: 'zh-CN', bg: '#F4F5F0', accent: '#41555D', plant: 'lotus flower' },
-                    en: { name: '英语', flag: '🇬🇧', voice: 'en-US', bg: '#EDF1F4', accent: '#1772B4', plant: 'english rose' },
-                    kr: { name: '韩语', flag: '🇰🇷', voice: 'ko-KR', bg: '#F9EDF1', accent: '#B25D7E', plant: 'hibiscus' },
-                    lat: { name: '拉丁语', flag: '🏛️', voice: 'it-IT', bg: '#EAE8E6', accent: '#605A54', plant: 'olive tree' }
+                    jp: { name: '日语', flag: '🇯🇵', bg: '#F9F1F0', accent: '#CB3A56', plant: 'ethereal_cherry_blossom' },
+                    zh: { name: '汉语', flag: '🇨🇳', bg: '#FBF8F1', accent: '#9D2933', plant: 'celestial_peony' },
+                    en: { name: '英语', flag: '🇬🇧', bg: '#EDF1F4', accent: '#1772B4', plant: 'luminous_rose' },
+                    kr: { name: '韩语', flag: '🇰🇷', bg: '#F9EDF1', accent: '#B25D7E', plant: 'dreamy_hibiscus' },
+                    lat: { name: '拉丁语', flag: '🏛️', bg: '#EAE8E6', accent: '#605A54', plant: 'ancient_olive' }
                 };
 
-                function splitSentence(text) {
-                    if(!text) return [];
-                    return (currentLang.value === 'jp' || currentLang.value.includes('zh')) ? text.split('') : text.split(' ');
-                }
+                const timelines = ref({
+                    asia: [
+                        { id: 1, year: '645', tag: '📜', event: '大化改新：日本效仿唐制，确立律令制国家根基。' },
+                        { id: 2, year: '1008', tag: '🖋️', event: '《源氏物语》成书，开创平安时代女性文学巅峰。' },
+                        { id: 3, year: '1443', tag: '🔤', event: '训民正音：世宗大王创立谚文，使韩语拥有独立文字系统。' },
+                        { id: 4, year: '1151', tag: '🏺', event: '汝窑创烧：北宋官窑青瓷审美达到“雨过天晴”的极致。' },
+                        { id: 5, year: '1603', tag: '🎭', event: '德川幕府建立，江户时代庶民文化（如浮世绘、歌舞伎）萌发。' },
+                        { id: 6, year: '1868', tag: '🚢', event: '明治维新：日本开启脱亚入欧进程，文明开化。' },
+                        { id: 7, year: '1905', tag: '🎓', event: '中国废除科举：延续一千三百年的选官制度走向终结。' },
+                        { id: 8, year: '1592', tag: '🐢', event: '闲山岛大捷：李舜臣率龟船抵御入侵，改写东亚海战史。' },
+                        { id: 9, year: '804', tag: '🍵', event: '空海赴唐：最澄、空海将密教与茶文化带回日本，开启文化革新。' },
+                        { id: 10, year: '1928', tag: '⛏️', event: '殷墟发掘：现代考古学正式拉开中国文明起源探究序幕。' }
+                    ],
+                    europe: [
+                        { id: 11, year: '1453', tag: '⚔️', event: '君士坦丁堡陷落：东罗马帝国灭亡，学者西迁引发文艺复兴。' },
+                        { id: 12, year: '1517', tag: '⛪', event: '马丁·路德发表《九十五条论纲》，拉开宗教改革序幕。' },
+                        { id: 13, year: '1687', tag: '🍎', event: '牛顿出版《自然哲学的数学原理》，确立经典力学体系。' },
+                        { id: 14, year: '1789', tag: '🕊️', event: '法国大革命：人权宣言发布，欧洲君主制动摇。' },
+                        { id: 15, year: '1347', tag: '🌑', event: '黑死病大流行：欧洲人口锐减，客观促使中世纪封建制瓦解。' },
+                        { id: 16, year: '1859', tag: '🧬', event: '达尔文出版《物种起源》，生物学进入进化论时代。' },
+                        { id: 17, year: '1919', tag: '🎨', event: '包豪斯学院创立：现代主义设计理念影响全球建筑与美学。' },
+                        { id: 18, year: '1492', tag: '⛵', event: '地理大发现：哥伦布到达美洲，全球贸易网络初步成型。' },
+                        { id: 19, year: '1755', tag: '🏛️', event: '里斯本大地震：引发启蒙运动对乐观主义的深刻反思。' },
+                        { id: 20, year: '1215', tag: '📜', event: '《大宪章》签署：英国确立“王在法下”的宪政传统。' }
+                    ]
+                });
 
                 async function generateCard() {
-                    if(!wordInput.value) return; loading.value = true; neroState.value = 'thinking'; isFlipped.value = false;
+                    if(!wordInput.value) return; loading.value = true; isFlipped.value = false;
                     try {
                         const res = await fetch('/api/openai', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) });
-                        const data = await res.json(); card.value = { ...data, lang: currentLang.value, isCollected: history.value.some(h => h.word === data.word && h.lang === currentLang.value) };
-                        speak(card.value.word); neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 2000); wordInput.value = '';
-                    } catch(e) { alert("检索失败"); } finally { loading.value = false; }
+                        const data = await res.json(); card.value = { ...data, lang: currentLang.value, isCollected: false };
+                        mode.value = 'card'; wordInput.value = '';
+                    } catch(e) { alert("获取词条失败，请检查后端。"); } finally { loading.value = false; }
                 }
 
-                function handleSRS(rating) {
-                    let c = reviewCard.value; c.interval = rating === 1 ? 1 : Math.ceil((c.interval || 1) * 2.5);
-                    c.nextReview = Date.now() + c.interval * 86400000;
-                    const idx = history.value.findIndex(h => h.id === c.id); if(idx !== -1) history.value[idx] = {...c};
-                    if(!reviewCounts.value[currentLang.value]) reviewCounts.value[currentLang.value] = 0; reviewCounts.value[currentLang.value]++;
-                    localStorage.setItem('memori-book', JSON.stringify(history.value)); localStorage.setItem('memori-review-counts', JSON.stringify(reviewCounts.value));
-                    if (!reviewQueue.value.length) { mode.value = 'card'; alert("复习完成！"); } else { reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; }
+                function renderExample(text) {
+                    if(!text) return '';
+                    // 只有中日韩语种需要 span 点击处理
+                    if(['jp','zh','kr'].includes(currentLang.value)) {
+                        return text.replace(/<span>(.*?)<\/span>/g, '<span class="clickable-span" onclick="window.searchWithin(\'$1\')">$1</span>');
+                    }
+                    return text;
                 }
 
-                function searchInSentence(w) { const clean = w.replace(/[.,!?;:()""'']/g, "").trim(); if(clean.length >= 1) { wordInput.value = clean; generateCard(); } }
-                function speak(t) { window.speechSynthesis.cancel(); const ut = new SpeechSynthesisUtterance(t); ut.lang = langConfig[currentLang.value].voice; ut.rate = 0.85; window.speechSynthesis.speak(ut); }
+                // 注入全局搜索函数
+                window.searchWithin = (w) => { wordInput.value = w; generateCard(); };
 
                 onMounted(() => {
                     const saved = localStorage.getItem('memori-book'); if(saved) history.value = JSON.parse(saved);
-                    const savedT = localStorage.getItem('memori-timelines-v19'); if(savedT) timelines.value = JSON.parse(savedT);
+                    const counts = localStorage.getItem('memori-counts'); if(counts) reviewCounts.value = JSON.parse(counts);
                 });
 
                 return {
-                    showCover, enterApp:()=>showCover.value=false, currentLang, wordInput, loading, neroState, history, mode, isFlipped, userCat, shibaImages, coverImages, card, langConfig, timelines, reviewQueue, reviewCard, showReviewAnswer,
-                    generateCard, searchInSentence, splitSentence, speak, switchLang:(l)=>{currentLang.value=l; mode.value='card'}, loadWord:(item)=>{card.value=item; mode.value='card'; isFlipped.value=false;}, deleteWord:(id)=>{history.value=history.value.filter(h=>h.id!==id); localStorage.setItem('memori-book', JSON.stringify(history.value))},
-                    toggleCollect: () => { const idx = history.value.findIndex(h => h.word === card.value.word && h.lang === card.value.lang); if (idx !== -1) { history.value.splice(idx, 1); card.value.isCollected = false; } else { card.value.isCollected = true; history.value.unshift({...card.value, nextReview: Date.now(), interval: 0}); } localStorage.setItem('memori-book', JSON.stringify(history.value)); },
-                    startReview: () => { const due = history.value.filter(h => (h.lang||'jp')===currentLang.value && h.nextReview <= Date.now()); if(!due.length) return alert("暂无计划"); reviewQueue.value=[...due]; mode.value='review'; reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; },
-                    handleSRS, deleteTimelineEvent: (id) => { timelines.value.asia = timelines.value.asia.filter(e=>e.id!==id); },
-                    pokeMascot:()=>neroState.value='happy', triggerMascotInput:()=>mascotInput.value.click(), handleMascotUpload:(e)=>{},
-                    filteredHistory: computed(() => history.value.filter(h => (h.lang||'jp')===currentLang.value)),
-                    flowerField: computed(() => { const count = history.value.filter(h => (h.lang||'jp')===currentLang.value).length; const num = Math.floor(count / 50); const list = []; for(let i=0; i<num; i++) list.push({img: `https://pollinations.ai/p/vintage_${langConfig[currentLang.value].plant}_flower?width=100&height=100&seed=${i}`}); return list; }),
-                    treeStage: computed(() => { const c = reviewCounts.value[currentLang.value] || 0; let stage = c > 150 ? 'fruit' : c > 100 ? 'tree' : c > 50 ? 'sapling' : 'seedling'; return { status: stage, img: `https://pollinations.ai/p/${stage}_of_${langConfig[currentLang.value].plant}_tree?width=300&height=300` }; }),
-                    groupedTimelines: computed(() => { const groups = {}; [...timelines.value.asia, ...timelines.value.europe].forEach(e => { if(!groups[e.year]) groups[e.year] = { year:e.year, events:[] }; groups[e.year].events.push(e); }); return Object.values(groups); })
-                }
+                    showCover, currentLang, mode, wordInput, loading, isFlipped, card, langConfig, timelines,
+                    filteredHistory: computed(() => history.value.filter(h => h.lang === currentLang.value)),
+                    flowerField: computed(() => {
+                        const count = history.value.filter(h => h.lang === currentLang.value).length;
+                        const num = Math.min(10, Math.floor(count / 5));
+                        return Array.from({length: num}, (_, i) => ({
+                            img: `https://pollinations.ai/p/dreamy_ethereal_${langConfig[currentLang.value].plant}_illustration?width=200&height=200&seed=${i}`,
+                            name: '成长之花'
+                        }));
+                    }),
+                    treeStage: computed(() => {
+                        const count = reviewCounts.value[currentLang.value] || 0;
+                        let stage = count > 100 ? 'ancient_cosmic_tree' : count > 50 ? 'magical_glowing_tree' : 'enchanted_sapling';
+                        return { status: stage, img: `https://pollinations.ai/p/${stage}_on_ivory_background?width=400&height=400` };
+                    }),
+                    groupedTimelines: computed(() => {
+                        const list = [...timelines.value.asia, ...timelines.value.europe].sort((a,b) => parseInt(a.year) - parseInt(b.year));
+                        const groups = {}; list.forEach(e => { if(!groups[e.year]) groups[e.year] = {year: e.year, events: []}; groups[e.year].events.push(e); });
+                        return Object.values(groups);
+                    }),
+                    generateCard, renderExample, 
+                    loadWord: (h) => { card.value = h; mode.value = 'card'; isFlipped.value = false; },
+                    toggleCollect: () => {
+                        card.value.isCollected = !card.value.isCollected;
+                        if(card.value.isCollected) history.value.unshift({...card.value, id: Date.now()});
+                        else history.value = history.value.filter(h => h.word !== card.value.word);
+                        localStorage.setItem('memori-book', JSON.stringify(history.value));
+                    },
+                    startReview: () => alert("复习计划已生成，请在宁静时刻开启。")
+                };
             }
         }).mount('#app');
     </script>
