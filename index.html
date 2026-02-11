@@ -14,641 +14,310 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-        :root {
-            --color-bg-main: #E2E1E4;
-            --color-text-main: #2D241E; 
-            --color-accent: #CB3A56;
-            --color-accent-hover: #EF7A82; 
-            --glass-bg: rgba(255, 253, 248, 0.85);
-            --glass-border: rgba(203, 58, 86, 0.15); 
-        }
+/* --- 🎨 Memori Design System v44.0 (复刻版) --- */
+:root {
+  --color-bg-main: #E2E1E4; [cite: 1]
+  --color-text-main: #2D241E; [cite: 2]
+  --color-accent: #CB3A56; [cite: 2]
+  --color-accent-hover: #EF7A82; [cite: 3]
+  --glass-bg: rgba(255, 253, 248, 0.75); [cite: 3]
+  --glass-border: rgba(203, 58, 86, 0.15); [cite: 4]
+}
 
-        /* --- 基础布局 --- */
-        * { box-sizing: border-box; user-select: none; }
-        body { margin: 0; overflow: hidden; background: #f0f0f0; }
-        
-        .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.5s ease, font-family 0.3s; position: relative; color: var(--color-text-main); }
-        
-        /* 纹理背景 (Multiply 混合) */
-        .app-container::before { 
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); 
-            pointer-events: none; z-index: 0; mix-blend-mode: multiply; 
-        }
+* { box-sizing: border-box; } [cite: 4]
 
-        /* 毛玻璃组件 */
-        .glass-morphism { 
-            background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); 
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08);
-            border-radius: 24px; 
-        }
+.app-container { 
+    display: flex; width: 100vw; height: 100vh; overflow: hidden; 
+    position: relative; color: var(--color-text-main); transition: background 0.5s; [cite: 5, 6]
+}
+.app-container::before { 
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); 
+    pointer-events: none; z-index: 0; mix-blend-mode: multiply; [cite: 7, 8]
+}
 
-        /* --- 侧边栏 (Sidebar) --- */
-        .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-        .sidebar-header { padding-bottom: 16px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h3 { margin: 0; font-size: 1.1rem; font-weight: bold; }
-        .import-btn { background: none; border: none; cursor: pointer; color: var(--color-accent); font-size: 0.9rem; transition: opacity 0.2s; }
-        .import-btn:hover { opacity: 0.7; }
+.glass-morphism { 
+    background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08); border-radius: 24px; [cite: 8, 9, 10]
+}
 
-        .word-list { flex: 1; overflow-y: auto; padding: 15px 0; }
-        .word-list::-webkit-scrollbar { width: 4px; }
-        .word-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
+/* 🚪 封面页 (完全复刻 index.txt) */
+.cover-stage.classic-theme { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background-size: cover; background-position: center; display: flex; 
+    justify-content: center; align-items: center; z-index: 1000; overflow: hidden; [cite: 10, 11]
+}
+.cover-overlay-gradient { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); [cite: 11, 12]
+}
+.cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; [cite: 13] }
+.cover-text-group.jp-style { flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); padding-left: 50px; text-align: right; z-index: 50; [cite: 14] }
+.cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; [cite: 15] }
+.subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; color: #E2E1E4; [cite: 16] }
+.start-btn-main.jp-btn { 
+    margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; font-size: 1.2rem; 
+    background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); color: #fff; border: none; 
+    border-radius: 4px; cursor: pointer; transition: all 0.4s; z-index: 100; [cite: 17, 18, 19, 20]
+}
+.cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; [cite: 21, 22] }
+.cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; transform: translateX(-10%) scaleX(-1); [cite: 22, 23] }
 
-        .word-item { padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.4); border-left: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; }
-        .word-item:hover { background: rgba(255,255,255,0.8); transform: translateX(2px); }
-        .word-item.active { background: white; border-left-color: var(--color-accent); font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .local-icon { font-size: 0.7rem; color: #8d6e63; margin-left: 5px; opacity: 0.7; }
+/* Sidebar */
+.sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; } [cite: 24, 25]
+.word-item { padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); display: flex; justify-content: space-between; } [cite: 29, 30]
+.word-item.active { background: white; border-left: 4px solid var(--color-accent); box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); } [cite: 30, 31]
 
-        .sidebar-footer { padding-top: 20px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--glass-border); }
-        .action-btn { width: 100%; padding: 12px; border-radius: 16px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-        .action-btn.primary { color: white; background: var(--color-accent); }
-        .action-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(203, 58, 86, 0.3); }
-        .action-btn.outline { background: rgba(255,255,255,0.6); border: 1px solid var(--glass-border); }
-        .action-btn.outline:hover { background: white; transform: translateY(-2px); }
+/* Main Stage */
+.main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; } [cite: 57]
+.search-bar { margin: 0 20px 25px; padding: 12px 25px; display: flex; align-items: center; z-index: 50; } [cite: 58]
+.lang-pill { width: 36px; height: 36px; border-radius: 12px; background: rgba(255, 253, 248, 0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: 8px; } [cite: 59, 60]
+.lang-pill.active { background: white; transform: scale(1.1); border: 1px solid var(--glass-border); } [cite: 61]
 
-        /* --- 主舞台 (Main Stage) --- */
-        .main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+/* Card 3D */
+.card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; margin: auto; } [cite: 88]
+.card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; } [cite: 89]
+.card-body.is-flipped { transform: rotateY(180deg); } [cite: 89]
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #fffdf9; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; } [cite: 90]
+.main-word { font-size: 3.2rem; font-family: 'Zen Old Mincho', serif; text-align: center; margin: 20px 0; } [cite: 100, 101]
 
-        /* 搜索栏 */
-        .search-bar { margin: 0 20px 20px; padding: 10px 20px; display: flex; align-items: center; z-index: 50; }
-        .lang-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; max-width: 40%; margin-right: 15px; }
-        .lang-scroll::-webkit-scrollbar { height: 0px; }
-        .lang-pill { padding: 6px 12px; border-radius: 8px; border: 1px solid transparent; background: rgba(255,255,255,0.5); cursor: pointer; font-size: 0.85rem; white-space: nowrap; transition: all 0.2s; }
-        .lang-pill.active { background: white; border-color: var(--color-accent); color: var(--color-accent); font-weight: bold; transform: scale(1.05); }
-        
-        .search-input { flex: 1; border: none; background: transparent; font-size: 1.1rem; outline: none; font-family: inherit; color: var(--color-text-main); }
-        .search-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--color-accent); }
+/* Timeline (完全复刻) */
+.history-stage { flex: 1; margin: 0 20px 20px; padding: 35px; display: flex; flex-direction: column; overflow: hidden; } [cite: 133]
+.timeline-spine { position: absolute; left: 95px; top: 0; bottom: 0; width: 3px; opacity: 0.4; border-radius: 1.5px; } [cite: 150]
+.year-number { font-weight: 800; font-size: 1.2rem; background: rgba(255, 253, 248, 0.95); padding: 4px 8px; border-radius: 6px; } [cite: 152, 153]
 
-        /* 卡片容器 */
-        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
-        
-        /* 3D 翻转卡片 (纯文字版) */
-        .card-3d-wrapper { width: 420px; height: 620px; perspective: 1500px; cursor: pointer; }
-        .card-body { width: 100%; height: 100%; position: relative; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
-        .card-body.is-flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; overflow: hidden; background: #fffdf9; display: flex; flex-direction: column; }
-        
-        /* 正面设计 */
-        .front-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; position: relative; }
-        .front-bg-pattern { position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0.05; background-image: radial-gradient(var(--color-text-main) 1px, transparent 1px); background-size: 20px 20px; z-index: 0; pointer-events: none; }
-        .word-main { font-size: 3.5rem; font-family: 'Zen Old Mincho', serif; margin: 20px 0; z-index: 2; position: relative; }
-        .word-pinyin { font-size: 1rem; color: var(--color-accent); font-family: sans-serif; margin-bottom: -15px; z-index: 2; opacity: 0.8; }
-        .word-reading { font-size: 1.2rem; opacity: 0.6; margin-bottom: 20px; font-family: serif; z-index: 2; display: flex; align-items: center; gap: 10px; }
-        .word-meaning { font-size: 1.1rem; line-height: 1.6; max-width: 90%; z-index: 2; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; }
-        .local-badge { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #8d6e63; opacity: 0.8; }
-        
-        /* 背面设计 */
-        .card-face.back { transform: rotateY(180deg); background: #fffcf5; }
-        .back-scroll { padding: 30px; overflow-y: auto; height: 100%; }
-        .section-title { font-size: 0.85rem; color: var(--color-accent); letter-spacing: 1px; margin: 20px 0 10px; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 5px; font-weight: bold; }
-        .detail-text { font-size: 1rem; line-height: 1.8; text-align: justify; margin-bottom: 10px; }
-        .example-item { background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--color-accent); }
-        .ex-origin { font-family: serif; font-size: 1.05rem; margin-bottom: 4px; }
-        .ex-trans { font-size: 0.9rem; opacity: 0.7; }
-        
-        /* --- 数字花田 (Garden) --- */
-        .gallery-mode { width: 100%; height: 100%; padding: 20px; overflow-y: auto; }
-        .garden-canvas { 
-            position: relative; width: 100%; min-height: 500px; 
-            background: linear-gradient(to top, rgba(255,255,255,0.4), rgba(255,255,255,0));
-            border-radius: 24px; border: 1px solid var(--glass-border);
-            overflow: hidden; perspective: 1000px;
-        }
-        .plant-img { 
-            position: absolute; bottom: 0; 
-            /* 去白底核心 + 随机交错 */
-            mix-blend-mode: multiply; 
-            transition: transform 0.3s;
-            filter: contrast(1.1) saturate(1.1);
-        }
-        .plant-img:hover { transform: scale(1.1) !important; z-index: 1000 !important; cursor: pointer; }
+/* Mascot (固定280px) */
+.cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 280px; height: 280px; z-index: 100; pointer-events: none; } [cite: 46]
+.cat-mascot-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); } [cite: 47, 48]
 
-        /* --- 番茄钟 (Pomodoro) --- */
-        .pomodoro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2D241E; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #F3F2F0; }
-        .timer-display { font-size: 6rem; font-family: 'Cinzel', serif; font-weight: bold; margin: 30px 0; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
-        .pomodoro-icon { width: 180px; height: 180px; object-fit: contain; animation: breathe 4s infinite ease-in-out; }
-        .shiba-sleep { width: 200px; height: auto; margin-top: 30px; opacity: 0.8; }
-        .focus-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 30px; border-radius: 30px; cursor: pointer; transition: all 0.3s; margin-top: 20px; }
-        .focus-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
+/* Garden (去白混合模式) */
+.plant-img { position: absolute; bottom: 0; mix-blend-mode: multiply; transition: transform 0.3s; }
 
-        /* --- 看板娘 & 交互 --- */
-        .cat-container { 
-            position: fixed; bottom: 20px; right: 20px; 
-            width: 280px; /* 固定宽度 */
-            height: 280px; z-index: 100; pointer-events: none; 
-        }
-        .cat-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
-        
-        .mascot-bubble {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            background: white; padding: 8px 16px; border-radius: 12px;
-            font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            white-space: nowrap; animation: popIn 0.3s;
-        }
-
-        /* 模态框 */
-        .modal-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-box { background: white; padding: 30px; border-radius: 24px; width: 400px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        .modal-title { font-size: 1.4rem; margin-bottom: 20px; font-weight: bold; color: var(--color-text-main); }
-
-        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        @keyframes popIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.fade-enter-active, .fade-leave-active { transition: opacity 1s ease; } [cite: 23, 24]
+.fade-enter-from, .fade-leave-to { opacity: 0; } [cite: 24]
     </style>
 </head>
 <body>
     <div id="app">
         <Transition name="fade">
-            <div v-if="mode === 'focus'" class="pomodoro-overlay">
-                <img src="./pomodoro-timer.png" class="pomodoro-icon" alt="Timer">
-                <div class="timer-display">{{ formatTime(timeLeft) }}</div>
-                <div style="opacity: 0.6; letter-spacing: 2px;">{{ focusDuration >= 60 ? '🌊 深潜模式 · 必得特等植被' : '🌿 专注模式 · 培育记忆' }}</div>
-                <img src="./shiba-sleep.gif" class="shiba-sleep" alt="Sleeping Shiba">
-                <button class="focus-btn" @click="abortFocus">中止专注</button>
+            <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: \`url(\${coverImages.bg})\` }">
+                <div class="cover-overlay-gradient"></div>
+                <div class="cover-content-layout">
+                    <div class="cover-cat-wrapper"><img :src="coverImages.cat" class="cover-cat-large" alt="Cover Cat"></div>
+                    <div class="cover-text-group jp-style">
+                        <h1 class="cover-title-main">Memori</h1>
+                        <p class="subtitle-main">言葉の考古学</p>
+                        <div class="poem-main"><p>時の砂に埋もれた、</p><p>言葉の欠片を探して。</p></div>
+                        <button class="start-btn-main jp-btn" @click="enterApp">探索を始める</button>
+                    </div>
+                </div>
             </div>
         </Transition>
 
-        <div class="app-container" :style="{ background: langConfig[currentLang].bg }">
-            
+        <div v-if="!showCover" class="app-container" :style="{ background: langConfig[currentLang].bg }">
             <aside class="sidebar glass-morphism">
                 <div class="sidebar-header">
-                    <h3>📚 {{ langConfig[currentLang].name }} <span style="font-size:0.8em; opacity:0.5">({{ filteredHistory.length }})</span></h3>
-                    <button class="import-btn" @click="showImportModal = true" title="挂载本地辞典"><i class="fa-solid fa-file-import"></i></button>
+                    <h3 :style="{ color: langConfig[currentLang].accent }">🏮 {{ langConfig[currentLang].name }} <span>{{ filteredHistory.length }} 词</span></h3>
+                    <button @click="showImport = true" class="text-xs opacity-50 hover:opacity-100">导入离线库</button>
                 </div>
-                
-                <div class="word-list">
-                    <div v-for="item in filteredHistory" :key="item.id" 
-                         class="word-item" :class="{ active: currentWord && currentWord.id === item.id }"
-                         @click="loadWord(item)">
+                <div class="word-list custom-scroll">
+                    <div v-for="item in filteredHistory" :key="item.id" class="word-item" :class="{ active: card && item.id === card.id }" @click="loadWord(item)">
                         <span>{{ item.word }}</span>
-                        <i v-if="item.isLocal" class="fa-solid fa-scroll local-icon" title="来自本地古籍"></i>
+                        <i v-if="item.isLocal" class="fa-solid fa-scroll text-[10px] opacity-40"></i>
                     </div>
                 </div>
-
                 <div class="sidebar-footer">
-                    <button class="action-btn primary" @click="startFocusSelect"><i class="fa-solid fa-hourglass-half"></i> 焚香 · 深潜</button>
-                    <button class="action-btn outline" @click="mode = 'garden'"><i class="fa-solid fa-seedling"></i> 记忆花田</button>
-                    <button class="action-btn outline" @click="exportData"><i class="fa-solid fa-download"></i> 备份记忆</button>
+                    <button class="action-btn primary" @click="mode = 'review'" :style="{ background: langConfig[currentLang].accent }">复习记忆</button>
+                    <button class="action-btn outline" @click="mode = 'garden'">记忆花田</button>
+                    <button class="action-btn outline" @click="mode = 'history'">历史年表</button>
                 </div>
             </aside>
 
             <main class="main-stage">
                 <div class="search-bar glass-morphism">
-                    <div class="lang-scroll">
-                        <div v-for="(cfg, key) in langConfig" :key="key" 
-                             class="lang-pill" :class="{ active: currentLang === key }"
-                             @click="currentLang = key">
-                             {{ cfg.flag }} {{ cfg.name }}
-                        </div>
+                    <div class="flex">
+                        <button v-for="(cfg, key) in langConfig" :key="key" @click="currentLang = key" class="lang-pill" :class="{ active: currentLang === key }">{{ cfg.flag }}</button>
                     </div>
-                    <input v-model="wordInput" @keyup.enter="handleSearch" class="search-input" :placeholder="`在${langConfig[currentLang].name}中寻觅...`">
-                    <button @click="handleSearch" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <input v-model="wordInput" @keyup.enter="handleSearch" class="flex-1 bg-transparent px-4 outline-none" :placeholder="\`寻觅\${langConfig[currentLang].name}...\`" />
+                    <button @click="handleSearch" class="text-xl" :style="{ color: langConfig[currentLang].accent }"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
-                <div class="content-area">
-                    
-                    <div v-if="mode === 'garden'" class="gallery-mode custom-scroll">
-                        <div style="margin-bottom: 15px; display: flex; justify-content: space-between;">
-                            <h2 style="margin:0; font-family: 'Zen Old Mincho'">记忆花田</h2>
-                            <button @click="isEditMode = !isEditMode" class="import-btn">{{ isEditMode ? '锁定布局' : '修剪枝叶' }}</button>
-                        </div>
-                        <div class="garden-canvas" :style="{ height: gardenHeight + 'px' }">
-                            <img v-for="plant in gardenPlants" :key="plant.id"
-                                 :src="plant.src"
-                                 class="plant-img"
-                                 :style="{ 
-                                     left: plant.x + '%', 
-                                     bottom: plant.y + '%', 
-                                     width: plant.size + 'px', 
-                                     zIndex: plant.zIndex 
-                                 }"
-                                 @mousedown="startDrag($event, plant)"
-                            >
+                <div class="flex-1 relative overflow-hidden">
+                    <div v-if="mode === 'card'" class="card-3d-wrapper" @click="isFlipped = !isFlipped">
+                        <div class="card-body" :class="{ 'is-flipped': isFlipped }">
+                            <div class="card-face">
+                                <div class="p-10 flex flex-col items-center justify-center h-full">
+                                    <div v-if="card.pinyin" class="text-red-800 opacity-60 mb-[-10px]">{{ card.pinyin }}</div>
+                                    <h2 class="main-word">{{ card.word }}</h2>
+                                    <div class="opacity-50 italic mb-6">{{ card.reading }}</div>
+                                    <div class="text-lg border-t pt-6 w-full text-center">{{ card.meaning }}</div>
+                                </div>
+                            </div>
+                            <div class="card-face back p-8 custom-scroll">
+                                <div class="mb-6"><span class="text-xs font-bold text-red-800 block mb-2 uppercase tracking-widest">词源考据</span><p>{{ card.etymology }}</p></div>
+                                <div v-if="card.examples && card.examples.length"><span class="text-xs font-bold text-red-800 block mb-2 uppercase tracking-widest">典籍例句</span>
+                                    <div v-for="ex in card.examples" class="mb-4 p-3 bg-black/5 rounded-lg border-l-4 border-red-800">
+                                        <p class="italic mb-1" @click.stop="speak(ex.text)">{{ ex.text }}</p><p class="text-sm opacity-60">{{ ex.cn }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div v-else class="card-3d-wrapper" @click="toggleFlip">
-                        <div class="card-body glass-morphism" :class="{ 'is-flipped': isFlipped }">
-                            
-                            <div class="card-face front">
-                                <div class="front-bg-pattern"></div>
-                                <i v-if="currentWord && currentWord.isLocal" class="fa-solid fa-scroll local-badge"></i>
-                                
-                                <div v-if="loading" style="opacity: 0.5"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></div>
-                                
-                                <div v-else-if="currentWord">
-                                    <div v-if="currentWord.pinyin" class="word-pinyin">{{ currentWord.pinyin }}</div>
-                                    <div class="word-main">{{ currentWord.word }}</div>
-                                    <div class="word-reading">
-                                        {{ currentWord.reading }}
-                                        <i v-if="canSpeak" @click.stop="speak(currentWord.word)" class="fa-solid fa-volume-high" style="cursor:pointer; margin-left:8px; font-size:0.9em"></i>
-                                    </div>
-                                    <div class="word-meaning">{{ currentWord.meaning }}</div>
-                                </div>
-                                <div v-else style="opacity: 0.4">输入词汇，开启探索</div>
+                    <div v-else-if="mode === 'history'" class="history-stage glass-morphism">
+                        <div class="flex justify-between items-center mb-6">
+                            <h1 class="text-2xl font-bold" :style="{ color: langConfig[currentLang].accent }">历史大事年表</h1>
+                            <div class="flex gap-4">
+                                <button :class="{ 'font-bold': historyTab === 'asia' }" @click="historyTab = 'asia'">🌏 亚洲</button>
+                                <button :class="{ 'font-bold': historyTab === 'europe' }" @click="historyTab = 'europe'">🏛️ 欧洲史</button>
                             </div>
-
-                            <div class="card-face back">
-                                <div class="back-scroll custom-scroll" v-if="currentWord">
-                                    <div class="section-title">🗝️ 词源考据 (Etymology)</div>
-                                    <div class="detail-text">{{ currentWord.etymology || '正在考据中...' }}</div>
-                                    
-                                    <div class="section-title">📜 典籍例句 (Sentences)</div>
-                                    <div v-if="currentWord.examples && currentWord.examples.length">
-                                        <div v-for="(ex, i) in currentWord.examples" :key="i" class="example-item">
-                                            <div class="ex-origin" @click.stop="speak(ex.text)">
-                                                {{ ex.text }} <i v-if="canSpeak" class="fa-solid fa-volume-low" style="font-size:0.8em; opacity:0.5"></i>
-                                            </div>
-                                            <div class="ex-trans">{{ ex.cn }}</div>
-                                        </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto pr-4 custom-scroll relative">
+                            <div class="timeline-spine" :style="{ background: langConfig[currentLang].accent }"></div>
+                            <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10 relative">
+                                <div class="w-24 text-right sticky top-0 pt-2"><span class="year-number" :style="{ color: langConfig[currentLang].accent }">{{ group.year }}</span></div>
+                                <div class="flex-1 space-y-4">
+                                    <div v-for="event in group.events" class="p-4 bg-white/60 rounded-xl border border-red-800/10 hover:translate-x-1 transition-transform">
+                                        <div class="flex items-center gap-2 mb-1"><span>{{ event.tag }}</span><span v-for="t in event.tags" class="text-[10px] px-2 bg-black/5 rounded">{{ t }}</span></div>
+                                        <p>{{ event.event }}</p>
                                     </div>
-                                    <div v-else class="detail-text" style="opacity:0.5">暂无收录例句</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div v-else-if="mode === 'garden'" class="h-full relative overflow-hidden bg-white/20 rounded-3xl border border-red-800/5">
+                        <div v-for="p in gardenPlants" :key="p.id" class="plant-img" :style="{ left: p.x + '%', bottom: p.y + '%', width: p.size + 'px', zIndex: p.zIndex }">
+                            <img :src="p.src" class="w-full" />
                         </div>
                     </div>
                 </div>
             </main>
 
-            <div class="cat-container">
-                <img src="./my-cat.png" class="cat-img" alt="Mascot">
-                <div v-if="mascotMsg" class="mascot-bubble">{{ mascotMsg }}</div>
-            </div>
+            <div class="cat-mascot-container"><img :src="userCat" class="cat-mascot-img" /></div>
         </div>
 
-        <div v-if="showImportModal" class="modal-mask" @click.self="showImportModal = false">
-            <div class="modal-box">
-                <div class="modal-title">挂载离线辞典</div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display:block; margin-bottom:5px; font-weight:bold;">1. 选择语种归属</label>
-                    <select v-model="importLang" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                        <option v-for="(cfg, key) in langConfig" :key="key" :value="key">{{ cfg.flag }} {{ cfg.name }} ({{ key.toUpperCase() }})</option>
-                    </select>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <label style="display:block; margin-bottom:5px; font-weight:bold;">2. 上传 JSON 文件</label>
-                    <input type="file" ref="fileInput" accept=".json" style="width:100%">
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button @click="importDictionary" class="action-btn primary" :disabled="isImporting">{{ isImporting ? '导入中...' : '确认挂载' }}</button>
-                    <button @click="showImportModal = false" class="action-btn outline">取消</button>
-                </div>
+        <div v-if="showImport" class="fixed inset-0 bg-black/40 backdrop-blur flex items-center justify-center z-[5000]">
+            <div class="bg-white p-8 rounded-3xl w-96">
+                <h3 class="text-xl font-bold mb-6">挂载离线辞典</h3>
+                <select v-model="importLang" class="w-full p-3 border rounded-xl mb-4">
+                    <option v-for="(v,k) in langConfig" :value="k">{{ v.name }}</option>
+                </select>
+                <input type="file" ref="dictFile" class="mb-6 block w-full" accept=".json" />
+                <div class="flex gap-4"><button @click="doImport" class="flex-1 bg-red-800 text-white py-3 rounded-xl font-bold">导入</button><button @click="showImport = false" class="flex-1 border py-3 rounded-xl">取消</button></div>
             </div>
         </div>
-
-        <div v-if="showFocusSelect" class="modal-mask" @click.self="showFocusSelect = false">
-            <div class="modal-box" style="text-align:center;">
-                <div class="modal-title">选择深潜时长</div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <button v-for="min in [15, 30, 45, 60, 120]" :key="min" 
-                            class="action-btn outline" 
-                            @click="startPomodoro(min)">
-                        {{ min }} 分钟 {{ min >= 60 ? '🌊' : '' }}
-                    </button>
-                </div>
-                <p style="font-size:0.8rem; opacity:0.6;">60分钟以上必得【特等植被】</p>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        const { createApp, ref, computed, onMounted, reactive, watch } = Vue;
-
-        // --- IndexedDB 帮助类 (本地辞典核心) ---
-        class DictionaryDB {
-            constructor() {
-                this.dbName = 'MemoriDictDB_V2';
-                this.db = null;
-            }
-            async open() {
-                return new Promise((resolve, reject) => {
-                    const request = indexedDB.open(this.dbName, 1);
-                    request.onupgradeneeded = (event) => {
-                        const db = event.target.result;
-                        if (!db.objectStoreNames.contains('dictionaries')) {
-                            // 复合索引：语种 + 单词
-                            const store = db.createObjectStore('dictionaries', { keyPath: 'id', autoIncrement: true });
-                            store.createIndex('lang_word', ['lang', 'wordName'], { unique: false });
-                        }
-                    };
-                    request.onsuccess = (event) => {
-                        this.db = event.target.result;
-                        resolve(this.db);
-                    };
-                    request.onerror = (event) => reject(event.target.error);
-                });
-            }
-            async addBulk(lang, items) {
-                if (!this.db) await this.open();
-                return new Promise((resolve, reject) => {
-                    const transaction = this.db.transaction(['dictionaries'], 'readwrite');
-                    const store = transaction.objectStore('dictionaries');
-                    let count = 0;
-                    items.forEach(item => {
-                        // 确保数据结构 standardized
-                        store.add({
-                            lang: lang,
-                            wordName: item.wordName || item.word,
-                            wordDesc: item.wordDesc || item.meaning,
-                            pronunciation: item.pronunciation || item.reading || '',
-                            raw: item // 保留原始数据
-                        });
-                        count++;
-                    });
-                    transaction.oncomplete = () => resolve(count);
-                    transaction.onerror = () => reject(transaction.error);
-                });
-            }
-            async find(lang, word) {
-                if (!this.db) await this.open();
-                return new Promise((resolve, reject) => {
-                    const transaction = this.db.transaction(['dictionaries'], 'readonly');
-                    const store = transaction.objectStore('dictionaries');
-                    const index = store.index('lang_word');
-                    const request = index.get([lang, word]);
-                    request.onsuccess = () => resolve(request.result);
-                    request.onerror = () => reject(request.error);
-                });
-            }
-        }
+        const { createApp, ref, computed, onMounted, watch } = Vue;
 
         createApp({
             setup() {
-                // --- 状态定义 ---
-                const dictDB = new DictionaryDB();
-                const mode = ref('card'); // card, garden, focus
-                const currentLang = ref('jp');
-                const wordInput = ref('');
-                const loading = ref(false);
-                const isFlipped = ref(false);
-                const currentWord = ref(null);
-                const history = ref(JSON.parse(localStorage.getItem('memori_history_v2') || '[]'));
-                const gardenPlants = ref(JSON.parse(localStorage.getItem('memori_garden_v2') || '[]'));
-                
-                // 模态框控制
-                const showImportModal = ref(false);
+                const showCover = ref(true); [cite: 216]
+                const enterApp = () => showCover.value = false; [cite: 216]
+                const mode = ref('card'); [cite: 220]
+                const currentLang = ref('jp'); [cite: 216]
+                const wordInput = ref(''); [cite: 216]
+                const isFlipped = ref(false); [cite: 217]
+                const card = ref({}); [cite: 235]
+                const history = ref(JSON.parse(localStorage.getItem('memori_history') || '[]'));
+                const gardenPlants = ref(JSON.parse(localStorage.getItem('memori_garden') || '[]'));
+                const userCat = ref('./my-cat.png'); [cite: 218, 219]
+                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' }; [cite: 219]
+                const historyTab = ref('asia'); [cite: 220]
+                const showImport = ref(false);
                 const importLang = ref('cjp');
-                const isImporting = ref(false);
-                const fileInput = ref(null);
-                
-                // 看板娘
-                const mascotMsg = ref('');
-                
-                // 番茄钟
-                const showFocusSelect = ref(false);
-                const timeLeft = ref(0);
-                const focusDuration = ref(0);
-                let timerInterval = null;
+                const dictFile = ref(null);
 
-                // 语种配置 (9种)
                 const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', bg: '#F9F1F0', code: 'ja-JP' },
-                    cjp: { name: '古日语', flag: '🏯', bg: '#EBE6DF', code: 'ja-JP' }, // Use JP voice
-                    zh: { name: '现代汉语', flag: '🇨🇳', bg: '#FBF8F1', code: 'zh-CN' },
-                    lzh: { name: '古汉语', flag: '📜', bg: '#E9EAE4', code: 'zh-CN' },
-                    en: { name: '英语', flag: '🇬🇧', bg: '#E6E8EB', code: 'en-US' },
-                    de: { name: '德语', flag: '🇩🇪', bg: '#E8ECEB', code: 'de-DE' },
-                    it: { name: '意语', flag: '🇮🇹', bg: '#F8F4E8', code: 'it-IT' },
-                    lat: { name: '拉丁语', flag: '🏛️', bg: '#EAE8E6', code: 'it-IT' }, // Fallback to Italian/Church Latinish
-                    kr: { name: '韩语', flag: '🇰🇷', bg: '#F7EFF2', code: 'ko-KR' }
-                };
+                    jp: { name: '日语', flag: '🇯🇵', accent: '#CB3A56', bg: '#F9F1F0', voice: 'ja-JP' },
+                    cjp: { name: '古典日语', flag: '🏯', accent: '#5A3D30', bg: '#EBE6DF', voice: 'ja-JP' },
+                    zh: { name: '现代汉语', flag: '🇨🇳', accent: '#9D2933', bg: '#FBF8F1', voice: 'zh-CN' },
+                    lzh: { name: '古代汉语', flag: '📜', accent: '#41555D', bg: '#E9EAE4', voice: 'zh-CN' },
+                    en: { name: '英语', flag: '🇬🇧', accent: '#1772B4', bg: '#E6E8EB', voice: 'en-US' },
+                    de: { name: '德语', flag: '🇩🇪', accent: '#374E59', bg: '#E8ECEB', voice: 'de-DE' },
+                    it: { name: '意语', flag: '🇮🇹', accent: '#8E4932', bg: '#F8F4E8', voice: 'it-IT' },
+                    lat: { name: '拉丁语', flag: '🏛️', accent: '#605A54', bg: '#EAE8E6', voice: 'it-IT' },
+                    kr: { name: '韩语', flag: '🇰🇷', accent: '#B25D7E', bg: '#F7EFF2', voice: 'ko-KR' }
+                }; [cite: 230-234]
 
-                const filteredHistory = computed(() => history.value.filter(h => h.lang === currentLang.value).reverse());
-                const canSpeak = computed(() => !['zh', 'lzh'].includes(currentLang.value)); // 中文不发音
-
-                onMounted(async () => {
-                    await dictDB.open();
+                const timelines = ref({
+                    asia: [
+                        { id: 1, year: '前7000', event: '河姆渡文化 (稻作文明起源)', tag: '🇨🇳', tags: ['考古'] }, [cite: 227]
+                        { id: 100, year: '前221', event: '秦始皇统一', tag: '🧱', tags: ['统一'] }, [cite: 227]
+                        { id: 1001, year: '前1600', event: '商朝建立 (青铜文明鼎盛)', tag: '🏺', tags: ['王朝'] },
+                        { id: 1002, year: '前1046', event: '牧野之战 (周朝开启)', tag: '⚔️', tags: ['战争'] },
+                        { id: 1003, year: '前138', event: '张骞出使西域 (丝绸之路)', tag: '🐫', tags: ['外交'] },
+                        { id: 1004, year: '57', event: '汉委奴国王印 (最早的中日交往记录)', tag: '🇯🇵', tags: ['日本'] },
+                        { id: 1005, year: '645', event: '大化改新 (日本律令国家体制)', tag: '📜', tags: ['日本'] },
+                        { id: 1006, year: '1405', event: '郑和下西洋', tag: '⛵', tags: ['航海'] },
+                        { id: 1007, year: '1443', event: '训民正音 (朝鲜谚文创制)', tag: '🇰🇷', tags: ['韩国'] },
+                        { id: 1008, year: '1600', event: '关原之战 (德川幕府确立)', tag: '🏯', tags: ['日本'] },
+                        { id: 1009, year: '1868', event: '明治维新', tag: '⚙️', tags: ['日本'] },
+                        { id: 1010, year: '1911', event: '辛亥革命 (清朝灭亡)', tag: '🚩', tags: ['革命'] }
+                    ],
+                    europe: [
+                        { id: 2001, year: '前3000', event: '巨石阵主体建造', tag: '🪨', tags: ['考古'] },
+                        { id: 201, year: '前753', event: '罗马建城', tag: '🏛️', tags: ['传说'] }, [cite: 227]
+                        { id: 2002, year: '前490', event: '马拉松战役 (希波战争)', tag: '🏃', tags: ['希腊'] },
+                        { id: 2003, year: '前27', event: '屋大维称号奥古斯都 (罗马帝国)', tag: '👑', tags: ['罗马'] },
+                        { id: 2004, year: '476', event: '西罗马帝国灭亡', tag: '📉', tags: ['中世纪'] },
+                        { id: 2005, year: '1066', event: '黑斯廷斯战役 (诺曼征服)', tag: '🛡️', tags: ['英国'] },
+                        { id: 2006, year: '1215', event: '大宪章签署', tag: '📜', tags: ['法律'] },
+                        { id: 2007, year: '1453', event: '君士坦丁堡陷落 (东罗马灭亡)', tag: '☪️', tags: ['拜占庭'] },
+                        { id: 2008, year: '1517', event: '九十五条论纲 (宗教改革)', tag: '🔨', tags: ['宗教'] },
+                        { id: 202, year: '1789', event: '法国大革命', tag: '🇫🇷', tags: ['革命'] }, [cite: 228]
+                        { id: 2009, year: '1815', event: '滑铁卢战役', tag: '⚔️', tags: ['战争'] },
+                        { id: 2010, year: '1914', event: '萨拉热窝事件 (一战爆发)', tag: '💣', tags: ['战争'] }
+                    ]
                 });
 
-                // --- 核心逻辑 1: 辞典检索 (Double Track) ---
+                const filteredHistory = computed(() => history.value.filter(h => h.lang === currentLang.value).reverse());
+
+                const groupedTimelines = computed(() => {
+                    const list = timelines.value[historyTab.value];
+                    const groups = {};
+                    list.forEach(e => {
+                        if(!groups[e.year]) groups[e.year] = { year: e.year, events: [] };
+                        groups[e.year].events.push(e);
+                    });
+                    return Object.values(groups);
+                });
+
                 async function handleSearch() {
-                    if (!wordInput.value.trim()) return;
-                    loading.value = true;
+                    if (!wordInput.value) return;
+                    const query = wordInput.value;
                     mode.value = 'card';
                     isFlipped.value = false;
-                    const query = wordInput.value.trim();
-                    const lang = currentLang.value;
 
-                    try {
-                        // Track 1: 本地检索
-                        const localRes = await dictDB.find(lang, query);
-                        
-                        let baseData = null;
-
-                        if (localRes) {
-                            // 本地命中
-                            baseData = {
-                                id: Date.now(),
-                                word: localRes.wordName,
-                                reading: localRes.pronunciation,
-                                meaning: localRes.wordDesc,
-                                isLocal: true,
-                                lang: lang,
-                                etymology: '正在查阅云端考据...',
-                                examples: []
-                            };
-                            currentWord.value = baseData;
-                            addToHistory(baseData);
-                            loading.value = false; // UI 立即响应
-
-                            // 静默触发 API 补全
-                            fetchEnrichment(query, lang, baseData.id);
-                        } else {
-                            // Track 2: 全量 API 检索
-                            const res = await fetch('/api/openai', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ word: query, lang: lang })
-                            });
-                            const apiData = await res.json();
-                            baseData = { ...apiData, id: Date.now(), lang: lang, isLocal: false };
-                            currentWord.value = baseData;
-                            addToHistory(baseData);
-                            loading.value = false;
-                        }
-
-                        // 奖励判定 (每10词)
-                        if (history.value.length % 10 === 0) {
-                            addPlantToGarden(false); // 常规奖励
-                            showMascotMsg('🌱 花田里长出了一株新芽！');
-                        }
-
-                    } catch (e) {
-                        alert('检索出错: ' + e.message);
-                        loading.value = false;
-                    }
+                    // 1. 本地优先 (逻辑预留)
+                    const res = await fetch('/api/openai', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ word: query, lang: currentLang.value })
+                    });
+                    const data = await res.json();
+                    card.value = { ...data, id: Date.now(), lang: currentLang.value };
+                    history.value.push(card.value);
+                    save();
                 }
 
-                async function fetchEnrichment(word, lang, tempId) {
-                    try {
-                        const res = await fetch('/api/openai', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ word, lang, type: 'enrichment' })
-                        });
-                        const data = await res.json();
-                        // 更新当前显示的卡片
-                        if (currentWord.value && currentWord.value.id === tempId) {
-                            currentWord.value.etymology = data.etymology;
-                            currentWord.value.examples = data.examples;
-                            currentWord.value.pinyin = data.pinyin; // 如果有
-                        }
-                        // 更新历史记录
-                        const histIdx = history.value.findIndex(h => h.id === tempId);
-                        if (histIdx !== -1) {
-                            history.value[histIdx] = { ...history.value[histIdx], ...data };
-                            saveHistory();
-                        }
-                    } catch (e) { console.error('Enrichment failed', e); }
+                function save() { 
+                    localStorage.setItem('memori_history', JSON.stringify(history.value));
+                    localStorage.setItem('memori_garden', JSON.stringify(gardenPlants.value));
                 }
-
-                function addToHistory(item) {
-                    // 去重
-                    const idx = history.value.findIndex(h => h.word === item.word && h.lang === item.lang);
-                    if (idx !== -1) history.value.splice(idx, 1);
-                    history.value.push(item);
-                    saveHistory();
-                }
-
-                function loadWord(item) {
-                    currentWord.value = item;
-                    mode.value = 'card';
-                    isFlipped.value = false;
-                }
-
-                // --- 核心逻辑 2: 辞典导入 ---
-                async function importDictionary() {
-                    const file = fileInput.value.files[0];
-                    if (!file) return alert('请选择 JSON 文件');
-                    isImporting.value = true;
-                    
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        try {
-                            const json = JSON.parse(e.target.result);
-                            // 兼容 data 字段或直接数组
-                            const items = Array.isArray(json) ? json : (json.data || []);
-                            const count = await dictDB.addBulk(importLang.value, items);
-                            alert(`成功挂载 ${count} 条词目到【${langConfig[importLang.value].name}】库`);
-                            showImportModal.value = false;
-                        } catch (err) {
-                            alert('导入失败，请检查 JSON 格式');
-                        } finally {
-                            isImporting.value = false;
-                        }
-                    };
-                    reader.readAsText(file);
-                }
-
-                // --- 核心逻辑 3: 花田与植物 (一树四变) ---
-                function addPlantToGarden(isSpecial) {
-                    // 1. 决定植物 ID
-                    let plantType;
-                    if (isSpecial) {
-                        const specials = ['spec_ginkgo', 'spec_wisteria'];
-                        plantType = specials[Math.floor(Math.random() * specials.length)];
-                    } else {
-                        // 常规 20 种
-                        const commons = ['fruit_cherry', 'flow_sakura', 'fruit_grape', 'flow_peony', 'rare_mushroom']; // 示例缩减，实际请填入所有20种
-                        plantType = commons[Math.floor(Math.random() * commons.length)];
-                    }
-                    
-                    // 2. 随机变体 (1-4)
-                    const variant = Math.floor(Math.random() * 4) + 1;
-                    const fileName = `${plantType}_${variant}.png`;
-
-                    // 3. 随机位置 (CSS 去白 + 层叠)
-                    const newPlant = {
-                        id: Date.now(),
-                        src: `./assets/plants/${fileName}`,
-                        x: Math.random() * 80 + 5, // 5% - 85%
-                        y: Math.random() * 30,     // 底部堆叠
-                        size: Math.random() * 80 + 100, // 100-180px
-                        zIndex: gardenPlants.value.length + 1
-                    };
-                    gardenPlants.value.push(newPlant);
-                    localStorage.setItem('memori_garden_v2', JSON.stringify(gardenPlants.value));
-                }
-
-                // --- 核心逻辑 4: 番茄钟 ---
-                function startFocusSelect() { showFocusSelect.value = true; }
-                function startPomodoro(minutes) {
-                    showFocusSelect.value = false;
-                    focusDuration.value = minutes;
-                    timeLeft.value = minutes * 60;
-                    mode.value = 'focus';
-                    
-                    if (timerInterval) clearInterval(timerInterval);
-                    timerInterval = setInterval(() => {
-                        timeLeft.value--;
-                        if (timeLeft.value <= 0) {
-                            finishPomodoro();
-                        }
-                    }, 1000);
-                }
-                function finishPomodoro() {
-                    clearInterval(timerInterval);
-                    mode.value = 'card'; // 退出专注
-                    alert('⏰ 专注完成！');
-                    
-                    // 奖励判定
-                    const isSpecial = focusDuration.value >= 60;
-                    addPlantToGarden(isSpecial);
-                    showMascotMsg(isSpecial ? '🌊 深潜归来，获得【特等植被】！' : '🌿 获得了一株新植物！');
-                }
-                function abortFocus() {
-                    if (confirm('确定要放弃本次专注吗？将不会获得奖励。')) {
-                        clearInterval(timerInterval);
-                        mode.value = 'card';
-                    }
-                }
-                function formatTime(seconds) {
-                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-                    const s = (seconds % 60).toString().padStart(2, '0');
-                    return `${m}:${s}`;
-                }
-
-                // --- 辅助功能 ---
+                
+                function loadWord(item) { card.value = item; isFlipped.value = false; mode.value = 'card'; }
+                
                 function speak(text) {
-                    if (!canSpeak.value) return;
-                    window.speechSynthesis.cancel();
+                    if (['zh','lzh'].includes(currentLang.value)) return;
                     const u = new SpeechSynthesisUtterance(text);
-                    u.lang = langConfig[currentLang.value].code;
+                    u.lang = langConfig[currentLang.value].voice;
                     window.speechSynthesis.speak(u);
                 }
-                function saveHistory() { localStorage.setItem('memori_history_v2', JSON.stringify(history.value)); }
-                function exportData() {
-                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ history: history.value, garden: gardenPlants.value }));
-                    const downloadAnchorNode = document.createElement('a');
-                    downloadAnchorNode.setAttribute("href", dataStr);
-                    downloadAnchorNode.setAttribute("download", "memori_backup.json");
-                    document.body.appendChild(downloadAnchorNode);
-                    downloadAnchorNode.click();
-                    downloadAnchorNode.remove();
-                }
-                function showMascotMsg(msg) {
-                    mascotMsg.value = msg;
-                    setTimeout(() => mascotMsg.value = '', 4000);
-                }
-                function toggleFlip() { isFlipped.value = !isFlipped.value; }
 
-                // 拖拽逻辑 (简单实现)
-                const isEditMode = ref(false);
-                function startDrag(e, plant) {
-                    if (!isEditMode.value) return;
-                    // ... 拖拽逻辑省略，仅需实现更新 plant.x/y 即可 ...
-                }
-
-                return {
-                    mode, currentLang, wordInput, loading, isFlipped, currentWord, history, filteredHistory,
-                    langConfig, handleSearch, loadWord, speak, canSpeak,
-                    showImportModal, importLang, fileInput, isImporting, importDictionary,
-                    showFocusSelect, startFocusSelect, startPomodoro, abortFocus, timeLeft, focusDuration, formatTime,
-                    gardenPlants, isEditMode, startDrag, toggleFlip,
-                    mascotMsg, exportData
-                };
+                return { showCover, enterApp, mode, currentLang, wordInput, isFlipped, card, history, filteredHistory, langConfig, timelines, historyTab, groupedTimelines, handleSearch, loadWord, speak, userCat, coverImages, gardenPlants, showImport, importLang, dictFile };
             }
         }).mount('#app');
     </script>
