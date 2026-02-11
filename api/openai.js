@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // 1. 完全复刻您的跨域 (CORS) 设置
+  // 1. 保留您的跨域 (CORS) 设置
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // 处理预检请求
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -21,30 +20,33 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: '服务器配置错误：缺少 API Key' });
     }
 
-    // 3. 解析前端发送的参数 (兼容您的 App.vue 发送的 POST 请求体)
+    // 3. 解析前端参数
     const { word, lang } = req.body || req.query || {};
     if (!word) {
       return res.status(400).json({ error: '未提供单词' });
     }
 
-    // 4. 完美复刻您的 Lexicographer 提示词 (Prompt)
-    const prompt = `You are a professional lexicographer. Create a high-quality vocabulary card for the word "${word}" in ${lang || 'Chinese'}.
+    // 4. 优化后的词典编纂提示词：去图片化，强调考古与学术严谨性
+    // 这里的 prompt 移除了视觉描述，增加了对考古语境的理解
+    const prompt = `You are a professional lexicographer specializing in Archaeology and Linguistics. 
+    Create a high-quality academic vocabulary card for the word "${word}" in the context of ${lang || 'Japanese/Chinese'}.
+    
     Return a JSON object with this exact structure:
     {
       "word": "${word}",
-      "reading": "pronunciation/kana",
-      "meaning": "concise definition in Chinese",
-      "etymology": "brief origin of the word",
-      "word_details": "part of speech and grammar tips",
-      "simple_english": "simple english translation",
+      "reading": "kana for Japanese or pinyin for Chinese",
+      "meaning": "concise academic definition in Chinese",
+      "etymology": "historical or linguistic origin of the word",
+      "word_details": "academic category (e.g., Archaeology, Art History, etc.)",
+      "simple_english": "clear english academic term",
       "examples": [
-        {"text": "example sentence in ${lang}", "cn": "chinese translation"}
+        {"text": "example sentence showing usage in academic literature", "cn": "accurate chinese translation"}
       ]
     }`;
 
-    console.log(`🤖 正在为单词 [${word}] 挖掘内容...`);
+    console.log(`🏛️ 正在对考古词汇 [${word}] 进行学术挖掘...`);
 
-    // 5. 使用 fetch 适配中转 API 站 (解决云端 @google/generative-ai 连接失败的问题)
+    // 5. 调用中转 API (保持原有适配逻辑)
     const response = await fetch('https://api.openai-proxy.org/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -52,11 +54,15 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", // 中转站会将此映射至正确的模型
+        model: "gpt-3.5-turbo", 
         messages: [
+          { 
+            role: "system", 
+            content: "You are a helpful assistant that outputs only JSON for archaeology and language learning." 
+          },
           { role: "user", content: prompt }
         ],
-        response_format: { type: "json_object" } // 强制返回 JSON 格式
+        response_format: { type: "json_object" } 
       })
     });
 
@@ -67,16 +73,17 @@ export default async function handler(req, res) {
     const responseData = await response.json();
     const textContent = responseData.choices[0].message.content;
 
-    // 6. 解析并返回数据给前端
+    // 6. 解析并返回
     const data = JSON.parse(textContent);
+    
+    // 确保返回的数据中不包含任何旧有的图片链接字段，保持简洁明快
     return res.status(200).json(data);
 
   } catch (error) {
-    console.error("❌ 挖掘失败详细日志:", error);
+    console.error("❌ 后端挖掘失败:", error);
     return res.status(500).json({ 
       error: '挖掘失败', 
-      message: error.message,
-      suggestion: "请检查 API Key 是否有效以及环境变量是否配置正确" 
+      message: error.message
     });
   }
 }
