@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memori - 言叶の考古学 (演示版)</title>
+    <title>Memori - 言叶の考古学</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,21 +16,30 @@
     <style>
 /* --- 🏮 中国色主题变量 (Zhongguose Palette) --- */
 :root {
+  /* 芡食白 Qiànsè Bái (背景米白) */
   --color-bg-main: #E2E1E4;
+  /* 乌色 Wūsè (文字深褐) */
   --color-text-main: #2D241E; 
+  /* 茜色 Qiànsè (强调深红) */
   --color-accent: #CB3A56;
+  /* 嫣红 Yānhóng (强调色悬停) */
   --color-accent-hover: #EF7A82; 
+  /* 暖调毛玻璃背景 */
   --glass-bg: rgba(255, 253, 248, 0.75);
+  /* 暖调毛玻璃边框 */
   --glass-border: rgba(203, 58, 86, 0.15); 
 }
 
+/* 🎨 Memori Design System v44.0 (Final Fixes & Layout) */
 * { box-sizing: border-box; }
+/* 使用 CSS 变量应用新主题色 */
 .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.5s ease, font-family 0.3s; position: relative; color: var(--color-text-main); }
 .app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+/* 更新毛玻璃样式以匹配暖色调 */
 .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08), 0 2px 4px -1px rgba(45, 36, 30, 0.04), inset 0 0 20px rgba(255, 253, 248, 0.3); border-radius: 24px; }
 .artistic-border { border-radius: 24px; }
 
-/* 封面页 */
+/* 🚪 封面页修复：处理猫咪遮挡按钮问题 */
 .cover-stage.classic-theme { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
 .cover-overlay-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
 .cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
@@ -40,6 +49,7 @@
 .poem-main { font-family: 'Zen Old Mincho', serif; font-size: 1.3rem; line-height: 2; margin-top: 50px; opacity: 0.9; }
 .start-btn-main.jp-btn { margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: all 0.4s; letter-spacing: 0.1em; box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); pointer-events: auto; position: relative; z-index: 100;}
 .start-btn-main.jp-btn:hover { transform: translateY(-3px) scale(1.02); background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); box-shadow: 0 8px 30px rgba(203, 58, 86, 0.5); }
+/* 猫咪在左侧，缩小占比，点击穿透 */
 .cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
 .cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
 .fade-enter-active, .fade-leave-active { transition: opacity 1s ease; }
@@ -128,6 +138,16 @@
 .flower-item:hover { transform: scale(1.1); }
 .flower-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 
+/* Orchard */
+.review-with-tree { display: flex; gap: 30px; justify-content: center; padding: 0 40px; }
+.review-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.orchard-sidebar { width: 280px; padding: 25px; display: flex; flex-direction: column; align-items: center; border-radius: 24px; background: var(--glass-bg); height: 640px; justify-content: space-between; }
+.orchard-sidebar h3 { font-size: 1.2rem; color: var(--color-text-main); margin-bottom: 10px; }
+.tree-display { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; }
+.tree-img { width: 100%; max-height: 300px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(45, 36, 30, 0.2)); transition: all 0.5s; }
+.tree-stats { text-align: center; background: rgba(255, 253, 248, 0.7); padding: 15px; border-radius: 12px; width: 100%; border: 1px solid var(--glass-border); }
+.tree-status { font-weight: bold; color: #2E7D32; margin-top: 5px; }
+
 /* Card 3D */
 .card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; z-index: 2; }
 .card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
@@ -167,9 +187,7 @@
 .html-content img { max-width: 100%; border-radius: 10px; margin: 12px 0; box-shadow: 0 4px 10px rgba(45, 36, 30, 0.08); }
 .html-content b { font-weight: 700; color: var(--color-accent); }
 
-/* Review & Orchard */
-.review-with-tree { display: flex; gap: 30px; justify-content: center; padding: 0 40px; }
-.review-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* Review Card */
 .review-card { width: 400px; height: 600px; background: rgba(255, 253, 248, 0.95) !important; box-shadow: 0 10px 40px rgba(45, 36, 30, 0.15); border: 1px solid var(--glass-border); display: flex; flex-direction: column; overflow: hidden; border-radius: 24px; }
 .review-upper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative; z-index: 2; }
 .review-img-holder { width: 140px; height: 140px; border-radius: 50%; overflow: hidden; margin-bottom: 25px; border: 5px solid #F3F2F0; box-shadow: 0 10px 25px rgba(45, 36, 30, 0.15); background: #E2E1E4; }
@@ -177,16 +195,15 @@
 .reveal-btn { background: var(--color-text-main); color: #F3F2F0; border: none; padding: 14px 36px; border-radius: 28px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-size: 1.1rem; }
 .reveal-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(45, 36, 30, 0.2); background: var(--color-accent); }
 .r-answer { width: 100%; text-align: center; animation: fadeIn 0.4s ease; }
-.orchard-sidebar { width: 280px; padding: 25px; display: flex; flex-direction: column; align-items: center; border-radius: 24px; background: var(--glass-bg); height: 640px; justify-content: space-between; }
-.orchard-sidebar h3 { font-size: 1.2rem; color: var(--color-text-main); margin-bottom: 10px; }
-.tree-display { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; }
-.tree-img { width: 100%; max-height: 300px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(45, 36, 30, 0.2)); transition: all 0.5s; }
-.tree-stats { text-align: center; background: rgba(255, 253, 248, 0.7); padding: 15px; border-radius: 12px; width: 100%; border: 1px solid var(--glass-border); }
-.tree-status { font-weight: bold; color: #2E7D32; margin-top: 5px; }
-.exit-btn { margin-top: 25px; border: none; background: none; color: rgba(45, 36, 30, 0.6); text-decoration: underline; cursor: pointer; font-size: 1rem; }
+.r-reading { font-size: 1.3rem; color: rgba(45, 36, 30, 0.8); margin-bottom: 8px; }
 .srs-actions { display: flex; gap: 12px; width: 100%; }
 .srs-btn { flex: 1; padding: 14px 0; border: none; border-radius: 14px; font-weight: bold; cursor: pointer; color: white; font-size: 1.1rem; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
-.again { background: #CB3A56; } .hard { background: #F28E16; } .good { background: #8FAB1D; } .easy { background: #2C9678; }
+.srs-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(45, 36, 30, 0.15); }
+.again { background: #CB3A56; } /* 茜色 */
+.hard { background: #F28E16; } /* 缃色 */
+.good { background: #8FAB1D; } /* 柳黄 */
+.easy { background: #2C9678; } /* 竹青 */
+.exit-btn { margin-top: 25px; border: none; background: none; color: rgba(45, 36, 30, 0.6); text-decoration: underline; cursor: pointer; font-size: 1rem; }
 
 /* Timeline List */
 .history-stage { flex: 1; margin: 0 20px 20px; padding: 35px; display: flex; flex-direction: column; overflow: hidden; }
@@ -194,16 +211,23 @@
 .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
 .history-header h1 { font-size: 2rem; margin: 0; font-family: 'Zen Old Mincho', serif; }
 .close-mode-btn { background: none; border: none; font-size: 1.6rem; color: #aaa; cursor: pointer; transition: color 0.2s; }
+.close-mode-btn:hover { color: var(--color-accent); }
 .history-tabs { display: flex; gap: 25px; margin-bottom: 25px; align-items: center; }
 .history-tabs button { background: none; border: none; font-size: 1.15rem; cursor: pointer; opacity: 0.6; padding-bottom: 6px; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.3s; font-weight: 500; color: var(--color-text-main); }
 .history-tabs button.active { opacity: 1; border-bottom-color: currentColor; font-weight: bold; }
 .timeline-input-group { background: rgba(255, 253, 248, 0.6); padding: 18px; border-radius: 18px; transition: all 0.3s; border: 1px solid var(--glass-border); }
 .timeline-input-group.editing { background: #FFF3E0; border: 1px solid #FFB74D; }
 .input-header { font-size: 0.85rem; font-weight: bold; margin-bottom: 12px; color: rgba(45, 36, 30, 0.7); text-transform: uppercase; letter-spacing: 1.2px; display: flex; justify-content: space-between; align-items: center; }
+.cancel-edit-btn { border: none; background: none; color: var(--color-accent); cursor: pointer; font-size: 0.85rem; text-decoration: underline; }
 .input-row { display: flex; gap: 12px; }
 .t-input { border: 1px solid var(--glass-border); padding: 10px 14px; border-radius: 10px; background: rgba(255, 253, 248, 0.8); outline: none; font-family: inherit; font-size: 1rem; transition: border-color 0.2s; color: var(--color-text-main); }
-.t-input.year { width: 110px; } .t-input.tag { width: 70px; text-align: center; } .t-input.event { flex: 1; }
+.t-input:focus { border-color: var(--color-accent); }
+.t-input.year { width: 110px; }
+.t-input.tag { width: 70px; text-align: center; }
+.t-input.event { flex: 1; }
 .t-btn { border: none; color: white; padding: 0 24px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
+.t-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(203, 58, 86, 0.3); background-color: var(--color-accent-hover) !important; }
+.tags-input { width: 100%; margin-top: 10px; }
 .timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 20px; scroll-padding-top: 20px; }
 .timeline-list { position: relative; padding-left: 15px; padding-top: 10px; }
 .timeline-spine { position: absolute; left: 95px; top: 0; bottom: 0; width: 3px; background: currentColor; z-index: 0; border-radius: 1.5px; opacity: 0.4; }
@@ -212,20 +236,44 @@
 .year-number { font-weight: 800; font-size: 1.2rem; color: var(--color-text-main); background: rgba(255, 253, 248, 0.95); padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(45, 36, 30, 0.06); font-family: sans-serif; border: 1px solid var(--glass-border); }
 .events-container { flex: 1; display: flex; flex-direction: column; gap: 18px; }
 .t-item-box { display: flex; align-items: center; position: relative; transition: all 0.3s; cursor: grab; }
+.t-item-box:active { cursor: grabbing; }
+.t-item-box.starred .t-content { border-left: 5px solid #FFD700; background: #FFFDE7; }
 .t-dot { width: 16px; height: 16px; border-radius: 50%; position: absolute; left: -26px; top: 22px; border: 4px solid #F3F2F0; box-shadow: 0 2px 6px rgba(45, 36, 30, 0.15); z-index: 2; }
 .t-content { flex: 1; background: rgba(255, 253, 248, 0.9); padding: 15px 22px; transition: transform 0.2s, box-shadow 0.2s; position: relative; border: 1px solid var(--glass-border); }
+.t-content:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(45, 36, 30, 0.08); }
 .t-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
 .t-icon { font-size: 1.4rem; }
+.t-tags { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+.custom-tag { font-size: 0.75rem; padding: 3px 10px; border-radius: 8px; font-weight: 600; letter-spacing: 0.5px; }
 .t-text { flex: 1; font-size: 1.1rem; color: var(--color-text-main); line-height: 1.6; font-weight: 500; font-family: 'Noto Serif SC', sans-serif; }
 .t-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s; background: var(--glass-bg); padding: 4px; border-radius: 8px; position: absolute; right: 12px; top: 12px; box-shadow: 0 2px 8px rgba(45, 36, 30, 0.1); border: 1px solid var(--glass-border); }
 .t-content:hover .t-actions { opacity: 1; }
 .t-act-btn { border: none; background: none; cursor: pointer; color: rgba(45, 36, 30, 0.4); padding: 5px 7px; font-size: 1rem; transition: color 0.2s; }
+.t-act-btn:hover { color: var(--color-text-main); transform: scale(1.1); }
+.t-act-btn.del:hover { color: var(--color-accent); }
+.t-act-btn.star:hover, .t-act-btn.star.active { color: #FFD700; }
+.drag-handle { color: rgba(45, 36, 30, 0.3); cursor: grab; padding: 0 6px; font-size: 1.3rem; }
 
 @media (max-width: 768px) {
   .app-container { flex-direction: column-reverse; height: auto; overflow-y: auto; }
   .sidebar { width: auto; height: auto; border-right: none; border-top: 1px solid var(--glass-border); margin: 0; padding: 25px; border-radius: 24px 24px 0 0; }
   .main-stage { height: 100vh; padding: 15px; }
+  .card-3d-wrapper { width: 100%; height: 70vh; max-height: 600px; }
+  .cat-mascot-container { bottom: 25px; right: 25px; width: 180px; height: 180px; }
+  .cover-content-layout { flex-direction: column-reverse; justify-content: center; height: auto; padding: 40px 20px; gap: 30px; }
+  .cover-text-group.jp-style { padding-left: 0; text-align: center; margin-bottom: 20px; }
+  .cover-title-main { font-size: 3.5rem; }
+  .cover-cat-wrapper { justify-content: center; align-items: center; height: auto; flex: 1; }
+  .cover-cat-large { max-height: 45vh; transform: scaleX(-1); }
+  .search-bar { margin: 0 0 20px; }
+  .history-stage { margin: 0 0 20px; padding: 25px; }
+  .gallery-mode { padding: 20px; }
+  .review-with-tree { flex-direction: column; gap: 15px; }
+  .orchard-sidebar { width: 100%; height: auto; flex-direction: row; }
+  .tree-img { height: 80px; }
 }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -286,12 +334,22 @@
 
                 <Transition name="fade-mode" mode="out-in">
                     <div v-if="mode === 'gallery'" class="content-area gallery-mode custom-scroll" key="gallery">
-                        <div class="gallery-header"><h2 class="gallery-title" :style="{ color: langConfig[currentLang].accent }">香氛藏品馆</h2></div>
+                        <div class="flower-field-container" v-if="flowerField.length > 0">
+                            <div class="field-label">已收藏 {{ filteredHistory.length }} 词 · 花田盛开中</div>
+                            <div class="flower-grid"><div v-for="flower in flowerField" :key="flower.id" class="flower-item" title="每50词绽放一朵"><img :src="flower.img" class="flower-img" @error="handleImageError"></div></div>
+                        </div>
+                        <div class="gallery-header">
+                            <h2 class="gallery-title" :style="{ color: langConfig[currentLang].accent }"><i class="fa-solid fa-bottle-droplet"></i> 香氛藏品馆</h2>
+                            <button v-if="filteredHistory.length > 0" @click="clearCurrentHistory" class="clear-history-icon" title="散去旧香"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
                         <div v-if="filteredHistory.length === 0" class="empty-state"><p>空气中还未留下词语的香气...</p></div>
                         <div class="gallery-list">
                             <div v-for="item in filteredHistory" :key="item.id" class="gallery-row-item glass-morphism" @click="loadWord(item)">
                                 <div class="row-left"><span class="row-word">{{ item.word }}</span><span class="row-reading">{{ item.reading }}</span></div>
-                                <div class="row-right"><button class="row-del-btn" @click.stop="deleteGalleryItem(item.id)">🗑️</button></div>
+                                <div class="row-right">
+                                    <button class="row-del-btn" @click.stop="deleteGalleryItem(item.id)" title="移除此词"><i class="fa-solid fa-trash"></i></button>
+                                    <span class="row-arrow" :style="{color: langConfig[currentLang].accent}"><i class="fa-solid fa-feather"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -303,36 +361,53 @@
                                     <div class="img-header" :class="{ 'loading': imageLoading }">
                                         <img :src="card.imageUrl" class="cover-img" @error="handleImageError" @load="imageLoading = false">
                                         <div v-if="imageLoading" class="img-loading-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+                                        <div class="overlay-actions">
+                                            <button class="icon-btn star-btn" @click.stop="toggleCollect" :title="card.isCollected ? '取消收藏' : '加入单词本'"><i class="fa-solid fa-star" :class="{ 'starred': card.isCollected }"></i></button>
+                                            <button class="icon-btn" @click.stop="toggleImageLock"><i class="fa-solid" :class="card.isImageLocked ? 'fa-lock' : 'fa-lock-open'"></i></button>
+                                        </div>
                                     </div>
                                     <div class="text-content custom-scroll">
-                                        <div class="word-display"><h2 class="main-word">{{ card.word }}</h2><div class="pronunciation"><span>{{ card.reading }}</span></div></div>
-                                        <p class="simple-en">{{ card.simple_english }}</p>
-                                        <div class="flip-hint">闻香识义 ➡️</div>
+                                        <div class="word-display"><p v-if="card.lang === 'zh' && card.pinyin" class="pinyin">{{ card.pinyin }}</p><div class="word-group"><h2 class="main-word">{{ card.word }}</h2></div><div class="pronunciation"><span>{{ card.reading }}</span><button class="speaker-btn" @click.stop="speak(card.word, card.lang)"><i class="fa-solid fa-volume-high"></i></button></div></div>
+                                        <div class="meta-info"><span v-if="card.word_details" class="meta-tag">{{ card.word_details }}</span></div><p v-if="card.simple_english" class="simple-en">{{ card.simple_english }}</p><div class="flip-hint">闻香识义 <i class="fa-solid fa-arrow-right-long"></i></div>
                                     </div>
                                 </div>
                                 <div class="card-face back glass-morphism artistic-border">
-                                    <div class="back-scroll custom-scroll">
-                                        <div class="info-block meaning"><span class="label">释义</span><div class="html-content" v-html="card.meaning"></div></div>
-                                        <div v-if="card.etymology" class="info-block etymology"><span class="label">词源</span><p>{{ card.etymology }}</p></div>
-                                    </div>
+                                    <div class="back-header" @click.stop><h3>{{ card.word }}</h3><div class="back-actions"><button class="icon-btn sm" @click.stop="speak(card.word, card.lang)"><i class="fa-solid fa-volume-high"></i></button><button class="icon-btn sm" @click.stop="isFlipped = !isFlipped"><i class="fa-solid fa-rotate-left"></i></button></div></div>
+                                    <div class="back-scroll custom-scroll" @click.stop><div class="info-block meaning"><span class="label">释义</span><div class="html-content" v-html="card.meaning"></div></div><div v-if="card.etymology" class="info-block etymology"><span class="label">前调 (词源)</span><p>{{ card.etymology }}</p></div><div v-if="card.examples && card.examples.length" class="info-block examples"><span class="label">中调 (例句)</span><div v-for="(ex, i) in card.examples" :key="i" class="example-row"><p class="ex-text" @click="speak(ex.text, card.lang)">{{ ex.text }}</p><p class="ex-cn">{{ ex.cn }}</p></div></div></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div v-else-if="mode === 'history'" class="history-stage glass-morphism artistic-border" key="history">
-                         <div class="history-top"><h1 :style="{ color: langConfig[currentLang].accent }">历史年表</h1></div>
-                         <div class="timeline-wrapper custom-scroll">
-                             <div v-for="group in groupedTimelines" :key="group.year" class="year-group">
-                                 <div class="t-year-label"><span class="year-number">{{ group.year }}</span></div>
-                                 <div class="events-container">
-                                     <div v-for="item in group.events" :key="item.id" class="t-content artistic-border">{{ item.event }}</div>
-                                 </div>
-                             </div>
-                         </div>
+                        <div class="history-top"><div class="history-header"><h1 :style="{ color: langConfig[currentLang].accent }">历史大事年表</h1><button class="close-mode-btn" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button></div><div class="history-tabs"><button :class="{ active: historyTab === 'asia' }" @click="historyTab = 'asia'">🌏 亚洲史</button><button :class="{ active: historyTab === 'europe' }" @click="historyTab = 'europe'">🏛️ 欧洲史</button></div><div class="timeline-input-group" :class="{ 'editing': isEditingTimeline }"><div class="input-header">{{ isEditingTimeline ? '✏️ 编辑条目' : '✍️ 添加新历史' }}<button v-if="isEditingTimeline" class="cancel-edit-btn" @click="cancelEdit">取消</button></div><div class="input-row"><input v-model="newEvent.year" placeholder="年份" class="t-input year"><input v-model="newEvent.tag" placeholder="图标" class="t-input tag" @blur="autoMapIcon"><input v-model="newEvent.event" placeholder="发生了什么？" class="t-input event"><button @click="addTimelineEvent" class="t-btn" :style="{background: langConfig[currentLang].accent}">{{ isEditingTimeline ? '保存' : '添加' }}</button></div><input v-model="newEvent.tagsInput" placeholder="标签 (可选，空格分隔)" class="t-input tags-input" style="width:100%; margin-top:8px;"></div></div>
+                        <div class="timeline-wrapper custom-scroll"><div class="timeline-list"><div class="timeline-spine" :style="{ background: langConfig[currentLang].accent, opacity: 0.4 }"></div><div v-for="group in groupedTimelines" :key="group.year" class="year-group"><div class="t-year-label"><span class="year-number" :style="{ color: langConfig[currentLang].accent }">{{ group.year }}</span></div><div class="events-container"><div v-for="item in group.events" :key="item.id" class="t-item-box" :class="{ 'starred': item.isStarred }" draggable="true" @dragstart="onDragStart($event, item)" @drop="onDrop($event, item)" @dragover.prevent><div class="t-dot" :style="{background: langConfig[currentLang].accent}"></div><div class="t-content artistic-border"><div class="t-header"><span class="t-icon">{{ item.tag }}</span><div v-if="item.tags" class="t-tags"><span v-for="t in item.tags" :key="t" class="custom-tag" :style="getTagStyle(t)">{{ t }}</span></div><div class="t-actions"><span class="drag-handle">⋮⋮</span><button class="t-act-btn star" @click="toggleStar(item)" :class="{ active: item.isStarred }">★</button><button class="t-edit" @click="editTimelineEvent(item)"><i class="fa-solid fa-pen"></i></button><button class="t-del" @click="deleteTimelineEvent(item.id)">×</button></div></div><span class="t-text">{{ item.event }}</span></div></div></div></div></div></div>
+                    </div>
+
+                    <div v-else-if="mode === 'review' && reviewCard" class="content-area review-with-tree" key="review">
+                        <div class="review-center">
+                            <div class="review-card glass-morphism artistic-border">
+                                <div class="review-upper"><div class="review-img-holder"><img :src="reviewCard.imageUrl" class="r-img" @error="handleImageError"></div><h2 class="r-word">{{ reviewCard.word }}</h2><button class="r-speak" @click="speak(reviewCard.word, reviewCard.lang)"><i class="fa-solid fa-volume-high"></i></button></div>
+                                <div class="review-lower"><div v-if="!showReviewAnswer" class="r-mask"><button class="reveal-btn artistic-btn" @click="showReviewAnswer = true">揭开谜底</button></div><div v-else class="r-answer"><p class="r-reading">{{ reviewCard.reading }}</p><div class="html-content" v-html="reviewCard.meaning"></div><div class="srs-actions"><button class="srs-btn again artistic-btn" @click="handleSRS(1)">忘</button><button class="srs-btn hard artistic-btn" @click="handleSRS(2)">难</button><button class="srs-btn good artistic-btn" @click="handleSRS(3)">会</button><button class="srs-btn easy artistic-btn" @click="handleSRS(4)">熟</button></div></div></div></div>
+                        </div>
+                        <div class="orchard-sidebar glass-morphism">
+                            <h3>记忆之树</h3>
+                            <div class="tree-display">
+                                <img :src="treeStage.img" class="tree-img" alt="Memory Tree" @error="handleTreeError">
+                            </div>
+                            <div class="tree-stats"><p>已复习: <strong>{{ currentReviewCount }}</strong></p><p class="tree-status">状态: {{ treeStage.stage === 'fruit' ? '🍒 果实累累' : (treeStage.stage === 'tree' ? '🌳 枝繁叶茂' : (treeStage.stage === 'sapling' ? '🌿 茁壮成长' : '🌱 正在萌芽')) }}</p></div>
+                            <button class="exit-btn" @click="mode = 'card'">暂停耕耘</button>
+                        </div>
                     </div>
                 </Transition>
             </main>
+
+            <div v-if="mode !== 'history'" class="cat-mascot-container" @click="pokeMascot" :class="{ 'poked': neroState === 'happy' }" title="双击上传猫咪" @dblclick="triggerMascotInput">
+                <input type="file" ref="mascotInput" @change="handleMascotUpload" accept="image/*" style="display:none">
+                <div class="cat-img-wrapper"><img :src="userCat" class="cat-mascot-img" :class="neroState === 'thinking' ? 'thinking-anim' : 'idle-anim'" alt="Cat Mascot"></div>
+                <div v-if="neroState === 'thinking'" class="cat-bubble">挖掘中...</div>
+                <div v-if="neroState === 'happy'" class="cat-bubble">喵~✨</div>
+            </div>
         </div>
     </div>
 
@@ -347,76 +422,210 @@
                 const wordInput = ref('');
                 const loading = ref(false);
                 const imageLoading = ref(false);
-                const neroState = ref('idle');
+                const neroState = ref('idle'); 
                 const isFlipped = ref(false);
-                const history = ref([]);
+                const history = ref([]); 
+                const showConjugation = ref(false);
                 const mascotInput = ref(null);
 
                 const reviewCounts = ref(JSON.parse(localStorage.getItem('memori-review-counts') || '{}'));
 
-                // 替换为网络占位图，防止本地图片缺失
-                const shibaImages = { idle: 'https://media.tenor.com/2nJ1jW7kXp0AAAAi/shiba-inu-dog.gif', thinking: 'https://media.tenor.com/2nJ1jW7kXp0AAAAi/shiba-inu-dog.gif', happy: 'https://media.tenor.com/2nJ1jW7kXp0AAAAi/shiba-inu-dog.gif' };
-                const userCat = ref('https://placekitten.com/200/200');
-                const coverImages = { bg: 'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=1600&q=80', cat: 'https://placekitten.com/400/400' };
-                
-                const mode = ref('gallery');
+                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
+                const defaultCat = './my-cat.png'; 
+                const userCat = ref(localStorage.getItem('memori-user-cat') || defaultCat);
+                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
+                const mode = ref('gallery'); 
                 const reviewQueue = ref([]);
                 const reviewCard = ref(null);
                 const showReviewAnswer = ref(false);
+
                 const historyTab = ref('asia');
-                
-                // ... (timeline data omitted for brevity, logic fixed) ...
+                const isEditingTimeline = ref(false);
+                const editingEventId = ref(null);
+                const newEvent = ref({ year: '', event: '', tag: '🏺', tagsInput: '' });
+                const iconMap = { '中国': '🇨🇳', 'CN': '🇨🇳', '中': '🇨🇳', '日本': '🇯🇵', 'JP': '🇯🇵', '日': '🇯🇵', '韩国': '🇰🇷', 'KR': '🇰🇷', '英国': '🇬🇧', '法国': '🇫🇷', '德国': '🇩🇪', '意大利': '🇮🇹', '美国': '🇺🇸', '俄国': '🇷🇺', '埃及': '🇪🇬', '罗马': '🏛️', '秦': '🧱', '汉': '👘', '唐': '🏯', '宋': '📜', '明': '🏮', '清': '🐉', '艺术': '🎨', '考古': '🏺' };
+                function autoMapIcon() { const val = newEvent.value.tag.trim(); if (iconMap[val]) newEvent.value.tag = iconMap[val]; }
+
+                function getTagStyle(str) { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); const hue = Math.abs(hash % 360); return { backgroundColor: `hsl(${hue}, 15%, 90%)`, color: `hsl(${hue}, 40%, 35%)`, border: `1px solid hsl(${hue}, 20%, 80%)` }; }
+
+                // 历史年表数据 (复刻 + 扩充至24条)
                 const timelines = ref({
-                    asia: [{ id: 1, year: '前7000', event: '河姆渡文化', tag: '🇨🇳' }],
-                    europe: [{ id: 2, year: '1789', event: '法国大革命', tag: '🇫🇷' }]
+                    asia: [
+                        { id: 1, year: '前7000', event: '河姆渡文化 (稻作文明起源)', tag: '🇨🇳', tags: ['考古', '文明'] },
+                        { id: 1001, year: '前1600', event: '商朝建立 (青铜时代鼎盛)', tag: '🏺', tags: ['王朝'] },
+                        { id: 1002, year: '前1046', event: '牧野之战 (周朝建立)', tag: '⚔️', tags: ['战争'] },
+                        { id: 100, year: '前221', event: '秦始皇统一六国', tag: '🧱', tags: ['统一', '帝制'] },
+                        { id: 1003, year: '前138', event: '张骞出使西域 (丝绸之路)', tag: '🐫', tags: ['外交'] },
+                        { id: 1004, year: '57', event: '汉委奴国王印 (中日交流)', tag: '🇯🇵', tags: ['日本', '外交'] },
+                        { id: 1005, year: '645', event: '大化改新 (日本律令制)', tag: '📜', tags: ['日本', '改革'] },
+                        { id: 1006, year: '1405', event: '郑和下西洋', tag: '⛵', tags: ['航海'] },
+                        { id: 1007, year: '1443', event: '朝鲜世宗创制谚文', tag: '🇰🇷', tags: ['韩国', '文字'] },
+                        { id: 1008, year: '1600', event: '关原之战 (德川幕府)', tag: '🏯', tags: ['日本', '战争'] },
+                        { id: 1009, year: '1868', event: '明治维新', tag: '⚙️', tags: ['日本', '近代化'] },
+                        { id: 1010, year: '1911', event: '辛亥革命 (清朝灭亡)', tag: '🚩', tags: ['革命'] }
+                    ],
+                    europe: [
+                        { id: 2001, year: '前3000', event: '巨石阵 (Stonehenge) 建造', tag: '🪨', tags: ['考古'] },
+                        { id: 201, year: '前753', event: '罗马建城', tag: '🏛️', tags: ['传说', '罗马'] },
+                        { id: 2002, year: '前490', event: '马拉松战役 (希波战争)', tag: '🏃', tags: ['希腊', '战争'] },
+                        { id: 2003, year: '前27', event: '奥古斯都建立罗马帝国', tag: '👑', tags: ['罗马', '帝制'] },
+                        { id: 2004, year: '476', event: '西罗马帝国灭亡', tag: '📉', tags: ['中世纪'] },
+                        { id: 2005, year: '1066', event: '诺曼征服 (黑斯廷斯战役)', tag: '🛡️', tags: ['英国'] },
+                        { id: 2006, year: '1215', event: '大宪章 (Magna Carta) 签署', tag: '📜', tags: ['法律'] },
+                        { id: 2007, year: '1453', event: '君士坦丁堡陷落', tag: '☪️', tags: ['拜占庭'] },
+                        { id: 2008, year: '1517', event: '马丁·路德宗教改革', tag: '🔨', tags: ['宗教'] },
+                        { id: 202, year: '1789', event: '法国大革命', tag: '🇫🇷', tags: ['革命'] },
+                        { id: 2009, year: '1914', event: '第一次世界大战爆发', tag: '💣', tags: ['战争'] }
+                    ]
                 });
 
-                const unifiedFont = "'Zen Old Mincho', serif";
+                const unifiedFont = "'Zen Old Mincho', 'Noto Serif SC', 'Noto Serif JP', 'Noto Serif KR', serif";
                 const langConfig = {
-                    jp: { name: '日语', scent: '樱与和纸', plant: 'cherry blossom', flag: '🇯🇵', voice: 'ja-JP', bg: '#F9F1F0', accent: '#CB3A56', font: unifiedFont },
-                    // ... other langs simplified ...
+                    jp: { name: '日语', scent: '樱与和纸', plant: 'cherry blossom', scentColor: '244, 165, 179', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0 0%, #FCEFE8 100%)', accent: '#CB3A56', text: '#4B2F32', font: unifiedFont },
+                    zh: { name: '现代汉语', scent: '朱砂与茶', plant: 'peony flower', scentColor: '157, 41, 51', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1 0%, #F6F4EF 100%)', accent: '#9D2933', text: '#2E211B', font: unifiedFont },
+                    lzh: { name: '古代汉语', scent: '檀香', plant: 'lotus flower', scentColor: '76, 92, 106', flag: '📜', voice: 'zh-CN', bg: 'linear-gradient(to top, #E9EAE4 0%, #F4F5F0 100%)', accent: '#41555D', text: '#1B2124', font: unifiedFont },
+                    en: { name: '英语', scent: '羊皮卷', plant: 'english rose', scentColor: '23, 114, 180', flag: '🇬🇧', voice: 'en-US', bg: 'linear-gradient(-20deg, #E6E8EB 0%, #EDF1F4 100%)', accent: '#1772B4', text: '#151D29', font: "'Playfair Display', serif" },
+                    cjp: { name: '古典日语', scent: '枯墨', plant: 'bonsai pine', scentColor: '109, 88, 67', flag: '🏯', voice: 'ja-JP', bg: 'linear-gradient(to top, #EBE6DF 0%, #F2EFE8 100%)', accent: '#5A3D30', text: '#2B201A', font: unifiedFont },
+                    kr: { name: '韩语', scent: '木槿', plant: 'hibiscus flower', scentColor: '219, 102, 142', flag: '🇰🇷', voice: 'ko-KR', bg: 'linear-gradient(to top, #F7EFF2 0%, #F9EDF1 100%)', accent: '#B25D7E', text: '#402E34', font: unifiedFont },
+                    de: { name: '德语', scent: '黑森林', plant: 'oak tree', scentColor: '81, 106, 120', flag: '🇩🇪', voice: 'de-DE', bg: 'linear-gradient(to top, #E8ECEB 0%, #EFF2F1 100%)', accent: '#374E59', text: '#1A2326', font: "'Playfair Display', serif" },
+                    it: { name: '意语', scent: '托斯卡纳', plant: 'lemon tree', scentColor: '201, 127, 85', flag: '🇮🇹', voice: 'it-IT', bg: 'linear-gradient(120deg, #F8F4E8 0%, #FAF6EE 100%)', accent: '#8E4932', text: '#36221B', font: "'Playfair Display', serif" },
+                    lat: { name: '拉丁', scent: '乳香', plant: 'olive tree', scentColor: '143, 137, 133', flag: '🏛️', voice: 'it-IT', bg: 'linear-gradient(to top, #EAE8E6 0%, #F0EEEC 100%)', accent: '#605A54', text: '#262422', font: "'Cinzel', serif" }
                 };
-                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', imageUrl: 'https://images.unsplash.com/photo-1535905557558-afc4877a26fc?auto=format&fit=crop&w=800&q=80', isImageLocked: false, examples: [], lang: 'jp', nextReview: 0, interval: 0, isCollected: false });
-                
-                const filteredHistory = computed(() => history.value);
-                const currentReviewCount = computed(() => 0);
-                const flowerField = computed(() => []);
-                const treeStage = computed(() => ({ img: 'https://via.placeholder.com/150' }));
-                const groupedTimelines = computed(() => { return timelines.value.asia.map(t => ({year: t.year, events: [t]})) });
-
-                onMounted(() => {
-                    const savedBook = localStorage.getItem('memori-book');
-                    if (savedBook) history.value = JSON.parse(savedBook);
+                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', imageUrl: 'https://picsum.photos/seed/memori/800/1000', isImageLocked: false, examples: [], lang: 'jp', nextReview: 0, interval: 0, isCollected: false });
+                const filteredHistory = computed(() => history.value.filter(item => (item.lang || 'jp') === currentLang.value));
+                const currentReviewCount = computed(() => reviewCounts.value[currentLang.value] || 0);
+                const flowerField = computed(() => {
+                    const count = filteredHistory.value.length;
+                    const flowerCount = Math.floor(count / 50);
+                    const flowers = [];
+                    const plantName = langConfig[currentLang.value].plant;
+                    for(let i=0; i<flowerCount; i++) {
+                        const seed = `flower_${currentLang.value}_${i}`;
+                        const url = `https://pollinations.ai/p/vintage%20botanical%20illustration%20of%20${encodeURIComponent(plantName)}%20flower%20on%20old%20paper?width=200&height=200&nologo=true&seed=${seed}`;
+                        flowers.push({ id: i, img: url });
+                    }
+                    return flowers;
+                });
+                const treeStage = computed(() => {
+                    const c = currentReviewCount.value;
+                    const plantName = langConfig[currentLang.value].plant;
+                    let prompt = '';
+                    let status = '';
+                    let seedSuffix = 100; 
+                    
+                    if (c < 50) { prompt = `tiny_green_sprout_in_dark_soil_macro`; status = 'seedling'; seedSuffix = 101; } 
+                    else if (c < 100) { prompt = `young_${plantName.replace(/\s/g, '_')}_tree_sapling_vintage`; status = 'sapling'; seedSuffix = 102; } 
+                    else if (c < 150) { prompt = `big_mature_${plantName.replace(/\s/g, '_')}_tree_on_white`; status = 'tree'; seedSuffix = 103; } 
+                    else { prompt = `mystical_${plantName.replace(/\s/g, '_')}_tree_with_golden_fruits_art`; status = 'fruit'; seedSuffix = 104; }
+                  
+                    return { stage: status, img: `https://pollinations.ai/p/${prompt}?width=400&height=600&nologo=true&model=flux&seed=${seedSuffix}` };
                 });
 
-                function handleImageError(e) { e.target.src = 'https://via.placeholder.com/400x600?text=Image+Error'; }
-                function speak(text) { console.log("Speaking:", text); } // Mock speak
-                function toggleCollect() { /* ... logic ... */ }
+                function parseYear(yearStr) { if (!yearStr) return 0; const isBC = yearStr.includes('前') || yearStr.includes('BC') || yearStr.includes('-'); const numMatch = yearStr.match(/\d+/); const num = numMatch ? parseInt(numMatch[0]) : 0; return isBC ? -num : num; }
+                const groupedTimelines = computed(() => { const rawList = timelines.value[historyTab.value]; const groups = {}; rawList.forEach(item => { if (!groups[item.year]) { groups[item.year] = { year: item.year, rawYear: parseYear(item.year), events: [] }; } groups[item.year].events.push(item); }); return Object.values(groups).sort((a, b) => a.rawYear - b.rawYear); });
                 
-                // MOCK API FUNCTION (模拟后端)
-                async function generateCard() {
-                    if (!wordInput.value) return;
-                    loading.value = true;
-                    setTimeout(() => {
-                        // 模拟返回数据
-                        const mockData = {
-                            word: wordInput.value,
-                            reading: 'Mock Reading',
-                            meaning: 'This is a mock definition because the backend is missing.',
-                            simple_english: 'Mock Translation',
-                            etymology: 'Mock Etymology',
-                            imageUrl: 'https://images.unsplash.com/photo-1507842217153-e56f45d871fd?auto=format&fit=crop&w=800&q=80'
-                        };
-                        card.value = { ...mockData, id: Date.now(), lang: currentLang.value };
-                        history.value.push(card.value);
-                        mode.value = 'card';
-                        loading.value = false;
-                        wordInput.value = '';
-                    }, 1000);
+                onMounted(() => {
+                    const savedBook = localStorage.getItem('memori-book'); if (savedBook) { history.value = JSON.parse(savedBook); if(history.value.length > 0) mode.value = 'gallery'; }
+                    const savedTimeline = localStorage.getItem('memori-timelines-v19'); if (savedTimeline) timelines.value = JSON.parse(savedTimeline);
+                    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+                    switchLang('jp');
+                });
+                watch(timelines, (newVal) => { localStorage.setItem('memori-timelines-v19', JSON.stringify(newVal)); }, { deep: true });
+                watch(reviewCounts, (newVal) => { localStorage.setItem('memori-review-counts', JSON.stringify(newVal)); }, { deep: true });
+
+                function handleImageError(e) { const currentSrc = e.target.src; if (currentSrc.includes('pollinations.ai')) { e.target.src = `https://picsum.photos/seed/${encodeURIComponent(card.value.word)}/800/1000`; } else { e.target.src = 'https://via.placeholder.com/400x600?text=No+Image'; } }
+                function handleTreeError(e) { e.target.src = 'https://via.placeholder.com/400x600?text=Tree+Growing'; }
+                function speak(text, langCode = null) { if (!text) return; const langKey = langCode || currentLang.value; if (langKey === 'zh' || langKey === 'lzh') return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); const config = langConfig[langKey]; const targetBCP47 = config ? config.voice : 'en-US'; utterance.lang = targetBCP47; const voices = window.speechSynthesis.getVoices(); const exactVoice = voices.find(v => v.lang === targetBCP47) || voices.find(v => v.lang === targetBCP47.replace('-', '_')) || voices.find(v => v.lang.startsWith(targetBCP47.split('-')[0])); if (exactVoice) { utterance.voice = exactVoice; utterance.lang = exactVoice.lang; } else { utterance.lang = targetBCP47; } utterance.rate = 0.9; window.speechSynthesis.speak(utterance); }
+
+                function toggleCollect() {
+                    if (card.value.isCollected) {
+                        if(!confirm('💔 确定要将此词移出单词本吗？')) return;
+                        history.value = history.value.filter(h => !(h.word === card.value.word && h.lang === card.value.lang));
+                        card.value.isCollected = false;
+                    } else {
+                        const exists = history.value.some(h => h.word === card.value.word && h.lang === card.value.lang);
+                        if (!exists) {
+                            const cardToSave = { ...card.value, isCollected: true, nextReview: Date.now(), interval: 0 };
+                            history.value.unshift(cardToSave);
+                            card.value.isCollected = true;
+                            if (filteredHistory.value.length % 50 === 0) { alert(`🌸 恭喜！你在【${langConfig[currentLang.value].name}】的花田里种下了一株新植物！`); }
+                        }
+                    }
+                    localStorage.setItem('memori-book', JSON.stringify(history.value));
                 }
 
+                // --- 发掘核心：对接云端 API ---
+                async function generateCard() {
+                    if (!wordInput.value) return;
+                    loading.value = true; imageLoading.value = true; neroState.value = 'thinking'; isFlipped.value = false; showConjugation.value = false; mode.value = 'card';
+                    try {
+                        const existing = history.value.find(h => h.word === wordInput.value && h.lang === currentLang.value);
+                        if (existing) {
+                            card.value = { ...existing };
+                            setTimeout(() => speak(existing.word, existing.lang), 500);
+                        } else {
+                            // 调用新部署的接口
+                            const res = await fetch('/api/openai', { 
+                                method: 'POST', 
+                                headers: { 'Content-Type': 'application/json' }, 
+                                body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) 
+                            });
+                            if (!res.ok) throw new Error('API Error');
+                            const data = await res.json();
+                            const prompt = `ancient museum artifact ${data.simple_english || data.word}, cinematic lighting, highly detailed, textured background, historical`; 
+                            const finalImageUrl = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=800&height=1000&nologo=true&model=flux`;
+                            card.value = { id: Date.now(), ...data, lang: currentLang.value, imageUrl: finalImageUrl, isImageLocked: false, nextReview: 0, interval: 0, isCollected: false };
+                            setTimeout(() => speak(card.value.word, card.value.lang), 500);
+                        }
+                        neroState.value = 'happy';
+                        setTimeout(() => neroState.value = 'idle', 3000); wordInput.value = ''; 
+                    } catch (e) { alert('挖掘失败: ' + e.message); neroState.value = 'idle'; } finally { loading.value = false; }
+                }
+
+                function saveToBook(newCard) { 
+                    const idx = history.value.findIndex(h => h.word === newCard.word && h.lang === newCard.lang);
+                    if (idx !== -1) { history.value[idx] = newCard; localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+                }
+
+                function startReview() { 
+                    const now = Date.now();
+                    const dueWords = filteredHistory.value.filter(w => w.nextReview <= now); 
+                    if (dueWords.length === 0) { alert(`🎉 太棒了！【${langConfig[currentLang.value].name}】暂无复习任务。`); return; } 
+                    reviewQueue.value = dueWords.sort((a, b) => a.nextReview - b.nextReview);
+                    mode.value = 'review'; nextReviewCard(); 
+                }
+                function nextReviewCard() { if (reviewQueue.value.length === 0) { alert("🎉 本轮复习完成！"); mode.value = 'card'; neroState.value = 'happy'; setTimeout(() => neroState.value = 'idle', 3000); return; } reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; }
+                function handleSRS(rating) { 
+                    const c = reviewCard.value;
+                    let interval = c.interval || 0; 
+                    if (rating === 1) interval = 1;
+                    else { if (interval === 0) interval = 1; else if (interval === 1) interval = 3; else interval = Math.ceil(interval * (rating === 2 ? 1.2 : (rating === 3 ? 2.5 : 4.0))); } 
+                    c.interval = interval;
+                    c.nextReview = Date.now() + (interval * 24 * 60 * 60 * 1000); 
+                    saveToBook(c); 
+                    if (!reviewCounts.value[currentLang.value]) reviewCounts.value[currentLang.value] = 0; reviewCounts.value[currentLang.value]++;
+                    nextReviewCard(); 
+                }
+                const loadWord = (item) => { card.value = item; if (item.lang && item.lang !== currentLang.value) switchLang(item.lang); isFlipped.value = false; if (mode.value !== 'card') mode.value = 'card'; };
+                function deleteGalleryItem(id) { if(!confirm('确定要从藏品馆移除这个词吗？')) return; history.value = history.value.filter(item => item.id !== id); localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+                const deleteWord = (id) => deleteGalleryItem(id);
+                const toggleImageLock = () => { card.value.isImageLocked = !card.value.isImageLocked; const found = history.value.find(h => h.id === card.value.id); if (found) { found.isImageLocked = card.value.isImageLocked; found.imageUrl = card.value.imageUrl; localStorage.setItem('memori-book', JSON.stringify(history.value)); } };
+                function pokeMascot() { if (neroState.value === 'idle') { neroState.value = 'happy'; setTimeout(() => neroState.value = 'idle', 1500); } }
+                function triggerMascotInput() { mascotInput.value.click(); }
+                function handleMascotUpload(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { userCat.value = e.target.result; localStorage.setItem('memori-user-cat', e.target.result); alert('🐱 新猫咪已上任！'); }; reader.readAsDataURL(file); }
+
+                function editTimelineEvent(item) { newEvent.value = { ...item, tagsInput: item.tags ? item.tags.join(' ') : '' }; isEditingTimeline.value = true; editingEventId.value = item.id; document.querySelector('.history-stage')?.scrollTo({ top: 0, behavior: 'smooth' }); }
+                function cancelEdit() { isEditingTimeline.value = false; editingEventId.value = null; newEvent.value = { year: '', event: '', tag: '🏺', tagsInput: '' }; }
+                function addTimelineEvent() { if (!newEvent.value.year || !newEvent.value.event) return; const tagList = newEvent.value.tagsInput ? newEvent.value.tagsInput.split(/[ ,，、]+/).filter(t => t.trim() !== '') : []; const finalEvent = { year: newEvent.value.year, event: newEvent.value.event, tag: newEvent.value.tag, tags: tagList, isStarred: newEvent.value.isStarred || false }; if (isEditingTimeline.value) { const list = timelines.value[historyTab.value]; const index = list.findIndex(e => e.id === editingEventId.value); if (index !== -1) list[index] = { ...finalEvent, id: editingEventId.value }; isEditingTimeline.value = false; editingEventId.value = null; } else { timelines.value[historyTab.value].push({ id: Date.now(), ...finalEvent }); } newEvent.value = { year: '', event: '', tag: '🏺', tagsInput: '' }; neroState.value = 'happy'; setTimeout(() => neroState.value = 'idle', 1500); }
+                function deleteTimelineEvent(id) { if (!confirm('删除此条目？')) return; timelines.value[historyTab.value] = timelines.value[historyTab.value].filter(e => e.id !== id); }
+                function toggleStar(item) { item.isStarred = !item.isStarred; }
+                const switchLang = (lang) => { currentLang.value = lang; mode.value = 'card'; };
+                function onDragStart(event, item) { event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', item.id); }
+                function onDrop(event, targetItem) { const draggedId = event.dataTransfer.getData('text/plain'); if (!draggedId || parseInt(draggedId) === targetItem.id) return; const list = timelines.value[historyTab.value]; const fromIndex = list.findIndex(e => e.id == draggedId); const toIndex = list.findIndex(e => e.id === targetItem.id); if (fromIndex !== -1 && toIndex !== -1) { const itemToMove = list.splice(fromIndex, 1)[0]; list.splice(toIndex, 0, itemToMove); } }
+                function clearCurrentHistory() { if (!confirm(`⚠️ 确定要清空【${langConfig[currentLang.value].name}】的所有记录吗？`)) return; history.value = history.value.filter(item => (item.lang || 'jp') !== currentLang.value); reviewCounts.value[currentLang.value] = 0; localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+
                 return {
-                    showCover, enterApp, currentLang, wordInput, loading, imageLoading, neroState, isFlipped, history, mascotInput, reviewCounts, shibaImages, userCat, coverImages, mode, card, filteredHistory, langConfig, handleImageError, speak, generateCard, groupedTimelines, flowerField, treeStage, currentReviewCount
+                    showCover, enterApp, currentLang, wordInput, loading, imageLoading, neroState, isFlipped, history, showConjugation, mascotInput, reviewCounts, shibaImages, defaultCat, userCat, coverImages, mode, reviewQueue, reviewCard, showReviewAnswer, historyTab, isEditingTimeline, editingEventId, newEvent, iconMap, autoMapIcon, getTagStyle, timelines, unifiedFont, langConfig, card, filteredHistory, currentReviewCount, flowerField, treeStage, parseYear, groupedTimelines, handleImageError, handleTreeError, speak, toggleCollect, generateCard, saveToBook, startReview, nextReviewCard, handleSRS, loadWord, deleteGalleryItem, deleteWord, toggleImageLock, pokeMascot, triggerMascotInput, handleMascotUpload, editTimelineEvent, cancelEdit, addTimelineEvent, deleteTimelineEvent, toggleStar, switchLang, onDragStart, onDrop, clearCurrentHistory
                 };
             }
         }).mount('#app');
