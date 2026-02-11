@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // CORS 
+  // 1. CORS 配置
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -7,11 +7,11 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const { word, lang, type } = req.body; // type: 'full' | 'enrich'
+    const { word, lang, type } = req.body;
 
-    // 语种映射
+    // 语种全称映射
     const langMap = {
-      cjp: "Classical Japanese (Bungo, historical context)",
+      cjp: "Classical Japanese (Bungo)",
       lzh: "Classical Chinese (Literary Chinese)",
       lat: "Latin",
       jp: "Modern Japanese",
@@ -22,47 +22,46 @@ export default async function handler(req, res) {
       kr: "Korean"
     };
     const targetLang = langMap[lang] || "English";
+    const isChineseTarget = lang === 'zh' || lang === 'lzh';
 
-    let systemPrompt = `You are an expert Etymologist and Lexicographer. 
-    User Query: "${word}" in ${targetLang}.
+    // 核心 Prompt Logic
+    let systemPrompt = `You are a professional Etymologist and Lexicographer.
+    Target Language: ${targetLang}.
+    User Query: "${word}".
     
-    Output JSON ONLY. No markdown.
+    CRITICAL INSTRUCTION:
+    1. If the User Query is in Chinese AND Target Language is NOT Chinese/Classical Chinese:
+       - FIRST, translate "${word}" into ${targetLang}.
+       - THEN, create the dictionary entry for that TRANSLATED word.
+       - Example: User searches "苹果" in English -> You output data for "Apple".
+    2. If Target Language IS Chinese/Classical Chinese:
+       - Treat "${word}" strictly as the target word. Do NOT translate.
+    
+    Output strictly valid JSON. NO markdown.
     `;
 
     if (type === 'enrich') {
-      // 补全模式：只查词源和例句
+      // 补全模式
       systemPrompt += `
-      Task: Provide deep academic background and high-quality examples.
-      
-      Requirements:
-      1. **Etymology**: 200+ words. Trace roots (PIE, Proto-Sino-Tibetan, etc.). Bilingual explanation (Chinese + ${targetLang}). Mention historical shifts.
-      2. **Examples**: 2-3 sentences. MUST be from: Famous Literature, Ancient Texts, Historical Events, or Philosophers. No simple daily conversation.
-      
-      Structure:
+      Task: Provide deep etymology and examples only.
+      JSON Structure:
       {
-        "etymology": "Detailed string...",
-        "examples": [{"text": "Native text", "cn": "Chinese translation"}]
+        "etymology": "Detailed bilingual etymology (Chinese + Native)...",
+        "examples": [{"text": "Native Sentence", "cn": "Chinese Translation"}]
       }`;
     } else {
       // 全量模式
       systemPrompt += `
-      Task: Create a comprehensive dictionary entry.
-      
-      Requirements:
-      1. **Meaning**: Professional definition in Chinese.
-      2. **Reading**: IPA, Kana, or Pinyin.
-      3. **Etymology**: Wikipedia-level academic depth.
-      4. **Examples**: 2-3 High-quality quotes/historical text.
-      
-      Structure:
+      Task: Create a full dictionary card.
+      JSON Structure:
       {
-        "word": "${word}",
-        "reading": "...",
-        "meaning": "...",
-        "etymology": "...",
-        "simple_english": "Quick translation",
-        "word_details": "Part of speech / JLPT level / Era",
-        "examples": [{"text": "...", "cn": "..."}]
+        "word": "The word in ${targetLang}",
+        "reading": "Pronunciation (IPA/Kana/Pinyin)",
+        "meaning": "Definition in Chinese",
+        "etymology": "Brief origin",
+        "simple_english": "English equivalent",
+        "word_details": "Part of speech",
+        "examples": [{"text": "Example sentence", "cn": "Translation"}]
       }`;
     }
 
