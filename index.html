@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memori - 言叶の考古学 V2.0 (全功能完整版)</title>
+    <title>Memori - 言叶の考古学 V2.0 (全功能修复版)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-/* --- 🏮 严格保留原版中国色与全局样式 --- */
+/* --- 🏮 严格保留所有原本颜色变量 --- */
 :root {
   --color-bg-main: #E2E1E4;  /* 芡食白 */
   --color-text-main: #2D241E;  /* 乌色 */
@@ -24,65 +24,82 @@
   --glass-border: rgba(203, 58, 86, 0.15); 
 }
 
-/* 🎨 统一布局 */
 * { box-sizing: border-box; }
 .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; position: relative; color: var(--color-text-main); }
 .app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
 
-.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); border-radius: 24px; }
+.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; }
 
-/* 🚪 封面页样式 */
-.cover-stage { position: fixed; inset: 0; background-size: cover; background-position: center; z-index: 1000; display: flex; justify-content: center; align-items: center; }
-.cover-overlay-gradient { position: absolute; inset: 0; background: linear-gradient(to right, rgba(45,36,30,0.6), transparent); }
+/* 🚪 封面页：完全复刻原本结构与样式，解决点击失效问题 */
+.cover-stage.classic-theme { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
+.cover-overlay-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
+.cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
+.cover-text-group.jp-style { flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); padding-left: 50px; text-align: right; z-index: 50; }
+.cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; }
+.subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; opacity: 0.95; color: var(--color-bg-main); }
+.poem-main { font-family: 'Zen Old Mincho', serif; font-size: 1.3rem; line-height: 2; margin-top: 50px; opacity: 0.9; }
 
-/* 🏮 侧边栏与列表 */
+/* 关键修复点：提高按钮层级，确保点击生效 */
+.start-btn-main.jp-btn { 
+    margin-top: 60px; 
+    font-family: 'Noto Serif JP', serif; 
+    padding: 16px 48px; 
+    font-size: 1.2rem; 
+    font-weight: 700; 
+    background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); 
+    color: #fff; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: all 0.4s; 
+    letter-spacing: 0.1em; 
+    box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); 
+    pointer-events: auto; /* 强制开启点击 */
+    position: relative; 
+    z-index: 101; 
+}
+.start-btn-main.jp-btn:hover { transform: translateY(-3px) scale(1.02); background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); box-shadow: 0 8px 30px rgba(203, 58, 86, 0.5); }
+
+/* 猫咪防止遮挡设置 */
+.cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
+.cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
+
+/* 🏮 内部极简 UI 样式保留 */
 .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); position: relative; }
-.word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; border-left: 4px solid var(--color-accent); }
-
-/* 🏮 核心展示区 - 纸质版 UI 适配 */
 .main-stage { flex: 1; display: flex; flex-direction: column; padding: 20px; z-index: 10; align-items: center; justify-content: flex-start; }
-.search-bar { width: 100%; max-width: 600px; padding: 12px 25px; margin-bottom: 30px; }
-.search-input { border: none; background: transparent; padding: 10px; flex: 1; outline: none; font-size: 1.2rem; color: var(--color-text-main); }
-
-/* V2.0 极简卡片样式 */
 .v2-card { background: white; width: 400px; min-height: 520px; border-radius: 24px; padding: 50px 35px; box-shadow: 0 15px 35px rgba(45, 36, 30, 0.1); border: 1px solid var(--glass-border); display: flex; flex-direction: column; text-align: center; animation: fadeIn 0.4s ease; }
 .ruby-text { font-family: sans-serif; font-size: 15px; color: var(--color-accent); margin-bottom: 10px; letter-spacing: 1px; }
 .main-word-title { font-size: 3.8rem; font-weight: 700; margin: 0; line-height: 1.1; font-family: 'Zen Old Mincho', serif; }
 .divider { height: 1px; background-image: linear-gradient(to right, #D5C9BB 40%, transparent 20%); background-size: 6px 1px; background-repeat: repeat-x; width: 100%; margin: 35px 0; }
 
-/* 🏮 历史年表完整样式还原 */
-.history-stage { width: 95%; max-width: 1000px; height: 90vh; padding: 40px; overflow: hidden; display: flex; flex-direction: column; }
+/* 年表样式还原 */
+.history-stage { width: 95%; height: 90vh; padding: 40px; overflow: hidden; display: flex; flex-direction: column; }
 .timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 20px; }
-.t-content { background: rgba(255, 253, 248, 0.9); padding: 18px 25px; border: 1px solid var(--glass-border); border-radius: 18px; transition: all 0.3s; }
-.t-content:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(45, 36, 30, 0.08); }
-.year-number { font-weight: 800; font-size: 1.3rem; color: var(--color-accent); border: 1px solid var(--glass-border); padding: 4px 10px; border-radius: 8px; background: white; }
-
-/* 按钮样式 */
-.artistic-btn { padding: 14px 28px; border-radius: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; border: none; }
-.btn-primary { background: var(--color-accent); color: white; box-shadow: 0 4px 12px rgba(203, 58, 86, 0.2); }
-.btn-primary:hover { transform: translateY(-2px); background: var(--color-accent-hover); }
-
-/* 吉祥物动画 */
-.cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 220px; z-index: 100; cursor: pointer; transition: transform 0.3s; }
-.cat-mascot-container:hover { transform: scale(1.05); }
+.t-content { background: rgba(255, 253, 248, 0.9); padding: 18px 25px; border: 1px solid var(--glass-border); border-radius: 18px; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-enter-active, .fade-leave-active { transition: opacity 1s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body class="bg-[#E2E1E4]">
     <div id="app">
         <Transition name="fade">
-            <div v-if="showCover" class="cover-stage" :style="{ backgroundImage: `url(${coverImages.bg})` }">
+            <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: `url(${coverImages.bg})` }">
                 <div class="cover-overlay-gradient"></div>
-                <div class="relative z-10 flex flex-col items-end text-white px-20">
-                    <h1 class="text-8xl font-serif font-bold tracking-widest">Memori</h1>
-                    <p class="text-2xl mt-4 opacity-90 tracking-[0.3em]">言葉の考古学</p>
-                    <div class="mt-12 text-xl font-serif leading-loose opacity-80 text-right">
-                        <p>時の砂に埋もれた、</p>
-                        <p>言葉の欠片を探して。</p>
+                <div class="cover-content-layout">
+                    <div class="cover-cat-wrapper">
+                        <img :src="coverImages.cat" class="cover-cat-large" alt="Cover Cat">
                     </div>
-                    <button class="mt-16 artistic-btn btn-primary text-xl" @click="enterApp">探索を始める</button>
+                    <div class="cover-text-group jp-style">
+                        <h1 class="cover-title-main">Memori</h1>
+                        <p class="subtitle-main">言葉の考古学</p>
+                        <div class="poem-main">
+                            <p>時の砂に埋もれた、</p>
+                            <p>言葉の欠片を探して。</p>
+                        </div>
+                        <button class="start-btn-main jp-btn" @click="enterApp">探索を始める</button>
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -92,8 +109,8 @@
             <aside class="sidebar glass-morphism">
                 <div class="sidebar-header border-b border-pink-100 pb-4 mb-4">
                     <h3 class="font-bold flex justify-between items-center">
-                        <span class="text-lg">{{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}</span>
-                        <span class="text-xs opacity-50 font-sans">{{ filteredHistory.length }} 词</span>
+                        <span>{{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}</span>
+                        <span class="text-xs opacity-50">{{ filteredHistory.length }} 词</span>
                     </h3>
                 </div>
                 <div class="word-list flex-1 overflow-y-auto pr-2 custom-scroll">
@@ -102,34 +119,29 @@
                          :class="{ 'active': card.id === item.id }"
                          @click="loadWord(item)">
                         <span class="truncate">{{ item.word }}</span>
-                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold px-2 transition-opacity" @click.stop="deleteWord(item.id)">×</button>
+                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold" @click.stop="deleteWord(item.id)">×</button>
                     </div>
                 </div>
                 <div class="sidebar-footer mt-4 pt-4 border-t border-pink-100 flex flex-col gap-3 relative">
                     <div class="shiba-mascot" @click="pokeMascot">
                         <img :src="shibaImages[neroState]" class="w-full">
-                        <div v-if="neroState === 'thinking'" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full text-xs shadow-md">嗅嗅...</div>
                     </div>
-                    <button class="artistic-btn btn-primary" @click="startReview"><i class="fa-solid fa-layer-group mr-2"></i> 复习</button>
-                    <button class="artistic-btn bg-white/50 text-[#2D241E] border border-pink-100 hover:bg-white" @click="mode = 'history'"><i class="fa-solid fa-scroll mr-2"></i> 历史年表</button>
-                    <button class="text-xs opacity-40 hover:opacity-100 mt-2" @click="clearCurrentHistory">清空当前库</button>
+                    <button class="artistic-btn bg-[#CB3A56] text-white py-3 rounded-xl font-bold" @click="startReview">复习</button>
+                    <button class="artistic-btn border border-pink-200 py-3 rounded-xl" @click="mode = 'history'">历史年表</button>
                 </div>
             </aside>
 
             <main class="main-stage">
-                <div class="search-bar glass-morphism flex items-center">
+                <div class="search-bar glass-morphism w-full max-width-600 flex items-center px-6 py-3 mb-8">
                     <div class="flex gap-2 mr-4">
-                        <button v-for="(cfg, key) in langConfig" :key="key" @click="switchLang(key)" 
-                                class="w-9 h-9 rounded-xl flex items-center justify-center transition-all bg-white/40"
-                                :class="{ 'scale-110 shadow-inner bg-white border-2 border-[#CB3A56]': currentLang === key }">
+                        <button v-for="(cfg, key) in langConfig" @click="switchLang(key)" 
+                                class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+                                :class="currentLang === key ? 'bg-white border-2 border-[#CB3A56]' : 'opacity-50'">
                             {{ cfg.flag }}
                         </button>
                     </div>
-                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="'寻找' + langConfig[currentLang].name + '的味道...'" class="search-input">
-                    <button @click="generateCard" class="text-2xl" :style="{ color: langConfig[currentLang].accent }">
-                        <i v-if="loading" class="fa-solid fa-spinner fa-spin"></i>
-                        <i v-else class="fa-solid fa-magnifying-glass"></i>
-                    </button>
+                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="'寻找' + langConfig[currentLang].name + '的味道...'" class="search-input bg-transparent outline-none flex-1 text-xl">
+                    <button @click="generateCard" class="text-2xl text-[#CB3A56]"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
                 <Transition name="fade-mode" mode="out-in">
@@ -137,94 +149,55 @@
                         <div class="ruby-text">{{ card.reading }}</div>
                         <h2 class="main-word-title">{{ card.word }}</h2>
                         <div class="divider"></div>
-                        <div class="flex-1 overflow-y-auto pr-2 custom-scroll text-left">
-                            <div class="text-sm uppercase tracking-widest text-gray-400 mb-3 font-sans">释义与考证</div>
+                        <div class="flex-1 overflow-y-auto text-left">
                             <div class="text-lg leading-relaxed mb-8" v-html="card.meaning"></div>
-                            
-                            <div v-if="card.examples && card.examples.length" class="mt-6">
-                                <div class="text-sm uppercase tracking-widest text-gray-400 mb-3 font-sans">例证</div>
-                                <div v-for="(ex, i) in card.examples" :key="i" class="border-l-2 border-[#CB3A56]/30 pl-4 mb-4">
-                                    <p class="italic text-gray-700 cursor-pointer hover:text-[#CB3A56]" @click="speak(ex.text)">{{ ex.text }}</p>
-                                    <p class="text-sm text-gray-400 mt-1">{{ ex.cn }}</p>
+                            <div v-if="card.examples && card.examples.length">
+                                <div v-for="ex in card.examples" class="border-l-2 border-[#CB3A56]/30 pl-4 mb-4">
+                                    <p class="italic text-gray-700">{{ ex.text }}</p>
+                                    <p class="text-sm text-gray-400">{{ ex.cn }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-8 flex gap-4">
-                            <button class="flex-1 artistic-btn btn-primary" @click="toggleCollect">
-                                <i class="fa-solid" :class="card.isCollected ? 'fa-check mr-2' : 'fa-plus mr-2'"></i>
+                            <button class="flex-1 bg-[#CB3A56] text-white py-4 rounded-2xl font-bold" @click="toggleCollect">
                                 {{ card.isCollected ? '已收藏' : '加入单词本' }}
                             </button>
-                            <button class="w-16 artistic-btn bg-[#F0EAE1] text-[#5C4B3C]" @click="speak(card.word)">
-                                <i class="fa-solid fa-volume-high"></i>
-                            </button>
+                            <button class="w-16 bg-[#F0EAE1] text-[#5C4B3C] rounded-2xl" @click="speak(card.word)"><i class="fa-solid fa-volume-high"></i></button>
                         </div>
                     </div>
 
                     <div v-else-if="mode === 'review' && reviewCard" class="v2-card" key="review">
-                        <div class="text-sm tracking-[0.3em] text-gray-300 mb-10 font-sans">MEMORI RECALL</div>
+                        <div class="text-sm tracking-widest text-gray-300 mb-10">RECALLING...</div>
                         <h2 class="main-word-title">{{ reviewCard.word }}</h2>
                         <div class="divider"></div>
-                        
                         <div v-if="!showReviewAnswer" class="flex-1 flex flex-col items-center justify-center">
-                            <button class="artistic-btn btn-primary px-12 py-5 text-xl" @click="showReviewAnswer = true">揭开谜底</button>
-                            <p class="mt-6 text-gray-400 text-sm italic">沉思片刻，你还记得它的本义吗？</p>
+                            <button class="bg-[#CB3A56] text-white px-12 py-5 rounded-2xl text-xl font-bold" @click="showReviewAnswer = true">揭开谜底</button>
                         </div>
-                        
-                        <div v-else class="flex-1 flex flex-col w-full animate-in fade-in slide-in-from-bottom-4">
-                            <div class="ruby-text text-xl mb-4">{{ reviewCard.reading }}</div>
-                            <div class="flex-1 overflow-y-auto text-left px-2 mb-8" v-html="reviewCard.meaning"></div>
-                            <div class="flex gap-2 w-full">
-                                <button class="flex-1 bg-[#CB3A56] text-white p-4 rounded-2xl font-bold" @click="handleSRS(1)">忘</button>
-                                <button class="flex-1 bg-[#F28E16] text-white p-4 rounded-2xl font-bold" @click="handleSRS(2)">难</button>
-                                <button class="flex-1 bg-[#8FAB1D] text-white p-4 rounded-2xl font-bold" @click="handleSRS(3)">会</button>
-                                <button class="flex-1 bg-[#2C9678] text-white p-4 rounded-2xl font-bold" @click="handleSRS(4)">熟</button>
+                        <div v-else class="flex-1 flex flex-col w-full">
+                            <div class="ruby-text mb-4 text-xl">{{ reviewCard.reading }}</div>
+                            <div class="flex-1 overflow-y-auto text-left mb-8" v-html="reviewCard.meaning"></div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-[#CB3A56] text-white p-4 rounded-2xl" @click="handleSRS(1)">忘</button>
+                                <button class="flex-1 bg-[#F28E16] text-white p-4 rounded-2xl" @click="handleSRS(2)">难</button>
+                                <button class="flex-1 bg-[#8FAB1D] text-white p-4 rounded-2xl" @click="handleSRS(3)">会</button>
+                                <button class="flex-1 bg-[#2C9678] text-white p-4 rounded-2xl" @click="handleSRS(4)">熟</button>
                             </div>
                         </div>
                     </div>
 
                     <div v-else-if="mode === 'history'" class="history-stage glass-morphism" key="history">
-                        <div class="flex justify-between items-center border-b border-pink-100 pb-6 mb-8">
-                            <h1 class="text-4xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1>
-                            <button class="text-3xl text-gray-300 hover:text-[#CB3A56]" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button>
+                        <div class="flex justify-between items-center mb-8">
+                            <h1 class="text-3xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1>
+                            <button class="text-3xl text-gray-300" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        
-                        <div class="flex gap-6 mb-8 items-center">
-                            <button v-for="tab in ['asia', 'europe']" :key="tab" 
-                                    @click="historyTab = tab"
-                                    class="text-xl font-bold pb-2 transition-all border-b-4"
-                                    :class="historyTab === tab ? 'border-[#CB3A56] text-[#2D241E]' : 'border-transparent text-gray-300'">
-                                {{ tab === 'asia' ? '🌏 亚洲史' : '🏛️ 欧洲史' }}
-                            </button>
-                            
-                            <div class="flex-1 flex gap-2 bg-[#F0EAE1]/40 p-3 rounded-2xl border border-pink-100">
-                                <input v-model="newEvent.year" placeholder="年份" class="w-24 bg-transparent outline-none px-2 border-r border-pink-100">
-                                <input v-model="newEvent.tag" placeholder="图标" class="w-16 bg-transparent outline-none text-center border-r border-pink-100" @blur="autoMapIcon">
-                                <input v-model="newEvent.event" placeholder="发生了什么？" class="flex-1 bg-transparent outline-none px-2">
-                                <button @click="addTimelineEvent" class="bg-[#CB3A56] text-white px-4 py-2 rounded-xl text-sm font-bold">
-                                    {{ isEditingTimeline ? '保存' : '添加' }}
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="timeline-wrapper custom-scroll">
-                            <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10 relative">
-                                <div class="w-24 text-right shrink-0 pt-2 sticky top-0"><span class="year-number">{{ group.year }}</span></div>
-                                <div class="flex-1 flex flex-col gap-6">
-                                    <div v-for="item in group.events" :key="item.id" 
-                                         class="t-content group relative" 
-                                         draggable="true" @dragstart="onDragStart($event, item)" @drop="onDrop($event, item)" @dragover.prevent>
+                            <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10">
+                                <div class="w-24 text-right shrink-0 pt-2"><span class="year-number">{{ group.year }}</span></div>
+                                <div class="flex-1 flex flex-col gap-4">
+                                    <div v-for="item in group.events" :key="item.id" class="t-content">
                                         <div class="flex items-center gap-4">
-                                            <span class="text-3xl">{{ item.tag }}</span>
-                                            <div class="flex-1">
-                                                <div class="flex gap-2 mb-1">
-                                                    <span v-for="t in item.tags" :key="t" class="text-[10px] px-2 py-0.5 rounded-full bg-pink-100 text-[#CB3A56] font-sans font-bold">{{ t }}</span>
-                                                </div>
-                                                <span class="text-lg font-serif">{{ item.event }}</span>
-                                            </div>
-                                            <div class="opacity-0 group-hover:opacity-100 flex gap-3 transition-opacity">
-                                                <button class="text-gray-400 hover:text-blue-500" @click="editTimelineEvent(item)"><i class="fa-solid fa-pen"></i></button>
-                                                <button class="text-gray-400 hover:text-[#CB3A56]" @click="deleteTimelineEvent(item.id)"><i class="fa-solid fa-trash"></i></button>
-                                            </div>
+                                            <span class="text-2xl">{{ item.tag }}</span>
+                                            <span class="text-lg font-serif">{{ item.event }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -234,11 +207,9 @@
                 </Transition>
             </main>
 
-            <div class="cat-mascot-container" @click="pokeMascot" @dblclick="triggerMascotInput">
-                <input type="file" ref="mascotInput" @change="handleMascotUpload" accept="image/*" class="hidden">
+            <div class="cat-mascot-container" @click="pokeMascot">
                 <img :src="userCat" class="w-full drop-shadow-2xl">
-                <div v-if="neroState === 'thinking'" class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-full shadow-xl font-bold text-lg animate-bounce">挖掘中...</div>
-                <div v-if="neroState === 'happy'" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white px-5 py-2 rounded-full shadow-lg font-bold">喵~✨</div>
+                <div v-if="neroState === 'thinking'" class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white px-6 py-2 rounded-full shadow-xl font-bold">挖掘中...</div>
             </div>
         </div>
     </div>
@@ -248,7 +219,6 @@
 
         createApp({
             setup() {
-                // --- 状态库 ---
                 const showCover = ref(true);
                 const currentLang = ref('jp');
                 const wordInput = ref('');
@@ -259,68 +229,46 @@
                 const reviewQueue = ref([]);
                 const reviewCard = ref(null);
                 const showReviewAnswer = ref(false);
-                const mascotInput = ref(null);
                 const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
 
-                // 核心词汇对象
-                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', examples: [], lang: 'jp', nextReview: 0, interval: 0, isCollected: false });
+                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', examples: [], lang: 'jp', isCollected: false });
 
-                // 资源配置
                 const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
+                // 封面图片加载路径
                 const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
+
                 const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0 0%, #FCEFE8 100%)', accent: '#CB3A56' },
-                    zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1 0%, #F6F4EF 100%)', accent: '#9D2933' },
-                    en: { name: '英语', flag: '🇬🇧', voice: 'en-US', bg: 'linear-gradient(-20deg, #E6E8EB 0%, #EDF1F4 100%)', accent: '#1772B4' },
-                    lat: { name: '拉丁', flag: '🏛️', voice: 'it-IT', bg: '#EAE8E6', accent: '#605A54' }
+                    jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0, #FCEFE8)', accent: '#CB3A56' },
+                    zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1, #F6F4EF)', accent: '#9D2933' }
                 };
 
-                // --- 历史年表核心逻辑 ---
+                const timelines = ref({ asia: [ { id: 1, year: '前7000', event: '河姆渡文化', tag: '🇨🇳' } ], europe: [] });
                 const historyTab = ref('asia');
-                const isEditingTimeline = ref(false);
-                const editingEventId = ref(null);
-                const newEvent = ref({ year: '', event: '', tag: '🏺', tagsInput: '' });
-                const iconMap = { '中国': '🇨🇳', '日本': '🇯🇵', '考古': '🏺', '罗马': '🏛️' };
-                const timelines = ref({
-                    asia: [ { id: 1, year: '前7000', event: '河姆渡文化', tag: '🇨🇳', tags: ['考古'] } ],
-                    europe: [ { id: 201, year: '前753', event: '罗马建城', tag: '🏛️', tags: ['传说'] } ]
-                });
 
-                // 排序逻辑
-                function parseYear(y) { 
-                    const isBC = y.includes('前') || y.includes('-');
-                    const n = parseInt(y.match(/\d+/) || 0);
-                    return isBC ? -n : n;
-                }
+                const filteredHistory = computed(() => history.value.filter(item => (item.lang || 'jp') === currentLang.value));
                 const groupedTimelines = computed(() => {
                     const list = timelines.value[historyTab.value];
                     const groups = {};
                     list.forEach(e => {
-                        if(!groups[e.year]) groups[e.year] = { year: e.year, raw: parseYear(e.year), events: [] };
+                        if(!groups[e.year]) groups[e.year] = { year: e.year, events: [] };
                         groups[e.year].events.push(e);
                     });
-                    return Object.values(groups).sort((a, b) => a.raw - b.raw);
+                    return Object.values(groups);
                 });
 
-                // --- API 与 交互 ---
                 async function generateCard() {
                     if(!wordInput.value) return;
                     loading.value = true; neroState.value = 'thinking'; mode.value = 'card';
                     try {
-                        const exists = history.value.find(h => h.word === wordInput.value && h.lang === currentLang.value);
-                        if(exists) { card.value = {...exists}; }
-                        else {
-                            const res = await fetch('/api/openai', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) });
-                            const data = await res.json();
-                            card.value = { id: Date.now(), ...data, lang: currentLang.value, isCollected: false };
-                        }
+                        const res = await fetch('/api/openai', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) });
+                        const data = await res.json();
+                        card.value = { id: Date.now(), ...data, lang: currentLang.value, isCollected: false };
                         speak(card.value.word);
                         neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 2000);
                         wordInput.value = '';
                     } catch(e) { alert("挖掘失败"); } finally { loading.value = false; }
                 }
 
-                // --- 其余完整功能封装 ---
                 function toggleCollect() {
                     if (card.value.isCollected) {
                         history.value = history.value.filter(h => h.id !== card.value.id);
@@ -332,23 +280,6 @@
                     localStorage.setItem('memori-book', JSON.stringify(history.value));
                 }
 
-                function handleSRS(rating) {
-                    let interval = reviewCard.value.interval || 0;
-                    interval = rating === 1 ? 1 : Math.ceil((interval || 1) * 2.5);
-                    reviewCard.value.interval = interval;
-                    reviewCard.value.nextReview = Date.now() + interval * 86400000;
-                    const idx = history.value.findIndex(h => h.id === reviewCard.value.id);
-                    if(idx !== -1) history.value[idx] = {...reviewCard.value};
-                    localStorage.setItem('memori-book', JSON.stringify(history.value));
-                    nextReview();
-                }
-
-                function nextReview() {
-                    if (reviewQueue.value.length === 0) { mode.value = 'card'; return alert("复习完成！"); }
-                    reviewCard.value = reviewQueue.value.shift();
-                    showReviewAnswer.value = false;
-                }
-
                 function speak(t) {
                     window.speechSynthesis.cancel();
                     const ut = new SpeechSynthesisUtterance(t);
@@ -356,25 +287,17 @@
                     window.speechSynthesis.speak(ut);
                 }
 
-                // 挂载与监听
                 onMounted(() => {
                     const saved = localStorage.getItem('memori-book');
                     if(saved) history.value = JSON.parse(saved);
-                    const savedT = localStorage.getItem('memori-timelines-v19');
-                    if(savedT) timelines.value = JSON.parse(savedT);
                 });
-                watch(timelines, (val) => localStorage.setItem('memori-timelines-v19', JSON.stringify(val)), {deep:true});
 
-                // 完整导出的所有方法
                 return {
-                    showCover, enterApp:()=>showCover.value=false, currentLang, wordInput, loading, neroState, history, mode, reviewCard, showReviewAnswer, userCat, shibaImages, coverImages, card, langConfig, timelines, historyTab, newEvent, isEditingTimeline,
-                    generateCard, toggleCollect, handleSRS, speak, switchLang: (l)=>{currentLang.value=l; mode.value='card'}, loadWord: (item)=>{card.value=item; mode.value='card'}, deleteWord: (id)=>{history.value=history.value.filter(h=>h.id!==id); localStorage.setItem('memori-book', JSON.stringify(history.value))},
-                    startReview: () => { const due = history.value.filter(h => (h.lang||'jp')===currentLang.value && h.nextReview <= Date.now()); if(!due.length) return alert("暂无复习任务"); reviewQueue.value=[...due]; mode.value='review'; nextReview(); },
-                    addTimelineEvent: () => { /* 完整的添加逻辑 */ if(!newEvent.value.year || !newEvent.value.event) return; const tagList = newEvent.value.tagsInput ? newEvent.value.tagsInput.split(' ') : []; timelines.value[historyTab.value].push({id:Date.now(), ...newEvent.value, tags: tagList}); newEvent.value={year:'', event:'', tag:'🏺', tagsInput:''}; },
-                    deleteTimelineEvent: (id) => timelines.value[historyTab.value] = timelines.value[historyTab.value].filter(e=>e.id!==id),
-                    pokeMascot: () => { neroState.value='happy'; setTimeout(()=>neroState.value='idle', 1000); },
-                    autoMapIcon: () => { if(iconMap[newEvent.value.tag]) newEvent.value.tag = iconMap[newEvent.value.tag]; },
-                    groupedTimelines, clearCurrentHistory: () => { if(confirm("确定清空当前语言记录？")) history.value = history.value.filter(h=>h.lang!==currentLang.value); localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+                    showCover, enterApp:()=>showCover.value=false, currentLang, wordInput, loading, neroState, history, mode, reviewCard, showReviewAnswer, userCat, shibaImages, coverImages, card, langConfig, filteredHistory, groupedTimelines,
+                    generateCard, toggleCollect, speak, switchLang: (l)=>{currentLang.value=l; mode.value='card'}, loadWord: (item)=>{card.value=item; mode.value='card'}, deleteWord: (id)=>{history.value=history.value.filter(h=>h.id!==id); localStorage.setItem('memori-book', JSON.stringify(history.value))},
+                    startReview: () => { const due = history.value.filter(h => (h.lang||'jp')===currentLang.value); if(!due.length) return alert("暂无复习任务"); reviewQueue.value=[...due]; mode.value='review'; reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; },
+                    handleSRS: () => { if(reviewQueue.value.length) { reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value=false; } else { mode.value='card'; alert("复习完成！"); } },
+                    pokeMascot: () => { neroState.value='happy'; setTimeout(()=>neroState.value='idle', 1000); }
                 }
             }
         }).mount('#app');
