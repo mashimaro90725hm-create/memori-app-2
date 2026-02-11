@@ -14,103 +14,138 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-        /* --- 🏮 忆栖主题系统 V3.5 (修复版) --- */
-        :root {
-            --color-bg-main: #E2E1E4;
-            --color-text-main: #2D241E; 
-            --color-accent: #CB3A56;
-            --color-accent-hover: #EF7A82; 
-            --glass-bg: rgba(255, 253, 248, 0.85);
-            --glass-border: rgba(203, 58, 86, 0.15); 
-        }
+/* --- 🏮 忆栖主题系统 V4.0 (纯净文字版) --- */
+:root {
+  --color-bg-main: #E2E1E4;
+  --color-text-main: #2D241E;
+  --color-accent: #CB3A56;
+  --color-accent-hover: #EF7A82;
+  --glass-bg: rgba(255, 253, 248, 0.9);
+  --glass-border: rgba(203, 58, 86, 0.15);
+}
 
-        * { box-sizing: border-box; }
-        body { margin: 0; overflow: hidden; background-color: #E2E1E4; font-family: 'Noto Serif SC', serif; }
+* { box-sizing: border-box; }
+.app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.8s ease, font-family 0.3s; position: relative; color: var(--color-text-main); }
+.app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08); border-radius: 24px; }
+.artistic-border { border-radius: 24px; }
 
-        .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.8s ease, font-family 0.3s; position: relative; color: var(--color-text-main); }
-        /* 纹理背景 */
-        .app-container::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
+/* 封面页 */
+.cover-stage.classic-theme { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
+.cover-overlay-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
+.cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
+.cover-text-group.jp-style { flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); padding-left: 50px; text-align: right; z-index: 50; }
+.cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; }
+.subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; opacity: 0.95; color: var(--color-bg-main); }
+.start-btn-main.jp-btn { margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: all 0.4s; letter-spacing: 0.1em; box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); pointer-events: auto; position: relative; z-index: 100; }
+.cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
+.cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
+.fade-enter-active, .fade-leave-active { transition: opacity 1s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 
-        .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08); border-radius: 24px; }
-        .artistic-border { border-radius: 24px; }
+/* Sidebar */
+.sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
+.sidebar-header { padding: 0 10px 16px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+.sidebar-header h3 { font-size: 1.2rem; font-weight: bold; margin: 0; font-family: inherit; }
+.import-trigger { font-size: 0.8rem; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
+.word-list { flex: 1; overflow-y: auto; padding: 15px 0; }
+.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; color: var(--color-text-main); border-left: 4px solid transparent; position: relative; background: rgba(255, 253, 248, 0.5); }
+.word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; color: var(--color-text-main); }
+.item-actions { display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s; position: absolute; right: 12px; }
+.word-item:hover .item-actions { opacity: 1; }
+.del-icon { opacity: 0.8; border: none; background: none; color: var(--color-accent); cursor: pointer; font-weight: bold; }
+.sidebar-footer { padding-top: 25px; display: flex; flex-direction: column; gap: 12px; position: relative; border-top: 1px solid var(--glass-border); }
+.action-btn { width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; font-weight: bold; cursor: pointer; background: rgba(255, 253, 248, 0.6); transition: all 0.2s; text-align: center; }
+.action-btn.primary { background: var(--color-accent); color: white; border: none; }
+.action-btn:hover { transform: translateY(-2px); }
 
-        /* 🚪 封面页 (琉璃光院) */
-        .cover-stage.classic-theme { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
-        .cover-overlay-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
-        .cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
-        .cover-text-group.jp-style { flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); padding-left: 50px; text-align: right; z-index: 50; }
-        .cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; }
-        .subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; opacity: 0.95; color: var(--color-bg-main); }
-        .start-btn-main.jp-btn { margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: all 0.4s; letter-spacing: 0.1em; box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); pointer-events: auto; position: relative; z-index: 100; }
-        .cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
-        .cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
+/* Mascots */
+.shiba-mascot { position: absolute; bottom: 100%; right: 0px; width: 120px; height: 120px; cursor: pointer; z-index: 20; margin-bottom: 15px; }
+.shiba-img { width: 100%; height: 100%; object-fit: contain; }
+.cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 280px; height: 280px; cursor: pointer; z-index: 100; pointer-events: auto; }
+.cat-mascot-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
 
-        /* Sidebar */
-        .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-        .sidebar-header { padding: 0 10px 16px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h3 { font-size: 1.2rem; font-weight: bold; margin: 0; font-family: inherit; }
-        .import-trigger { font-size: 0.8rem; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
-        .word-list { flex: 1; overflow-y: auto; padding: 15px 0; }
-        .word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; color: var(--color-text-main); border-left: 4px solid transparent; position: relative; background: rgba(255, 253, 248, 0.5); }
-        .word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; color: var(--color-text-main); }
-        .del-icon { opacity: 0; border: none; background: none; color: var(--color-accent); cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
-        .word-item:hover .del-icon { opacity: 1; }
-        .sidebar-footer { padding-top: 25px; display: flex; flex-direction: column; gap: 12px; position: relative; border-top: 1px solid var(--glass-border); }
-        .action-btn { width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; font-weight: bold; cursor: pointer; background: rgba(255, 253, 248, 0.6); transition: all 0.2s; }
-        .action-btn:hover { background: white; color: var(--color-accent); transform: translateY(-2px); }
+/* Main Stage */
+.main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+.search-bar { margin: 0 20px 25px; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
+.lang-pills { display: flex; gap: 8px; }
+.lang-pill { padding: 5px 10px; border-radius: 8px; border: 1px solid transparent; background: rgba(255, 253, 248, 0.5); cursor: pointer; transition: all 0.3s; }
+.lang-pill.active { background: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(45, 36, 30, 0.1); font-weight: bold; color: var(--color-accent); }
+.search-input { border: none; background: transparent; padding: 10px; flex: 1; margin: 0 20px; outline: none; font-size: 1.1rem; font-family: inherit; color: var(--color-text-main); }
+.search-btn { border: none; background: transparent; cursor: pointer; font-size: 1.2rem; }
 
-        /* Mascots */
-        .shiba-mascot { position: absolute; bottom: 100%; right: 0px; width: 120px; height: 120px; cursor: pointer; z-index: 20; margin-bottom: 15px; }
-        .shiba-img { width: 100%; height: 100%; object-fit: contain; }
-        .cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 280px; height: 280px; cursor: pointer; z-index: 100; pointer-events: auto; }
-        .cat-mascot-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
+/* Card 3D - 纯文字版 */
+.content-area { flex: 1; display: flex; justify-content: center; align-items: center; }
+.card-3d-wrapper { width: 450px; height: 650px; perspective: 1500px; cursor: pointer; z-index: 2; margin: 0 auto; }
+.card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
+.card-body.is-flipped { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; overflow: hidden; display: flex; flex-direction: column; background: #fffdf9; border-radius: 24px; }
+.card-face.front { background-image: radial-gradient(#E2E1E4 1px, transparent 1px); background-size: 20px 20px; } 
 
-        /* Main Stage */
-        .main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; }
-        .search-bar { margin: 0 20px 25px; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-        .lang-pills { display: flex; gap: 8px; }
-        .lang-pill { padding: 5px 10px; border-radius: 8px; border: 1px solid transparent; background: rgba(255, 253, 248, 0.5); cursor: pointer; transition: all 0.3s; }
-        .lang-pill.active { background: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(45, 36, 30, 0.1); font-weight: bold; color: var(--color-accent); }
-        .search-input { border: none; background: transparent; padding: 10px; flex: 1; margin: 0 20px; outline: none; font-size: 1.1rem; font-family: inherit; color: var(--color-text-main); }
-        .search-btn { border: none; background: transparent; cursor: pointer; font-size: 1.2rem; }
+/* 文字卡片核心样式 */
+.text-card-content { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+.main-word { font-size: 4rem; margin: 20px 0; font-family: 'Zen Old Mincho', serif; color: var(--color-text-main); line-height: 1.1; letter-spacing: -0.02em; }
+.pronunciation { font-size: 1.4rem; color: var(--color-accent); opacity: 0.8; font-family: sans-serif; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+.meaning-text { font-size: 1.2rem; line-height: 1.8; opacity: 0.9; max-width: 90%; }
+.meta-info { margin-top: 30px; display: flex; gap: 10px; }
+.meta-tag { padding: 5px 12px; background: rgba(0,0,0,0.05); border-radius: 20px; font-size: 0.8rem; color: #666; }
+.overlay-actions { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s; }
+.icon-btn:hover { transform: scale(1.1); color: var(--color-accent); }
+.star-btn i.starred { color: var(--color-accent); }
 
-        /* Card 3D */
-        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; z-index: 2; margin: 0 auto; }
-        .card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
-        .card-body.is-flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; overflow: hidden; display: flex; flex-direction: column; background: #fffdf9; border-radius: 24px; }
-        .img-header { height: 50%; width: 100%; position: relative; background: #E2E1E4; overflow: hidden; }
-        .cover-img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
-        .text-content { flex: 1; padding: 25px; overflow-y: auto; }
-        .main-word { font-size: 2.8rem; margin: 10px 0; font-family: 'Zen Old Mincho', serif; color: var(--color-text-main); line-height: 1.1; }
-        .card-face.back { transform: rotateY(180deg); background: rgba(255, 253, 248, 0.95); }
-        .back-scroll { padding: 30px; overflow-y: auto; height: 100%; }
-        .section-title { font-size: 0.9rem; font-weight: bold; color: var(--color-accent); margin: 20px 0 10px; border-bottom: 1px dashed rgba(203,58,86,0.2); padding-bottom: 5px; }
-        .example-box { margin-bottom: 10px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 8px; border-left: 3px solid var(--color-accent); }
-        .ex-origin { font-family: 'Noto Serif SC', serif; font-weight: 500; margin-bottom: 4px; }
-        .ex-trans { font-size: 0.85rem; opacity: 0.7; }
+/* 背面 */
+.card-face.back { transform: rotateY(180deg); background: rgba(255, 253, 248, 0.98); }
+.back-scroll { padding: 40px; overflow-y: auto; height: 100%; text-align: left; }
+.section-title { font-size: 0.9rem; font-weight: bold; color: var(--color-accent); margin: 30px 0 15px; border-bottom: 1px dashed rgba(203,58,86,0.2); padding-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+.etymology-text { font-size: 1.05rem; line-height: 1.9; text-align: justify; color: #444; font-family: sans-serif; }
+.example-box { margin-bottom: 15px; padding: 15px; background: rgba(45,36,30,0.03); border-radius: 8px; border-left: 3px solid var(--color-accent); }
+.ex-origin { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; margin-bottom: 5px; color: var(--color-text-main); }
+.ex-trans { font-size: 0.9rem; opacity: 0.7; }
 
-        /* Timeline */
-        .history-stage { flex: 1; margin: 0 20px 20px; padding: 30px; display: flex; flex-direction: column; overflow: hidden; }
-        .history-top { border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 10px; }
-        .timeline-list { position: relative; padding-left: 20px; }
-        .timeline-spine { position: absolute; left: 100px; top: 0; bottom: 0; width: 2px; background: var(--color-accent); opacity: 0.3; }
-        .year-group { display: flex; margin-bottom: 30px; }
-        .t-year-label { width: 100px; text-align: right; padding-right: 20px; font-weight: bold; color: var(--color-text-main); font-family: sans-serif; }
-        .t-content { flex: 1; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); position: relative; }
-        .t-dot { position: absolute; left: -26px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--color-accent); border: 3px solid #fff; }
+/* Timeline (恢复自定义设置) */
+.history-stage { flex: 1; margin: 0 20px 20px; padding: 30px; display: flex; flex-direction: column; overflow: hidden; }
+.history-top { flex-shrink:0; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; margin-bottom: 20px; }
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.history-tabs button { background: none; border: none; font-size: 1.1rem; cursor: pointer; opacity: 0.6; padding: 0 10px; }
+.history-tabs button.active { opacity: 1; font-weight: bold; color: var(--color-accent); }
+/* 输入面板 */
+.timeline-input-group { background: rgba(255,255,255,0.5); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 10px; align-items: center; margin-top: 15px; }
+.t-input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd; background: rgba(255,255,255,0.8); }
+.t-btn { padding: 8px 15px; background: var(--color-accent); color: white; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-        /* 交互式标记 */
-        .interactive-word { border-bottom: 1px dashed var(--color-accent); cursor: pointer; }
-        .interactive-word:hover { background: rgba(203, 58, 86, 0.1); }
+.timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 10px; }
+.timeline-list { position: relative; padding-left: 20px; }
+.timeline-spine { position: absolute; left: 80px; top: 0; bottom: 0; width: 2px; background: var(--color-accent); opacity: 0.3; }
+.year-group { display: flex; margin-bottom: 25px; }
+.t-year-label { width: 80px; text-align: right; padding-right: 20px; font-weight: bold; color: var(--color-text-main); font-family: sans-serif; }
+.t-content { flex: 1; background: rgba(255,255,255,0.6); padding: 12px; border-radius: 8px; border: 1px solid var(--glass-border); position: relative; cursor: pointer; transition: all 0.2s; }
+.t-content:hover { background: white; transform: translateX(5px); }
+.t-dot { position: absolute; left: -25px; top: 15px; width: 12px; height: 12px; border-radius: 50%; background: var(--color-accent); border: 2px solid #fff; }
+.t-del { position: absolute; right: 10px; top: 10px; color: #aaa; cursor: pointer; display: none; }
+.t-content:hover .t-del { display: block; }
 
-        /* 动效 */
-        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
-        .fade-enter-from, .fade-leave-to { opacity: 0; }
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+/* Review Mode */
+.review-card-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+.review-card { width: 500px; height: 300px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-family: 'Zen Old Mincho'; position: relative; margin-bottom: 30px; }
+.review-answer { margin-top: 20px; width: 500px; text-align: center; }
+.srs-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+.srs-btn { padding: 10px 25px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
+.srs-btn:active { transform: scale(0.95); }
+
+/* 模态框 */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+.modal-box { background: white; width: 450px; padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+
+/* 交互式标记 */
+.interactive-word { border-bottom: 1px dashed var(--color-accent); cursor: pointer; }
+.interactive-word:hover { background: rgba(203, 58, 86, 0.1); }
+
+/* 滚动条 */
+.custom-scroll::-webkit-scrollbar { width: 5px; }
+.custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body>
@@ -134,7 +169,7 @@
             <aside class="sidebar glass-morphism artistic-border">
                 <div class="sidebar-header">
                     <h3>{{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}</h3>
-                    <span class="import-trigger" @click="showImportModal = true"><i class="fa-solid fa-file-import"></i></span>
+                    <span class="import-trigger" @click="showImportModal = true" title="导入辞典"><i class="fa-solid fa-file-import"></i></span>
                 </div>
                 <div class="word-list custom-scroll">
                     <div v-for="item in filteredHistory" :key="item.id" 
@@ -149,8 +184,9 @@
                     <div class="shiba-mascot" @click="pokeMascot">
                         <img :src="shibaImages[neroState]" class="shiba-img" alt="Shiba">
                     </div>
-                    <button class="action-btn" @click="mode = 'gallery'">📖 藏品馆</button>
-                    <button class="action-btn" @click="mode = 'history'">📜 历史年表</button>
+                    <button class="action-btn" @click="startReview" title="复习"><i class="fa-solid fa-layer-group"></i> 复习单词</button>
+                    <button class="action-btn" @click="mode = 'gallery'" title="单词本"><i class="fa-solid fa-book"></i> 单词本</button>
+                    <button class="action-btn" @click="mode = 'history'" title="历史年表"><i class="fa-solid fa-clock-rotate-left"></i> 历史年表</button>
                 </div>
             </aside>
 
@@ -177,25 +213,30 @@
                     <div v-if="mode === 'card' && card" class="card-3d-wrapper" @click="isFlipped = !isFlipped">
                         <div class="card-body" :class="{ 'is-flipped': isFlipped }">
                             <div class="card-face front glass-morphism artistic-border">
-                                <div class="img-header">
-                                    <img :src="card.imageUrl" class="cover-img" @error="handleImageError">
+                                <div class="overlay-actions" @click.stop>
+                                    <button class="icon-btn star-btn" @click.stop="toggleCollect" :title="card.isCollected ? '取消收藏' : '加入单词本'"><i class="fa-solid fa-star" :class="{ 'starred': card.isCollected }"></i></button>
                                 </div>
-                                <div class="text-content custom-scroll">
+                                <div class="text-card-content">
                                     <h1 class="main-word">{{ card.word }}</h1>
                                     <div class="pronunciation">
                                         <span>/ {{ card.reading }} /</span>
-                                        <button class="speaker-btn" @click.stop="speak(card.word, card.lang)"><i class="fa-solid fa-volume-high"></i></button>
+                                        <button class="icon-btn" @click.stop="speak(card.word, card.lang)"><i class="fa-solid fa-volume-high"></i></button>
                                     </div>
-                                    <p style="margin-top:20px; opacity:0.8; line-height:1.6;" v-html="formatInteractiveText(card.meaning)"></p>
-                                    <div style="margin-top:auto; font-size:0.8rem; color:#888; text-align:center;">点击翻转查看考据 <i class="fa-solid fa-rotate"></i></div>
+                                    <p class="meaning-text" v-html="formatInteractiveText(card.meaning)"></p>
+                                    <div class="meta-info">
+                                        <span class="meta-tag" v-if="card.word_details">{{ card.word_details }}</span>
+                                        <span class="meta-tag" v-if="card.isLocal">本地珍藏</span>
+                                    </div>
                                 </div>
+                                <div style="padding:10px; text-align:center; opacity:0.5; font-size:0.8rem;">点击查看【词源与例句】</div>
                             </div>
                             <div class="card-face back glass-morphism artistic-border">
-                                <div class="back-scroll custom-scroll">
-                                    <div class="section-title">🗝️ 词源考据 (Etymology)</div>
-                                    <p style="text-align:justify; line-height:1.8;" v-html="formatInteractiveText(card.etymology || '正在从云端发掘历史地层...')"></p>
+                                <div class="back-header" @click.stop><h3>{{ card.word }}</h3><div class="back-actions"><button class="icon-btn" @click.stop="isFlipped = !isFlipped"><i class="fa-solid fa-rotate-left"></i></button></div></div>
+                                <div class="back-scroll custom-scroll" @click.stop>
+                                    <div class="section-title">🗝️ 词源考据 (Wikipedia-Style)</div>
+                                    <div class="etymology-text" v-html="formatInteractiveText(card.etymology || '正在从云端发掘历史地层...')"></div>
                                     
-                                    <div class="section-title">📜 典籍例句 (Sentences)</div>
+                                    <div class="section-title">📜 典籍例句</div>
                                     <div v-if="card.examples && card.examples.length">
                                         <div v-for="(ex, i) in card.examples" :key="i" class="example-box">
                                             <div class="ex-origin" @click.stop="speak(ex.text, card.lang)">
@@ -209,14 +250,40 @@
                         </div>
                     </div>
 
-                    <div v-if="mode === 'gallery'" class="gallery-mode custom-scroll" style="width:100%; height:100%;">
-                        <h2 style="font-size:2rem; margin-bottom:20px; font-family:'Zen Old Mincho'">香氛藏品馆</h2>
-                        <div v-if="filteredHistory.length === 0" style="opacity:0.5">暂无藏品，请先去考据词汇。</div>
+                    <div v-if="mode === 'gallery'" class="gallery-mode custom-scroll" style="width:100%; height:100%; padding:20px;">
+                        <h2 style="font-size:2rem; margin-bottom:20px; font-family:'Zen Old Mincho'">单词本 ({{ filteredHistory.length }})</h2>
                         <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
-                            <div v-for="item in filteredHistory" :key="item.id" class="glass-morphism" style="padding:20px; cursor:pointer;" @click="loadWord(item)">
+                            <div v-for="item in filteredHistory" :key="item.id" class="glass-morphism" style="padding:20px; cursor:pointer; position:relative;" @click="loadWord(item)">
                                 <h3 style="font-size:1.5rem; font-weight:bold;">{{ item.word }}</h3>
                                 <p style="opacity:0.6;">{{ item.reading }}</p>
+                                <button @click.stop="deleteWord(item.id)" style="position:absolute; top:10px; right:10px; opacity:0.5; background:none; border:none; cursor:pointer;">×</button>
                             </div>
+                        </div>
+                    </div>
+
+                    <div v-if="mode === 'review'" class="review-card-wrapper">
+                        <div v-if="reviewQueue.length > 0">
+                            <div class="review-card glass-morphism">
+                                {{ reviewCard.word }}
+                            </div>
+                            <div v-if="!showReviewAnswer" style="text-align:center;">
+                                <button class="action-btn primary" @click="showReviewAnswer = true">查看释义</button>
+                            </div>
+                            <div v-else class="review-answer glass-morphism" style="padding:20px;">
+                                <p style="font-size:1.2rem; margin-bottom:10px;">{{ reviewCard.reading }}</p>
+                                <p>{{ reviewCard.meaning }}</p>
+                                <div class="srs-btns">
+                                    <button class="srs-btn" style="background:#CB3A56" @click="handleSRS(1)">忘 (1天)</button>
+                                    <button class="srs-btn" style="background:#F28E16" @click="handleSRS(2)">难 (3天)</button>
+                                    <button class="srs-btn" style="background:#8FAB1D" @click="handleSRS(3)">中 (7天)</button>
+                                    <button class="srs-btn" style="background:#2C9678" @click="handleSRS(4)">易 (15天)</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else style="text-align:center; opacity:0.6;">
+                            <i class="fa-solid fa-mug-hot fa-3x"></i>
+                            <p style="margin-top:20px;">当前没有需要复习的单词。</p>
+                            <button class="action-btn" style="margin-top:10px;" @click="mode='gallery'">返回单词本</button>
                         </div>
                     </div>
 
@@ -228,6 +295,12 @@
                                 <button @click="historyTab = 'europe'" :style="{fontWeight: historyTab==='europe'?'bold':'normal'}">🏛️ 欧洲</button>
                             </div>
                         </div>
+                        <div class="timeline-input-group">
+                            <input v-model="newEvent.year" placeholder="年份 (如 1840)" class="t-input" style="flex:1">
+                            <input v-model="newEvent.event" placeholder="事件描述" class="t-input" style="flex:3">
+                            <input v-model="newEvent.tag" placeholder="图标" class="t-input" style="flex:0.5; text-align:center;">
+                            <button class="t-btn" @click="addTimelineEvent">添加</button>
+                        </div>
                         <div class="timeline-wrapper custom-scroll">
                             <div class="timeline-list">
                                 <div class="timeline-spine"></div>
@@ -237,6 +310,7 @@
                                         <div v-for="item in group.events" :key="item.id" class="t-content">
                                             <div class="t-dot"></div>
                                             {{ item.event }} <span style="font-size:0.8rem; opacity:0.6;">{{ item.tag }}</span>
+                                            <i class="fa-solid fa-trash t-del" @click="deleteTimelineEvent(item.id)"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -269,7 +343,7 @@
 
         // IndexedDB 数据库
         class DictionaryDB {
-            constructor() { this.dbName = 'MemoriDB_V3_Pure'; this.db = null; }
+            constructor() { this.dbName = 'MemoriDB_V4_Academic'; this.db = null; }
             async open() {
                 return new Promise((resolve, reject) => {
                     const req = indexedDB.open(this.dbName, 1);
@@ -331,14 +405,19 @@
                 const showImportModal = ref(false);
                 const importFile = ref(null);
                 const historyTab = ref('asia');
+                const newEvent = ref({ year: '', event: '', tag: '📌' });
 
-                // 资源配置 (使用网络兜底图防止白屏)
+                // Review Logic
+                const reviewQueue = ref([]);
+                const reviewCard = ref(null);
+                const showReviewAnswer = ref(false);
+
+                // 资源配置
                 const defaultBg = 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1600&q=80'; 
                 const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
                 const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
                 const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
 
-                // 9种语言配置
                 const langConfig = {
                     cjp: { name: '古典日语', flag: '🏯', code: 'ja-JP', bg: 'linear-gradient(to top, #EBE6DF 0%, #F2EFE8 100%)', accent: '#5A3D30', font: "'Zen Old Mincho', serif" },
                     lzh: { name: '古代汉语', flag: '📜', code: 'zh-CN', bg: 'linear-gradient(to top, #E9EAE4 0%, #F4F5F0 100%)', accent: '#41555D', font: "'Zen Old Mincho', serif" },
@@ -351,56 +430,57 @@
                     kr: { name: '韩语', flag: '🇰🇷', code: 'ko-KR', bg: 'linear-gradient(to top, #F7EFF2 0%, #F9EDF1 100%)', accent: '#B25D7E', font: "'Noto Serif KR', serif" }
                 };
 
-                const filteredHistory = computed(() => history.value.filter(item => item.lang === currentLang.value));
+                const filteredHistory = computed(() => history.value.filter(item => item.lang === currentLang.value && item.isCollected));
 
-                // 历史年表数据 (完整24条)
+                // 历史年表数据
                 const timelines = ref({
                     asia: [
                         { id: 1, year: '前7000', event: '河姆渡文化', tag: '🇨🇳' },
-                        { id: 1001, year: '前1600', event: '商朝建立', tag: '🏺' },
-                        { id: 1002, year: '前1046', event: '牧野之战', tag: '⚔️' },
                         { id: 100, year: '前221', event: '秦始皇统一', tag: '🧱' },
-                        { id: 1003, year: '前138', event: '张骞通西域', tag: '🐫' },
-                        { id: 1004, year: '57', event: '汉委奴国王印', tag: '🇯🇵' },
-                        { id: 1005, year: '645', event: '大化改新', tag: '📜' },
-                        { id: 1006, year: '1405', event: '郑和下西洋', tag: '⛵' },
-                        { id: 1007, year: '1443', event: '训民正音', tag: '🇰🇷' },
-                        { id: 1008, year: '1600', event: '关原之战', tag: '🏯' },
-                        { id: 1009, year: '1868', event: '明治维新', tag: '⚙️' },
-                        { id: 1010, year: '1911', event: '辛亥革命', tag: '🚩' }
+                        { id: 1009, year: '1868', event: '明治维新', tag: '⚙️' }
                     ],
                     europe: [
                         { id: 2001, year: '前3000', event: '巨石阵', tag: '🪨' },
-                        { id: 201, year: '前753', event: '罗马建城', tag: '🏛️' },
-                        { id: 2002, year: '前490', event: '马拉松战役', tag: '🏃' },
-                        { id: 2003, year: '前27', event: '罗马帝国建立', tag: '👑' },
-                        { id: 2004, year: '476', event: '西罗马灭亡', tag: '📉' },
-                        { id: 2005, year: '1066', event: '诺曼征服', tag: '🛡️' },
-                        { id: 2006, year: '1215', event: '大宪章', tag: '📜' },
-                        { id: 2007, year: '1453', event: '君士坦丁堡陷落', tag: '☪️' },
-                        { id: 2008, year: '1517', event: '宗教改革', tag: '🔨' },
-                        { id: 202, year: '1789', event: '法国大革命', tag: '🇫🇷' },
-                        { id: 2009, year: '1914', event: '一战爆发', tag: '💣' },
-                        { id: 2010, year: '1939', event: '二战爆发', tag: '🔥' }
+                        { id: 2002, year: '1789', event: '法国大革命', tag: '🇫🇷' }
                     ]
                 });
+                
                 const groupedTimelines = computed(() => { 
-                    const list = timelines.value[historyTab.value];
-                    return list.map(item => ({ year: item.year, events: [item] })); // 简化分组逻辑
+                    const list = timelines.value[historyTab.value].sort((a,b) => parseInt(a.year.replace(/\D/g,'')) - parseInt(b.year.replace(/\D/g,'')));
+                    return list.map(item => ({ year: item.year, events: [item] })); 
                 });
+
+                function addTimelineEvent() {
+                    if(!newEvent.value.year || !newEvent.value.event) return;
+                    timelines.value[historyTab.value].push({ 
+                        id: Date.now(), 
+                        year: newEvent.value.year, 
+                        event: newEvent.value.event, 
+                        tag: newEvent.value.tag 
+                    });
+                    newEvent.value = { year: '', event: '', tag: '📌' };
+                    saveTimelines();
+                }
+                function deleteTimelineEvent(id) {
+                    if(confirm('删除此历史条目？')) {
+                        timelines.value[historyTab.value] = timelines.value[historyTab.value].filter(t => t.id !== id);
+                        saveTimelines();
+                    }
+                }
+                function saveTimelines() { localStorage.setItem('memori-timelines', JSON.stringify(timelines.value)); }
 
                 onMounted(async () => {
                     await db.open();
                     const saved = localStorage.getItem('memori-book');
                     if (saved) history.value = JSON.parse(saved);
+                    const savedTime = localStorage.getItem('memori-timelines');
+                    if (savedTime) timelines.value = JSON.parse(savedTime);
                     
-                    // 图片错误兜底
                     const img = new Image();
                     img.src = coverImages.bg;
                     img.onerror = () => { coverImages.bg = defaultBg; };
                 });
 
-                // 核心：双轨检索 + 中外互查
                 async function handleSearch() {
                     if (!wordInput.value.trim()) return;
                     loading.value = true;
@@ -411,17 +491,16 @@
                     const query = wordInput.value.trim();
                     const lang = currentLang.value;
 
-                    // 1. 本地查找
+                    // 本地查找
                     const localHit = await db.find(lang, query);
                     if (localHit) {
-                        card.value = { ...localHit, id: Date.now(), lang, isLocal: true, imageUrl: getPlaceholderImg(query) };
-                        fetchEnrichment(query, lang); // 后台补全
+                        card.value = { ...localHit, id: Date.now(), lang, isLocal: true, imageUrl: '' };
+                        fetchEnrichment(query, lang);
                         loading.value = false;
-                        saveHistory();
                         return;
                     }
 
-                    // 2. 云端发掘 (支持互查)
+                    // 云端发掘
                     try {
                         const res = await fetch('/api/openai', {
                             method: 'POST',
@@ -429,15 +508,7 @@
                             body: JSON.stringify({ word: query, lang: lang, type: 'full' })
                         });
                         const data = await res.json();
-                        
-                        card.value = {
-                            id: Date.now(),
-                            ...data, // API 返回的数据
-                            lang: lang,
-                            isLocal: false,
-                            imageUrl: getPlaceholderImg(data.word) // 使用返回的目标词生成图片
-                        };
-                        saveHistory();
+                        card.value = { id: Date.now(), ...data, lang: lang, isLocal: false, isCollected: false, imageUrl: '' };
                     } catch (e) {
                         alert('考古挖掘失败，请检查网络或 API Key');
                     } finally {
@@ -460,18 +531,35 @@
                     } catch (e) { console.log('补全失败'); }
                 }
 
-                function saveHistory() {
-                    const idx = history.value.findIndex(h => h.word === card.value.word && h.lang === card.value.lang);
-                    if (idx > -1) history.value.splice(idx, 1);
-                    history.value.unshift({ ...card.value });
-                    localStorage.setItem('memori-book', JSON.stringify(history.value));
+                // 复习逻辑
+                function startReview() {
+                    const now = Date.now();
+                    // 找出所有收藏的单词中，复习时间已到的
+                    reviewQueue.value = filteredHistory.value.filter(w => !w.nextReview || w.nextReview <= now);
+                    if(reviewQueue.value.length === 0) { alert('当前没有需要复习的单词！'); return; }
+                    mode.value = 'review';
+                    nextReviewCard();
+                }
+                function nextReviewCard() {
+                    if(reviewQueue.value.length === 0) { alert('本轮复习结束！'); mode.value = 'gallery'; return; }
+                    reviewCard.value = reviewQueue.value.shift();
+                    showReviewAnswer.value = false;
+                }
+                function handleSRS(level) {
+                    // 1:1天, 2:3天, 3:7天, 4:15天
+                    const days = level === 1 ? 1 : level === 2 ? 3 : level === 3 ? 7 : 15;
+                    const word = reviewCard.value;
+                    // 更新历史记录中的该词
+                    const idx = history.value.findIndex(h => h.id === word.id);
+                    if(idx > -1) {
+                        history.value[idx].nextReview = Date.now() + (days * 24 * 60 * 60 * 1000);
+                        localStorage.setItem('memori-book', JSON.stringify(history.value));
+                    }
+                    nextReviewCard();
                 }
 
-                function getPlaceholderImg(keyword) {
-                    return `https://pollinations.ai/p/${encodeURIComponent(keyword + ' ancient artifact museum lighting')}?width=800&height=1000&nologo=true&model=flux`;
-                }
-
-                function handleImageError(e) { e.target.src = 'https://via.placeholder.com/400x600?text=No+Image'; }
+                function saveHistory() { localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+                function handleImageError(e) { e.target.style.display = 'none'; }
                 function speak(text, lang) { 
                     const u = new SpeechSynthesisUtterance(text);
                     u.lang = langConfig[lang]?.code || 'en-US';
@@ -493,23 +581,33 @@
                 }
                 function formatInteractiveText(text) { 
                     if(!text) return '';
-                    // 简单的正则，将中日韩字符包裹
                     return text.replace(/([\u4e00-\u9fa5\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]+)/g, '<span class="interactive-word" onclick="document.dispatchEvent(new CustomEvent(\'search-word\', {detail: \'$1\'}))">$1</span>');
                 }
-                // 监听自定义事件
-                document.addEventListener('search-word', (e) => {
-                    wordInput.value = e.detail;
-                    handleSearch();
-                });
+                document.addEventListener('search-word', (e) => { wordInput.value = e.detail; handleSearch(); });
 
-                // 其他辅助函数
                 function enterApp() { showCover.value = false; }
                 function switchLang(key) { currentLang.value = key; mode.value = 'card'; }
                 function loadWord(item) { card.value = item; mode.value = 'card'; isFlipped.value = false; }
-                function deleteWord(id) { history.value = history.value.filter(i => i.id !== id); localStorage.setItem('memori-book', JSON.stringify(history.value)); }
+                function deleteWord(id) { 
+                    if(confirm('删除此词？')) {
+                        history.value = history.value.filter(i => i.id !== id); 
+                        saveHistory(); 
+                    }
+                }
                 function deleteGalleryItem(id) { deleteWord(id); }
-                function clearCurrentHistory() { if(confirm('清空当前语言历史？')) { history.value = history.value.filter(i => i.lang !== currentLang.value); localStorage.setItem('memori-book', JSON.stringify(history.value)); } }
-                function toggleCollect() { card.value.isCollected = !card.value.isCollected; saveHistory(); }
+                function clearCurrentHistory() { if(confirm('清空当前语言历史？')) { history.value = history.value.filter(i => i.lang !== currentLang.value); saveHistory(); } }
+                function toggleCollect() { 
+                    if(!card.value) return;
+                    card.value.isCollected = !card.value.isCollected;
+                    // 如果是收藏，加入历史；取消收藏，从历史移除
+                    if(card.value.isCollected) {
+                        const exists = history.value.find(h => h.word === card.value.word && h.lang === card.value.lang);
+                        if(!exists) history.value.unshift({...card.value, nextReview: Date.now()}); 
+                    } else {
+                        history.value = history.value.filter(h => h.word !== card.value.word || h.lang !== card.value.lang);
+                    }
+                    saveHistory(); 
+                }
                 function toggleImageLock() { card.value.isImageLocked = !card.value.isImageLocked; saveHistory(); }
                 function pokeMascot() { neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 1000); }
                 function handleMascotUpload(e) { 
@@ -518,11 +616,12 @@
                 }
 
                 return {
-                    showCover, enterApp, currentLang, wordInput, loading, imageLoading, neroState, isFlipped, history, card, mode, showImportModal, historyTab,
+                    showCover, enterApp, currentLang, wordInput, loading, imageLoading, neroState, isFlipped, history, card, mode, showImportModal, historyTab, newEvent,
                     langConfig, coverImages, shibaImages, userCat, filteredHistory, timelines, groupedTimelines,
                     handleSearch, speak, handleImageError, handleFileSelect, executeImport, formatInteractiveText,
                     switchLang, loadWord, deleteWord, deleteGalleryItem, clearCurrentHistory, toggleCollect, toggleImageLock, pokeMascot, handleMascotUpload,
-                    getTagStyle: () => ({}) // 简化样式
+                    addTimelineEvent, deleteTimelineEvent,
+                    startReview, nextReviewCard, handleSRS, reviewQueue, reviewCard, showReviewAnswer
                 };
             }
         }).mount('#app');
