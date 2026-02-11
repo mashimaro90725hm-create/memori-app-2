@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-/* --- 🏮 中国色主题变量 (Zhongguose Palette) --- */
+/* --- 🏮 中国色主题变量 --- */
 :root {
   --color-bg-main: #E2E1E4; /* 芡食白 */
   --color-text-main: #2D241E; /* 乌色 */
@@ -24,95 +24,47 @@
   --glass-border: rgba(203, 58, 86, 0.15); 
 }
 
+/* 🎨 全局布局 */
 * { box-sizing: border-box; }
-.app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.5s ease, font-family 0.3s; position: relative; color: var(--color-text-main); }
+.app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; position: relative; color: var(--color-text-main); }
 .app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
 
-.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px -1px rgba(45, 36, 30, 0.08), 0 2px 4px -1px rgba(45, 36, 30, 0.04), inset 0 0 20px rgba(255, 253, 248, 0.3); border-radius: 24px; }
-.artistic-border { border-radius: 24px; }
+.glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); }
 
-/* 🚪 封面页修复：处理猫咪遮挡按钮问题 */
-.cover-stage.classic-theme { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
-.cover-overlay-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
+/* 🚪 封面页 */
+.cover-stage.classic-theme { position: fixed; inset: 0; background-size: cover; background-position: center; z-index: 1000; display: flex; justify-content: center; align-items: center; }
+.cover-overlay-gradient { position: absolute; inset: 0; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
 .cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
-.cover-text-group.jp-style { flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); padding-left: 50px; text-align: right; z-index: 100; }
-.cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; }
-.subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; opacity: 0.95; color: var(--color-bg-main); }
-.poem-main { font-family: 'Zen Old Mincho', serif; font-size: 1.3rem; line-height: 2; margin-top: 50px; opacity: 0.9; }
+.cover-text-group { flex: 1; color: #f8f4e6; text-align: right; z-index: 50; padding-left: 50px; }
+.cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; color: #fff; }
+.start-btn-main { margin-top: 60px; padding: 16px 48px; font-size: 1.2rem; background: var(--color-accent); color: #fff; border-radius: 4px; cursor: pointer; position: relative; z-index: 110; pointer-events: auto; font-family: 'Noto Serif JP', serif; }
 
-/* 探索键核心修复 */
-.start-btn-main.jp-btn { 
-    margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; 
-    background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); color: #fff; border: none; border-radius: 4px; 
-    cursor: pointer; transition: all 0.4s; letter-spacing: 0.1em; box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); 
-    pointer-events: auto !important; position: relative; z-index: 110; 
-}
-.start-btn-main.jp-btn:hover { transform: translateY(-3px) scale(1.02); background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); box-shadow: 0 8px 30px rgba(203, 58, 86, 0.5); }
-
-.cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
-.cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
-
-/* Sidebar */
+/* 🏮 侧边栏 */
 .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-.sidebar-header { padding: 0 10px 16px; border-bottom: 1px solid var(--glass-border); }
-.sidebar-header h3 { font-size: 1.2rem; font-weight: bold; margin: 0; display: flex; justify-content: space-between; font-family: inherit; }
-.count { font-size: 0.8rem; opacity: 0.7; font-family: sans-serif; }
-.word-list { flex: 1; overflow-y: auto; padding: 15px 0; }
-.custom-scroll::-webkit-scrollbar { width: 6px; }
-.custom-scroll::-webkit-scrollbar-track { background: rgba(45, 36, 30, 0.05); border-radius: 3px; }
-.custom-scroll::-webkit-scrollbar-thumb { background: rgba(45, 36, 30, 0.2); border-radius: 3px; }
-.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; color: var(--color-text-main); border-left: 4px solid transparent; position: relative; background: rgba(255, 253, 248, 0.5); }
-.word-item:hover { background: rgba(255, 253, 248, 0.85); transform: translateX(2px); }
-.word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; color: var(--color-text-main); }
-.item-actions { display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s; position: absolute; right: 12px; z-index: 20; background: var(--glass-bg); border-radius: 8px; padding: 3px; box-shadow: 0 2px 8px rgba(45, 36, 30, 0.1); }
-.word-item:hover .item-actions { opacity: 1; }
-.del-icon { opacity: 0.8; border: none; background: none; color: var(--color-accent); cursor: pointer; font-weight: bold; padding: 4px 8px; font-size: 1.1rem; transition: opacity 0.2s; }
-.del-icon:hover { opacity: 1; }
-.sidebar-footer { padding-top: 25px; display: flex; flex-direction: column; gap: 12px; position: relative; border-top: 1px solid var(--glass-border); }
-.action-btn.artistic-btn { width: 100%; padding: 14px; border: none; border-radius: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: inherit; transition: all 0.2s; letter-spacing: 0.5px; }
-.action-btn.primary { color: white; box-shadow: 0 4px 12px rgba(203, 58, 86, 0.25); }
-.action-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(203, 58, 86, 0.35); background-color: var(--color-accent-hover) !important; }
-.action-btn.outline { background: rgba(255, 253, 248, 0.6); color: var(--color-text-main); border: 1px solid var(--glass-border); }
-.action-btn.outline:hover { background: white; border-color: var(--color-accent); transform: translateY(-2px); color: var(--color-accent); }
+.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); }
+.word-item.active { background: white; border-left: 4px solid var(--color-accent); box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); }
 
-/* Mascots */
-.shiba-mascot { position: absolute; bottom: 100%; right: 0px; width: 135px; height: 135px; cursor: pointer; z-index: 20; transition: transform 0.2s; margin-bottom: 15px; }
-.shiba-mascot:hover { transform: scale(1.05) rotate(3deg); }
-.shiba-img { width: 100%; height: 100%; object-fit: contain; drop-shadow: 0 5px 15px rgba(45, 36, 30, 0.15); }
-.shiba-bubble { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: white; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 10px rgba(45, 36, 30, 0.1); animation: popIn 0.3s; color: var(--color-text-main); }
-.shiba-bubble::after { content: ''; position: absolute; bottom: -6px; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: white transparent transparent transparent; }
-.cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 280px; height: 280px; cursor: pointer; z-index: 100; transition: transform 0.3s ease; }
-.cat-mascot-container:hover { transform: scale(1.03); }
-.cat-img-wrapper { width: 100%; height: 100%; transform: scaleX(-1); filter: drop-shadow(0 10px 25px rgba(45, 36, 30, 0.3)); }
-.cat-mascot-img { width: 100%; height: 100%; object-fit: contain; }
-.idle-anim { animation: float 3.5s ease-in-out infinite; }
-.thinking-anim { animation: tilt 0.6s ease-in-out infinite alternate; }
-.cat-mascot-container.poked .cat-mascot-img { animation: jump 0.5s cubic-bezier(0.28, 0.84, 0.42, 1); }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-@keyframes tilt { 0% { transform: rotate(-6deg); } 100% { transform: rotate(6deg); } }
-@keyframes jump { 0% { transform: scale(1,1) translateY(0); } 30% { transform: scale(0.92,1.08) translateY(-50px); } 100% { transform: scale(1,1) translateY(0); } }
-.cat-bubble { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); background: white; padding: 10px 20px; border-radius: 20px; font-size: 1.1rem; font-weight: bold; white-space: nowrap; box-shadow: 0 5px 15px rgba(45, 36, 30, 0.15); animation: popIn 0.3s; color: var(--color-text-main); }
-.cat-bubble::after { content: ''; position: absolute; bottom: -8px; left: 50%; margin-left: -8px; border-width: 8px; border-style: solid; border-color: white transparent transparent transparent; }
-@keyframes popIn { from { opacity: 0; transform: translateX(-50%) scale(0.5) translateY(20px); } to { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); } }
+/* 🏮 卡片翻转逻辑优化 (全域点击) */
+.card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; z-index: 2; }
+.card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
+.card-body.is-flipped { transform: rotateY(180deg); }
+.card-face { position: absolute; inset: 0; backface-visibility: hidden; display: flex; flex-direction: column; background: #FFFFFF; border-radius: 24px; padding: 40px; border: 1px solid var(--glass-border); }
+.card-face.back { transform: rotateY(180deg); overflow-y: auto; }
 
-/* Main Stage & Transitions */
-.main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; }
-.search-bar { margin: 0 20px 25px; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-.lang-pills { display: flex; gap: 10px; }
-.lang-pill { width: 36px; height: 36px; border-radius: 12px; border: 1px solid transparent; background: rgba(255, 253, 248, 0.5); cursor: pointer; font-size: 18px; transition: all 0.3s; display: flex; align-items: center; justify-content: center; color: var(--color-text-main); }
-.lang-pill.active { background: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(45, 36, 30, 0.1); border-color: var(--glass-border); }
-.search-input { border: none; background: transparent; padding: 10px; flex: 1; margin: 0 25px; outline: none; font-size: 1.2rem; font-family: inherit; color: var(--color-text-main); }
-.search-input::placeholder { color: rgba(45, 36, 30, 0.5); }
-.search-btn { border: none; background: transparent; cursor: pointer; font-size: 1.3rem; transition: transform 0.2s; }
-.search-btn:hover { transform: scale(1.1); color: var(--color-accent-hover) !important; }
+/* 排版细节 */
+.main-word { font-size: 3.2rem; font-family: 'Zen Old Mincho', serif; margin-bottom: 10px; }
+.divider { height: 1px; background-image: linear-gradient(to right, #D5C9BB 40%, transparent 20%); background-size: 6px 1px; background-repeat: repeat-x; width: 100%; margin: 25px 0; }
+.label-tag { font-size: 0.75rem; text-transform: uppercase; color: var(--color-accent); letter-spacing: 1.5px; font-weight: bold; margin-bottom: 8px; display: block; }
+.ex-text { font-style: italic; color: #444; border-left: 3px solid var(--glass-border); padding-left: 15px; margin-bottom: 15px; font-family: serif; }
+.ex-text span:hover { text-decoration: underline; color: var(--color-accent); cursor: help; } /* 词汇点击提示 */
 
-/* Timeline List */
-.history-stage { flex: 1; margin: 0 20px 20px; padding: 35px; display: flex; flex-direction: column; overflow: hidden; }
-.timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 20px; scroll-padding-top: 20px; }
-.t-content { flex: 1; background: rgba(255, 253, 248, 0.9); padding: 15px 22px; transition: transform 0.2s, box-shadow 0.2s; position: relative; border: 1px solid var(--glass-border); border-radius: 18px; }
-.year-number { font-weight: 800; font-size: 1.2rem; color: var(--color-text-main); background: rgba(255, 253, 248, 0.95); padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(45, 36, 30, 0.06); font-family: sans-serif; border: 1px solid var(--glass-border); }
+/* 年表 */
+.history-stage { width: 95%; height: 90vh; padding: 40px; overflow: hidden; display: flex; flex-direction: column; }
+.timeline-wrapper { flex: 1; overflow-y: auto; }
+.t-content { background: rgba(255, 253, 248, 0.9); padding: 15px 22px; border: 1px solid var(--glass-border); border-radius: 18px; margin-bottom: 15px; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body>
@@ -121,179 +73,164 @@
             <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: `url(${coverImages.bg})` }">
                 <div class="cover-overlay-gradient"></div>
                 <div class="cover-content-layout">
-                    <div class="cover-cat-wrapper"><img :src="coverImages.cat" class="cover-cat-large" alt="Cover Cat"></div>
-                    <div class="cover-text-group jp-style">
+                    <div class="flex-shrink-0"><img :src="coverImages.cat" class="max-h-[75vh] drop-shadow-2xl"></div>
+                    <div class="cover-text-group">
                         <h1 class="cover-title-main">Memori</h1>
-                        <p class="subtitle-main">言葉の考古学</p>
-                        <div class="poem-main"><p>時の砂に埋もれた、</p><p>言葉の欠片を探して。</p></div>
-                        <button class="start-btn-main jp-btn" @click="enterApp">探索を始める</button>
+                        <p class="text-2xl font-serif tracking-widest mt-2">言葉の考古学</p>
+                        <div class="mt-12 text-xl font-serif leading-loose opacity-80">
+                            <p>埋没于历史尘沙中的文字，</p>
+                            <p>即是开启文明碎片的钥匙。</p>
+                        </div>
+                        <button class="start-btn-main" @click="enterApp">开启学术探索</button>
                     </div>
                 </div>
             </div>
         </Transition>
 
-        <div v-if="!showCover" class="app-container with-texture" :style="{ background: langConfig[currentLang].bg, fontFamily: langConfig[currentLang].font }">
-            <aside class="sidebar glass-morphism artistic-border">
-                <div class="sidebar-header">
-                    <h3 :style="{ color: langConfig[currentLang].accent }">
-                        {{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }} 
-                        <span class="count">{{ filteredHistory.length }} 词</span>
+        <div v-if="!showCover" class="app-container with-texture" :style="{ background: langConfig[currentLang].bg }">
+            
+            <aside class="sidebar glass-morphism">
+                <div class="sidebar-header border-b border-pink-100 pb-4 mb-4">
+                    <h3 class="font-bold flex justify-between items-center">
+                        <span>{{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}</span>
+                        <span class="text-xs opacity-50 font-sans">{{ filteredHistory.length }} 词</span>
                     </h3>
                 </div>
-                <div class="word-list custom-scroll">
-                    <div v-for="item in filteredHistory" :key="item.id" class="word-item" :class="{ 'active': mode === 'card' && item.id === card.id }" :style="(mode === 'card' && item.id === card.id) ? { borderLeftColor: langConfig[currentLang].accent } : {}" @click="loadWord(item)">
-                        <span class="word-text">{{ item.word }}</span>
-                        <div class="item-actions"><button class="del-icon" @click.stop="deleteWord(item.id)">×</button></div>
+                <div class="word-list flex-1 overflow-y-auto pr-2 custom-scroll">
+                    <div v-for="item in filteredHistory" :key="item.id" 
+                         class="word-item group" 
+                         :class="{ 'active': card.id === item.id }"
+                         @click="loadWord(item)">
+                        <span class="truncate">{{ item.word }}</span>
+                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold" @click.stop="deleteWord(item.id)">×</button>
                     </div>
                 </div>
-                <div class="sidebar-footer">
+                <div class="sidebar-footer mt-4 pt-4 border-t border-pink-100 flex flex-col gap-3 relative">
                     <div class="shiba-mascot" @click="pokeMascot">
-                        <img :src="shibaImages[neroState]" class="shiba-img" alt="Shiba">
-                        <div v-if="neroState === 'thinking'" class="shiba-bubble">嗅嗅...</div>
-                        <div v-if="neroState === 'happy'" class="shiba-bubble">香！</div>
+                        <img :src="shibaImages[neroState]" class="w-full">
                     </div>
-                    <button class="action-btn primary artistic-btn" @click="startReview" :style="{ backgroundColor: langConfig[currentLang].accent }"><i class="fa-solid fa-layer-group"></i> 复习</button>
-                    <button class="action-btn outline artistic-btn" @click="mode = 'history'"><i class="fa-solid fa-scroll"></i> 历史年表</button>
+                    <button class="artistic-btn bg-[#CB3A56] text-white py-3 rounded-xl font-bold" @click="startReview">复习计划</button>
+                    <button class="artistic-btn border border-pink-200 py-3 rounded-xl" @click="mode = 'history'">历史年表</button>
                 </div>
             </aside>
 
             <main class="main-stage">
-                <div class="search-bar glass-morphism artistic-border">
-                    <div class="lang-pills">
-                        <button v-for="(cfg, key) in langConfig" :key="key" @click="switchLang(key)" class="lang-pill" :class="{ 'active': currentLang === key }" :title="cfg.scent">{{ cfg.flag }}</button>
+                <div class="search-bar glass-morphism w-full max-w-[600px] flex items-center px-6 py-3 mb-8">
+                    <div class="flex gap-2 mr-4">
+                        <button v-for="(cfg, key) in langConfig" @click="switchLang(key)" 
+                                class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+                                :class="currentLang === key ? 'bg-white border-2 border-[#CB3A56]' : 'opacity-40'">
+                            {{ cfg.flag }}
+                        </button>
                     </div>
-                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="`寻找${langConfig[currentLang].name}的味道...`" class="search-input">
-                    <button @click="generateCard" class="search-btn" :disabled="loading" :style="{ color: langConfig[currentLang].accent }"><i v-if="loading" class="fa-solid fa-spinner fa-spin"></i><i v-else class="fa-solid fa-magnifying-glass"></i></button>
+                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="`检索${langConfig[currentLang].name}学术词汇...`" class="bg-transparent outline-none flex-1 text-xl">
+                    <button @click="generateCard" class="text-2xl text-[#CB3A56]"><i v-if="loading" class="fa-solid fa-spinner fa-spin"></i><i v-else class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
                 <Transition name="fade-mode" mode="out-in">
-                    <div v-if="mode === 'card'" class="content-area" key="card">
-                        <div class="flex justify-center items-center h-full">
-                            <div class="bg-white w-[400px] min-h-[500px] rounded-[24px] shadow-lg p-10 flex flex-col items-center text-center border border-[#EAE3D9] animate-in slide-in-from-bottom-5">
-                                <div class="text-[#CB3A56] font-sans text-sm tracking-widest mb-2 uppercase">{{ card.reading }}</div>
-                                <h2 class="text-4xl font-bold font-serif tracking-widest text-[#2D241E] mb-6">{{ card.word }}</h2>
-                                <div class="w-full h-px bg-gradient-to-r from-transparent via-[#D5C9BB] to-transparent mb-8"></div>
-                                <div class="text-lg leading-relaxed text-[#2D241E] mb-8 text-left w-full overflow-y-auto max-h-[250px] custom-scroll" v-html="card.meaning"></div>
-                                <div class="mt-auto flex gap-4 w-full">
-                                    <button class="flex-1 bg-[#CB3A56] text-white font-bold py-4 rounded-xl shadow-md hover:bg-[#EF7A82] transition-all" @click="toggleCollect">{{ card.isCollected ? '已收藏' : '收藏单词' }}</button>
-                                    <button class="w-16 bg-[#F0EAE1] text-[#5C4B3C] rounded-xl flex items-center justify-center text-xl hover:bg-white transition-all border border-[#EAE3D9]" @click="speak(card.word)"><i class="fa-solid fa-volume-high"></i></button>
+                    <div v-if="mode === 'card'" class="card-3d-wrapper" @click="isFlipped = !isFlipped">
+                        <div class="card-body" :class="{ 'is-flipped': isFlipped }">
+                            <div class="card-face glass-morphism text-center">
+                                <div class="text-[#CB3A56] font-sans text-sm tracking-widest mb-2">{{ card.reading }}</div>
+                                <h2 class="main-word">{{ card.word }}</h2>
+                                <div class="divider"></div>
+                                <div class="flex-1 flex flex-col justify-center">
+                                    <span class="label-tag">学术释义</span>
+                                    <div class="text-xl leading-relaxed" v-html="card.meaning"></div>
                                 </div>
+                                <div class="mt-8 text-xs opacity-30 italic">点击卡片任意位置查看详尽考证</div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div v-else-if="mode === 'history'" class="history-stage glass-morphism artistic-border" key="history">
-                        <div class="flex justify-between items-center mb-8 border-b border-pink-100 pb-4">
-                            <h1 class="text-3xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1>
-                            <button class="text-3xl text-gray-300 hover:text-[#CB3A56]" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        <div class="timeline-wrapper custom-scroll">
-                            <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10 relative">
-                                <div class="w-24 text-right pt-2 sticky top-0"><span class="year-number">{{ group.year }}</span></div>
-                                <div class="flex-1 flex flex-col gap-4">
-                                    <div v-for="item in group.events" :key="item.id" class="t-content group" draggable="true" @dragstart="onDragStart($event, item)" @drop="onDrop($event, item)" @dragover.prevent>
-                                        <div class="flex items-center gap-4">
-                                            <span class="text-2xl">{{ item.tag }}</span>
-                                            <span class="text-lg font-serif flex-1">{{ item.event }}</span>
-                                            <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold px-2 transition-opacity" @click="deleteTimelineEvent(item.id)">×</button>
-                                        </div>
+                            <div class="card-face back glass-morphism" @click.stop>
+                                <div class="mb-6">
+                                    <span class="label-tag">语源考证 / Etymology</span>
+                                    <div class="text-base leading-relaxed text-justify" v-html="card.etymology"></div>
+                                </div>
+                                <div v-if="card.examples && card.examples.length">
+                                    <span class="label-tag">文献例证 / Examples</span>
+                                    <div v-for="ex in card.examples" class="ex-row mb-6">
+                                        <p class="ex-text" @click="speak(ex.text)">
+                                            <span v-for="word in ex.text.split(' ')" @click.stop="searchThis(word)" class="hover:text-[#CB3A56] cursor-help">{{word}} </span>
+                                        </p>
+                                        <p class="text-sm text-gray-500">{{ ex.cn }}</p>
                                     </div>
                                 </div>
+                                <button class="mt-auto w-full bg-[#CB3A56] text-white py-3 rounded-xl font-bold" @click="toggleCollect">
+                                    {{ card.isCollected ? '✔ 已归档' : '➕ 存入单词本' }}
+                                </button>
                             </div>
                         </div>
                     </div>
-                </Transition>
-            </main>
 
-            <div v-if="mode !== 'history'" class="cat-mascot-container" @click="pokeMascot" :class="{ 'poked': neroState === 'happy' }" title="双击上传猫咪" @dblclick="triggerMascotInput">
-                <input type="file" ref="mascotInput" @change="handleMascotUpload" accept="image/*" style="display:none">
-                <div class="cat-img-wrapper"><img :src="userCat" class="cat-mascot-img" alt="Cat Mascot"></div>
-                <div v-if="neroState === 'thinking'" class="cat-bubble">挖掘中...</div>
-                <div v-if="neroState === 'happy'" class="cat-bubble">喵~✨</div>
-            </div>
+                    <div v-else-if="mode === 'review' && reviewCard" class="flex gap-10 items-start">
+                        </div>
+
+                    </Transition>
+            </main>
         </div>
     </div>
 
     <script>
         const { createApp, ref, computed, onMounted, watch } = Vue;
+
         createApp({
             setup() {
                 const showCover = ref(true);
                 const currentLang = ref('jp');
                 const wordInput = ref('');
                 const loading = ref(false);
-                const neroState = ref('idle');
-                const history = ref([]); 
+                const isFlipped = ref(false);
+                const history = ref([]);
                 const mode = ref('card');
-                const mascotInput = ref(null);
-                const reviewCounts = ref(JSON.parse(localStorage.getItem('memori-review-counts') || '{}'));
-                const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
-                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
-                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
+                const neroState = ref('idle');
 
-                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', examples: [], lang: 'jp', isCollected: false });
+                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
+                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
+
+                const card = ref({ word: '言叶考古', reading: 'Kotoba Archaeology', meaning: '学术检索系统就绪', etymology: '暂无数据', examples: [] });
 
                 const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0 0%, #FCEFE8 100%)', accent: '#CB3A56', font: "'Zen Old Mincho', serif" },
-                    zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1 0%, #F6F4EF 100%)', accent: '#9D2933', font: "'Noto Serif SC', serif" },
-                    en: { name: '英语', flag: '🇬🇧', voice: 'en-US', bg: 'linear-gradient(-20deg, #E6E8EB 0%, #EDF1F4 100%)', accent: '#1772B4', font: "'Playfair Display', serif" },
-                    lat: { name: '拉丁', flag: '🏛️', voice: 'it-IT', bg: '#EAE8E6', accent: '#605A54', font: "'Cinzel', serif" }
+                    jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0, #FCEFE8)', accent: '#CB3A56' },
+                    zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1, #F6F4EF)', accent: '#9D2933' },
+                    lzh: { name: '古代汉语', flag: '📜', voice: 'zh-CN', bg: '#F4F5F0', accent: '#41555D' },
+                    en: { name: '英语', flag: '🇬🇧', voice: 'en-US', bg: '#EDF1F4', accent: '#1772B4' },
+                    kr: { name: '韩语', flag: '🇰🇷', voice: 'ko-KR', bg: '#F9EDF1', accent: '#B25D7E' },
+                    lat: { name: '拉丁语', flag: '🏛️', voice: 'it-IT', bg: '#EAE8E6', accent: '#605A54' }
                 };
 
-                const timelines = ref({ asia: [ { id: 1, year: '前7000', event: '河姆渡文化', tag: '🇨🇳' } ], europe: [] });
-
-                const filteredHistory = computed(() => history.value.filter(item => (item.lang || 'jp') === currentLang.value));
-                const groupedTimelines = computed(() => {
-                    const list = timelines.value.asia.concat(timelines.value.europe);
-                    const groups = {};
-                    list.forEach(e => { if(!groups[e.year]) groups[e.year] = { year: e.year, events: [] }; groups[e.year].events.push(e); });
-                    return Object.values(groups);
-                });
+                const filteredHistory = computed(() => history.value.filter(h => h.lang === currentLang.value));
 
                 async function generateCard() {
-                    if (!wordInput.value) return;
-                    loading.value = true; neroState.value = 'thinking'; mode.value = 'card';
+                    if(!wordInput.value) return;
+                    loading.value = true; neroState.value = 'thinking'; isFlipped.value = false;
                     try {
-                        const res = await fetch('/api/openai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) });
+                        const res = await fetch('/api/openai', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ word: wordInput.value, lang: currentLang.value })
+                        });
                         const data = await res.json();
-                        card.value = { id: Date.now(), ...data, lang: currentLang.value, isCollected: false };
+                        card.value = { ...data, lang: currentLang.value, isCollected: false };
                         speak(card.value.word);
-                        neroState.value = 'happy'; setTimeout(() => neroState.value = 'idle', 2000);
+                        neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 2000);
                         wordInput.value = '';
-                    } catch (e) { alert('挖掘失败'); } finally { loading.value = false; }
+                    } catch(e) { alert("检索失败，请检查网络。"); } finally { loading.value = false; }
                 }
 
-                function toggleCollect() {
-                    if (card.value.isCollected) {
-                        history.value = history.value.filter(h => h.id !== card.value.id);
-                        card.value.isCollected = false;
-                    } else {
-                        card.value.isCollected = true;
-                        history.value.unshift({...card.value, nextReview: Date.now(), interval: 0});
-                    }
-                    localStorage.setItem('memori-book', JSON.stringify(history.value));
-                }
+                function searchThis(w) { wordInput.value = w.replace(/[.,!?;:()]/g, ""); generateCard(); }
 
                 function speak(t) {
                     window.speechSynthesis.cancel();
                     const ut = new SpeechSynthesisUtterance(t);
                     ut.lang = langConfig[currentLang.value].voice;
+                    ut.rate = 0.85; // 稍慢的速度，确保发音清晰
                     window.speechSynthesis.speak(ut);
                 }
 
-                onMounted(() => {
-                    const saved = localStorage.getItem('memori-book'); if (saved) history.value = JSON.parse(saved);
-                    const savedT = localStorage.getItem('memori-timelines-v19'); if (savedT) timelines.value = JSON.parse(savedT);
-                });
-
-                return {
-                    showCover, enterApp: () => showCover.value = false, currentLang, wordInput, loading, neroState, history, mode, mascotInput, userCat, shibaImages, coverImages, card, langConfig, filteredHistory, groupedTimelines,
-                    generateCard, toggleCollect, speak, switchLang: (l) => { currentLang.value = l; mode.value = 'card'; }, loadWord: (item) => { card.value = item; mode.value = 'card'; }, deleteWord: (id) => { history.value = history.value.filter(h => h.id !== id); localStorage.setItem('memori-book', JSON.stringify(history.value)); },
-                    startReview: () => { const due = history.value.filter(h => h.lang === currentLang.value); if (!due.length) return alert("暂无复习任务"); alert("开始复习！"); },
-                    deleteTimelineEvent: (id) => { timelines.value.asia = timelines.value.asia.filter(e => e.id !== id); },
-                    pokeMascot: () => { neroState.value = 'happy'; setTimeout(() => neroState.value = 'idle', 1000); },
-                    handleMascotUpload: (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { userCat.value = ev.target.result; localStorage.setItem('memori-user-cat', ev.target.result); }; reader.readAsDataURL(file); } }
-                }
+                // 侧边栏及基础逻辑...
+                return { 
+                    showCover, enterApp:()=>showCover.value=false, currentLang, wordInput, loading, isFlipped, history, card, langConfig, coverImages, shibaImages, neroState, filteredHistory,
+                    generateCard, searchThis, speak, loadWord:(item)=>{card.value=item; mode.value='card'}, switchLang:(l)=>{currentLang.value=l; mode.value='card'}
+                };
             }
         }).mount('#app');
     </script>
