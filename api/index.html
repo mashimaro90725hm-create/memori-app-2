@@ -80,7 +80,7 @@
             resDiv.style.display = 'block';
 
             try {
-                // 核心：直接请求您刚才测试成功的后端路径
+                // 核心：请求您刚才测试成功的后端路径
                 const response = await fetch(`/api/openai?word=${encodeURIComponent(word)}`);
                 const data = await response.json();
 
