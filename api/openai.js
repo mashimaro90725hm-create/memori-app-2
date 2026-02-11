@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // CORS 配置
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -22,39 +21,38 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
 
-    // 专业学术 Prompt
-    let systemPrompt = `You are a professional Etymologist and Lexicographer writing for an academic encyclopedia.
+    // 核心指令：学术、维基百科风格、纯文本
+    let systemPrompt = `You are a strict Etymologist and Historian.
     Target Language: ${targetLang}.
     User Query: "${word}".
     
-    CRITICAL:
-    1. If Query is Chinese & Target is NOT Chinese -> Translate first, then define the translated word.
-    2. Output strict JSON.
+    Task: Provide a JSON response ONLY.
     
-    Task Requirements:
-    - **Etymology**: Provide a Wikipedia-style narrative. Discuss Proto-roots (PIE, Proto-Sino-Tibetan), cognates, and historical semantic shifts. Use academic tone.
-    - **Examples**: Select 2-3 prestigious sentences (Literature/History/Philosophy).
+    CRITICAL INSTRUCTION:
+    1. **Etymology**: MUST quote/adapt a narrative style similar to Wikipedia in the target language (translated to Chinese for clarity if needed, or bilingual). Focus on historical linguistic shifts, roots (PIE, Sino-Tibetan), and first known usages.
+    2. **Examples**: Provide 2-3 prestigious sentences (Literature, History, Philosophy).
+    3. **Images**: DO NOT generate images.
     `;
 
     if (type === 'enrich') {
       systemPrompt += `
-      Mode: Enrichment (Etymology & Examples only).
-      JSON Structure:
+      Mode: Enrichment.
+      JSON:
       {
-        "etymology": "Detailed encyclopedic narrative...",
-        "examples": [{"text": "Native", "cn": "Translation"}]
+        "etymology": "Detailed Wikipedia-style academic narrative...",
+        "examples": [{"text": "Native Sentence", "cn": "Chinese Translation"}]
       }`;
     } else {
       systemPrompt += `
-      Mode: Full Dictionary Entry.
-      JSON Structure:
+      Mode: Full Entry.
+      JSON:
       {
-        "word": "Target Word",
+        "word": "${word}",
         "reading": "IPA/Kana/Pinyin",
-        "meaning": "Concise definition in Chinese",
-        "etymology": "Detailed encyclopedic narrative...",
+        "meaning": "Concise Chinese definition",
+        "etymology": "Detailed Wikipedia-style academic narrative...",
         "simple_english": "English equivalent",
-        "word_details": "Part of speech / Origin Era",
+        "word_details": "POS / Era",
         "examples": [{"text": "Native", "cn": "Translation"}]
       }`;
     }
