@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memori - 言叶の考古学 V2.0 (全量功能恢复版)</title>
+    <title>Memori - 言叶の考古学 V2.0 (探索键修复版)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,46 +14,48 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-/* --- 🏮 严格保留中国色变量 --- */
+/* --- 🏮 核心中国色变量 (全量保留) --- */
 :root {
   --color-bg-main: #E2E1E4;  --color-text-main: #2D241E;  --color-accent: #CB3A56;  --color-accent-hover: #EF7A82;
   --glass-bg: rgba(255, 253, 248, 0.75); --glass-border: rgba(203, 58, 86, 0.15);
 }
 
-/* 🎨 全局样式与排版 */
 * { box-sizing: border-box; }
 .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; position: relative; color: var(--color-text-main); }
 .app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
-
 .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; }
 
-/* 🚪 封面页还原 */
+/* 🚪 封面页 (核心修复区) */
 .cover-stage.classic-theme { position: fixed; inset: 0; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 1000; overflow: hidden; }
-.cover-overlay-gradient { position: absolute; inset: 0; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); }
+.cover-overlay-gradient { position: absolute; inset: 0; background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); z-index: 1; }
 .cover-content-layout { position: relative; z-index: 2; width: 90%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; height: 80vh; }
-.cover-text-group { flex: 1; color: #f8f4e6; text-align: right; z-index: 50; padding-left: 50px; }
+.cover-text-group { flex: 1; color: #f8f4e6; text-align: right; z-index: 100; padding-left: 50px; } /* 提升文本组层级 */
 .cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; color: #fff; }
-.start-btn-main { margin-top: 60px; padding: 16px 48px; font-size: 1.2rem; background: var(--color-accent); color: #fff; border-radius: 4px; cursor: pointer; position: relative; z-index: 101; pointer-events: auto; }
+.start-btn-main { 
+    margin-top: 60px; padding: 16px 48px; font-size: 1.2rem; background: var(--color-accent); color: #fff; 
+    border-radius: 4px; cursor: pointer; transition: all 0.4s; 
+    position: relative; z-index: 110; pointer-events: auto !important; /* 深度锁定层级与响应 */
+    box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4);
+}
+.start-btn-main:hover { transform: translateY(-3px) scale(1.02); background: var(--color-accent-hover); }
 
-/* 🏮 侧边栏 */
+.cover-cat-wrapper { flex: 0 0 40%; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; z-index: 1; pointer-events: none; }
+.cover-cat-large { max-width: 100%; max-height: 75vh; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); transform: translateX(-10%) scaleX(-1); }
+
+/* 🏮 内部 UI */
 .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
-.word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); }
-.word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; border-left: 4px solid var(--color-accent); }
-
-/* 🏮 内部 UI 卡片设计 */
 .main-stage { flex: 1; display: flex; flex-direction: column; padding: 20px; z-index: 10; align-items: center; }
 .v2-card { background: white; width: 400px; min-height: 520px; border-radius: 24px; padding: 50px 35px; box-shadow: 0 15px 35px rgba(45, 36, 30, 0.1); border: 1px solid var(--glass-border); display: flex; flex-direction: column; text-align: center; }
-.ruby-text { font-family: sans-serif; font-size: 15px; color: var(--color-accent); margin-bottom: 10px; }
-.main-word-title { font-size: 3.5rem; font-weight: 700; font-family: 'Zen Old Mincho', serif; }
 .divider { height: 1px; background-image: linear-gradient(to right, #D5C9BB 40%, transparent 20%); background-size: 6px 1px; background-repeat: repeat-x; width: 100%; margin: 30px 0; }
 
-/* 🏮 年表样式全恢复 */
+/* 历史年表全量还原 */
 .history-stage { width: 95%; height: 90vh; padding: 40px; overflow: hidden; display: flex; flex-direction: column; }
 .timeline-wrapper { flex: 1; overflow-y: auto; padding-right: 20px; }
 .t-content { background: rgba(255, 253, 248, 0.9); padding: 18px 25px; border: 1px solid var(--glass-border); border-radius: 18px; position: relative; }
 .year-number { font-weight: 800; font-size: 1.3rem; color: var(--color-accent); border: 1px solid var(--glass-border); padding: 4px 10px; border-radius: 8px; background: white; }
 
-/* 其余吉祥物、花田等样式忽略展示，代码中包含 */
+.fade-enter-active, .fade-leave-active { transition: opacity 1s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body>
@@ -62,24 +64,18 @@
             <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: `url(${coverImages.bg})` }">
                 <div class="cover-overlay-gradient"></div>
                 <div class="cover-content-layout">
-                    <div class="flex-shrink-0 z-1 pointer-events-none">
-                        <img :src="coverImages.cat" class="max-h-[75vh] drop-shadow-2xl">
-                    </div>
+                    <div class="cover-cat-wrapper"><img :src="coverImages.cat" class="cover-cat-large"></div>
                     <div class="cover-text-group">
                         <h1 class="cover-title-main">Memori</h1>
                         <p class="text-2xl font-serif tracking-widest mt-2">言葉の考古学</p>
-                        <div class="mt-12 text-xl font-serif leading-loose opacity-80">
-                            <p>時の砂に埋もれた、</p>
-                            <p>言葉の欠片を探して。</p>
-                        </div>
-                        <button class="start-btn-main font-bold hover:scale-105 transition-all" @click="enterApp">探索を始める</button>
+                        <div class="mt-12 text-xl font-serif leading-loose opacity-80"><p>時の砂に埋もれた、</p><p>言葉の欠片を探して。</p></div>
+                        <button class="start-btn-main font-bold" @click="enterApp">探索を始める</button>
                     </div>
                 </div>
             </div>
         </Transition>
 
         <div v-if="!showCover" class="app-container with-texture" :style="{ background: langConfig[currentLang].bg }">
-            
             <aside class="sidebar glass-morphism">
                 <div class="sidebar-header border-b border-pink-100 pb-4 mb-4">
                     <h3 class="font-bold flex justify-between">
@@ -88,18 +84,13 @@
                     </h3>
                 </div>
                 <div class="word-list flex-1 overflow-y-auto pr-2 custom-scroll">
-                    <div v-for="item in filteredHistory" :key="item.id" 
-                         class="word-item group" 
-                         :class="{ 'active': card.id === item.id }"
-                         @click="loadWord(item)">
+                    <div v-for="item in filteredHistory" :key="item.id" class="word-item group" :class="{ 'active': card.id === item.id }" @click="loadWord(item)">
                         <span class="truncate">{{ item.word }}</span>
-                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold" @click.stop="deleteWord(item.id)">×</button>
+                        <button class="opacity-0 group-hover:opacity-100 text-red-400 font-bold px-2" @click.stop="deleteWord(item.id)">×</button>
                     </div>
                 </div>
                 <div class="sidebar-footer mt-4 pt-4 border-t border-pink-100 flex flex-col gap-3 relative">
-                    <div class="shiba-mascot" @click="pokeMascot">
-                        <img :src="shibaImages[neroState]" class="w-full">
-                    </div>
+                    <div class="shiba-mascot" @click="pokeMascot"><img :src="shibaImages[neroState]" class="w-full"></div>
                     <button class="artistic-btn bg-[#CB3A56] text-white py-3 rounded-xl font-bold" @click="startReview">复习</button>
                     <button class="artistic-btn border border-pink-200 py-3 rounded-xl" @click="mode = 'history'">历史年表</button>
                     <button class="text-xs opacity-30 mt-2" @click="clearCurrentHistory">清空当前库</button>
@@ -109,14 +100,10 @@
             <main class="main-stage">
                 <div class="search-bar glass-morphism flex items-center px-6 py-3 mb-8 w-full max-w-[600px]">
                     <div class="flex gap-2 mr-4">
-                        <button v-for="(cfg, key) in langConfig" :key="key" @click="switchLang(key)" 
-                                class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
-                                :class="currentLang === key ? 'bg-white border-2 border-[#CB3A56]' : 'opacity-40'">
-                            {{ cfg.flag }}
-                        </button>
+                        <button v-for="(cfg, key) in langConfig" :key="key" @click="switchLang(key)" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all" :class="currentLang === key ? 'bg-white border-2 border-[#CB3A56]' : 'opacity-40'">{{ cfg.flag }}</button>
                     </div>
                     <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="'寻找' + langConfig[currentLang].name + '的味道...'" class="bg-transparent outline-none flex-1 text-xl">
-                    <button @click="generateCard" class="text-2xl text-[#CB3A56]"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button @click="generateCard" class="text-2xl text-[#CB3A56]"><i v-if="loading" class="fa-solid fa-spinner fa-spin"></i><i v-else class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
                 <Transition name="fade-mode" mode="out-in">
@@ -134,9 +121,7 @@
                             </div>
                         </div>
                         <div class="mt-8 flex gap-4">
-                            <button class="flex-1 bg-[#CB3A56] text-white py-4 rounded-2xl font-bold" @click="toggleCollect">
-                                {{ card.isCollected ? '已收藏' : '加入单词本' }}
-                            </button>
+                            <button class="flex-1 bg-[#CB3A56] text-white py-4 rounded-2xl font-bold" @click="toggleCollect">{{ card.isCollected ? '已收藏' : '加入单词本' }}</button>
                             <button class="w-16 bg-[#F0EAE1] text-[#5C4B3C] rounded-2xl" @click="speak(card.word)"><i class="fa-solid fa-volume-high"></i></button>
                         </div>
                     </div>
@@ -152,43 +137,21 @@
                             <div v-else class="flex-1 flex flex-col w-full animate-in slide-in-from-bottom-5">
                                 <div class="ruby-text mb-4 text-xl">{{ reviewCard.reading }}</div>
                                 <div class="flex-1 overflow-y-auto text-left mb-8" v-html="reviewCard.meaning"></div>
-                                <div class="flex gap-2">
-                                    <button class="flex-1 bg-[#CB3A56] text-white p-4 rounded-2xl" @click="handleSRS(1)">忘</button>
-                                    <button class="flex-1 bg-[#F28E16] text-white p-4 rounded-2xl" @click="handleSRS(2)">难</button>
-                                    <button class="flex-1 bg-[#8FAB1D] text-white p-4 rounded-2xl" @click="handleSRS(3)">会</button>
-                                    <button class="flex-1 bg-[#2C9678] text-white p-4 rounded-2xl" @click="handleSRS(4)">熟</button>
-                                </div>
+                                <div class="flex gap-2"><button v-for="r in [{v:1,t:'忘',c:'again'},{v:2,t:'难',c:'hard'},{v:3,t:'会',c:'good'},{v:4,t:'熟',c:'easy'}]" @click="handleSRS(r.v)" class="flex-1 p-4 rounded-2xl text-white font-bold" :class="r.v===1?'bg-[#CB3A56]':r.v===2?'bg-[#F28E16]':r.v===3?'bg-[#8FAB1D]':'bg-[#2C9678]'">{{ r.t }}</button></div>
                             </div>
                         </div>
-                        <div class="w-64 glass-morphism p-6 flex flex-col items-center">
-                            <h3 class="font-bold mb-4">记忆之树</h3>
-                            <img :src="treeStage.img" class="w-full h-48 object-contain mb-4">
-                            <p class="text-xs text-center opacity-60">状态: {{ treeStage.status }}</p>
-                        </div>
+                        <div class="w-64 glass-morphism p-6 flex flex-col items-center"><h3 class="font-bold mb-4">记忆之树</h3><img :src="treeStage.img" class="w-full h-48 object-contain mb-4"><p class="text-xs text-center opacity-60">状态: {{ treeStage.status }}</p></div>
                     </div>
 
                     <div v-else-if="mode === 'history'" class="history-stage glass-morphism" key="history">
-                        <div class="flex justify-between items-center mb-8">
-                            <h1 class="text-3xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1>
-                            <button class="text-3xl text-gray-300" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        <div class="flex gap-2 mb-8 bg-white/50 p-4 rounded-2xl">
-                            <input v-model="newEvent.year" placeholder="年份" class="w-24 px-3 py-2 rounded-lg">
-                            <input v-model="newEvent.tag" placeholder="图标" class="w-16 px-3 py-2 rounded-lg" @blur="autoMapIcon">
-                            <input v-model="newEvent.event" placeholder="事件内容" class="flex-1 px-3 py-2 rounded-lg">
-                            <button @click="addTimelineEvent" class="bg-[#CB3A56] text-white px-6 rounded-lg font-bold">添加</button>
-                        </div>
+                        <div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-serif font-bold text-[#CB3A56]">历史大事年表</h1><button class="text-3xl text-gray-300" @click="mode = 'card'"><i class="fa-solid fa-xmark"></i></button></div>
+                        <div class="flex gap-2 mb-8 bg-white/50 p-4 rounded-2xl"><input v-model="newEvent.year" placeholder="年份" class="w-24 px-3 py-2 rounded-lg"><input v-model="newEvent.tag" placeholder="图标" class="w-16 px-3 py-2 rounded-lg" @blur="autoMapIcon"><input v-model="newEvent.event" placeholder="事件内容" class="flex-1 px-3 py-2 rounded-lg"><button @click="addTimelineEvent" class="bg-[#CB3A56] text-white px-6 rounded-lg font-bold">添加</button></div>
                         <div class="timeline-wrapper custom-scroll">
                             <div v-for="group in groupedTimelines" :key="group.year" class="flex gap-8 mb-10 relative">
                                 <div class="w-24 text-right pt-2 sticky top-0"><span class="year-number">{{ group.year }}</span></div>
                                 <div class="flex-1 flex flex-col gap-4">
-                                    <div v-for="item in group.events" :key="item.id" 
-                                         class="t-content group" draggable="true" @dragstart="onDragStart($event, item)" @drop="onDrop($event, item)" @dragover.prevent>
-                                        <div class="flex items-center gap-4">
-                                            <span class="text-2xl">{{ item.tag }}</span>
-                                            <span class="text-lg font-serif flex-1">{{ item.event }}</span>
-                                            <button class="opacity-0 group-hover:opacity-100 text-red-400" @click="deleteTimelineEvent(item.id)">×</button>
-                                        </div>
+                                    <div v-for="item in group.events" :key="item.id" class="t-content group" draggable="true" @dragstart="onDragStart($event, item)" @drop="onDrop($event, item)" @dragover.prevent>
+                                        <div class="flex items-center gap-4"><span class="text-2xl">{{ item.tag }}</span><span class="text-lg font-serif flex-1">{{ item.event }}</span><button class="opacity-0 group-hover:opacity-100 text-red-400" @click="deleteTimelineEvent(item.id)">×</button></div>
                                     </div>
                                 </div>
                             </div>
@@ -198,9 +161,7 @@
             </main>
 
             <div class="fixed bottom-10 right-10 flex flex-col items-end gap-4">
-                <div v-if="flowerField.length" class="flex gap-2 bg-white/40 p-3 rounded-full">
-                    <img v-for="f in flowerField" :src="f.img" class="w-8 h-8 rounded-full border border-white">
-                </div>
+                <div v-if="flowerField.length" class="flex gap-2 bg-white/40 p-3 rounded-full"><img v-for="f in flowerField" :src="f.img" class="w-8 h-8 rounded-full border border-white"></div>
                 <div class="cat-mascot-container" @click="pokeMascot" @dblclick="triggerMascotInput">
                     <input type="file" ref="mascotInput" @change="handleMascotUpload" class="hidden">
                     <img :src="userCat" class="w-48 drop-shadow-2xl">
@@ -212,28 +173,20 @@
 
     <script>
         const { createApp, ref, computed, onMounted, watch } = Vue;
-
         createApp({
             setup() {
-                // --- 基础状态 ---
-                const showCover = ref(true);
-                const currentLang = ref('jp');
-                const wordInput = ref('');
-                const loading = ref(false);
-                const neroState = ref('idle');
-                const history = ref([]);
-                const mode = ref('card');
-                const reviewQueue = ref([]);
-                const reviewCard = ref(null);
-                const showReviewAnswer = ref(false);
-                const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
-                const mascotInput = ref(null);
-
-                // --- 完整九语配置回归 ---
+                const showCover = ref(true); const currentLang = ref('jp'); const wordInput = ref(''); const loading = ref(false); const neroState = ref('idle');
+                const history = ref([]); const mode = ref('card'); const reviewQueue = ref([]); const reviewCard = ref(null); const showReviewAnswer = ref(false);
+                const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png'); const mascotInput = ref(null); const timelines = ref({ asia: [], europe: [] });
+                const newEvent = ref({ year: '', event: '', tag: '🏺' }); const iconMap = { '中国': '🇨🇳', '日本': '🇯🇵', '考古': '🏺' };
+                const reviewCounts = ref(JSON.parse(localStorage.getItem('memori-review-counts') || '{}'));
+                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', examples: [], lang: 'jp', isCollected: false });
+                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
+                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
                 const langConfig = {
                     jp: { name: '日语', flag: '🇯🇵', voice: 'ja-JP', bg: 'linear-gradient(to top, #F9F1F0, #FCEFE8)', accent: '#CB3A56', plant: 'cherry blossom' },
                     zh: { name: '汉语', flag: '🇨🇳', voice: 'zh-CN', bg: 'linear-gradient(120deg, #FBF8F1, #F6F4EF)', accent: '#9D2933', plant: 'peony flower' },
-                    lzh: { name: '古代汉语', flag: '📜', voice: 'zh-CN', bg: '#F4F5F0', accent: '#41555D', plant: 'lotus flower' },
+                    lzh: { name: '古汉语', flag: '📜', voice: 'zh-CN', bg: '#F4F5F0', accent: '#41555D', plant: 'lotus flower' },
                     en: { name: '英语', flag: '🇬🇧', voice: 'en-US', bg: '#EDF1F4', accent: '#1772B4', plant: 'english rose' },
                     cjp: { name: '古典日语', flag: '🏯', voice: 'ja-JP', bg: '#F2EFE8', accent: '#5A3D30', plant: 'bonsai pine' },
                     kr: { name: '韩语', flag: '🇰🇷', voice: 'ko-KR', bg: '#F9EDF1', accent: '#B25D7E', plant: 'hibiscus' },
@@ -242,111 +195,62 @@
                     lat: { name: '拉丁', flag: '🏛️', voice: 'it-IT', bg: '#F0EEEC', accent: '#605A54', plant: 'olive tree' }
                 };
 
-                // --- 核心词库对象 (无图片) ---
-                const card = ref({ id: Date.now(), word: 'Memori', reading: 'me-mo-ri', meaning: '欢迎来到语言考古发掘现场', examples: [], lang: 'jp', isCollected: false });
-
-                const shibaImages = { idle: './shiba/idle.gif', thinking: './shiba/run.gif', happy: './shiba/happy.gif' };
-                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
-
-                // --- 记忆树与花田逻辑全量回归 ---
-                const reviewCounts = ref(JSON.parse(localStorage.getItem('memori-review-counts') || '{}'));
+                const filteredHistory = computed(() => history.value.filter(item => (item.lang || 'jp') === currentLang.value));
                 const flowerField = computed(() => {
-                    const count = history.value.filter(h => h.lang === currentLang.value).length;
-                    const num = Math.floor(count / 50);
-                    const list = [];
-                    for(let i=0; i<num; i++) list.push({img: `https://pollinations.ai/p/vintage_${langConfig[currentLang.value].plant}_flower?width=100&height=100&seed=${i}`});
+                    const num = Math.floor(filteredHistory.value.length / 50);
+                    const list = []; for(let i=0; i<num; i++) list.push({img: `https://pollinations.ai/p/vintage_${langConfig[currentLang.value].plant}_flower?width=100&height=100&seed=${i}`});
                     return list;
                 });
                 const treeStage = computed(() => {
                     const c = reviewCounts.value[currentLang.value] || 0;
-                    let stage = 'seedling', status = '萌芽中';
-                    if(c > 150) { stage = 'fruit'; status = '果实累累'; }
-                    else if(c > 100) { stage = 'tree'; status = '枝繁叶茂'; }
-                    else if(c > 50) { stage = 'sapling'; status = '茁壮成长'; }
-                    return { status, img: `https://pollinations.ai/p/${stage}_of_${langConfig[currentLang.value].plant}_tree?width=300&height=300&nologo=true` };
+                    let stage = c > 150 ? 'fruit' : c > 100 ? 'tree' : c > 50 ? 'sapling' : 'seedling';
+                    return { status: stage === 'fruit'?'果实累累':stage==='tree'?'枝繁叶茂':stage==='sapling'?'茁壮成长':'萌芽中', img: `https://pollinations.ai/p/${stage}_of_${langConfig[currentLang.value].plant}_tree?width=300&height=300&nologo=true` };
                 });
-
-                // --- 历史年表全量逻辑 ---
-                const timelines = ref({ asia: [], europe: [] });
-                const newEvent = ref({ year: '', event: '', tag: '🏺' });
-                const iconMap = { '中国': '🇨🇳', '日本': '🇯🇵', '考古': '🏺' };
                 const groupedTimelines = computed(() => {
-                    const list = timelines.value.asia.concat(timelines.value.europe); // 简化演示
-                    const groups = {};
-                    list.forEach(e => { if(!groups[e.year]) groups[e.year] = { year:e.year, events:[] }; groups[e.year].events.push(e); });
+                    const groups = {}; [...timelines.value.asia, ...timelines.value.europe].forEach(e => { if(!groups[e.year]) groups[e.year] = { year:e.year, events:[] }; groups[e.year].events.push(e); });
                     return Object.values(groups);
                 });
 
-                // --- 方法全量回归 ---
                 async function generateCard() {
-                    if(!wordInput.value) return;
-                    loading.value = true; neroState.value = 'thinking'; mode.value = 'card';
+                    if(!wordInput.value) return; loading.value = true; neroState.value = 'thinking'; mode.value = 'card';
                     try {
                         const exists = history.value.find(h => h.word === wordInput.value && h.lang === currentLang.value);
                         if(exists) { card.value = {...exists}; }
                         else {
                             const res = await fetch('/api/openai', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word: wordInput.value, lang: currentLang.value }) });
-                            const data = await res.json();
-                            card.value = { id: Date.now(), ...data, lang: currentLang.value, isCollected: false };
+                            const data = await res.json(); card.value = { id: Date.now(), ...data, lang: currentLang.value, isCollected: false };
                         }
-                        speak(card.value.word);
-                        neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 2000);
-                        wordInput.value = '';
+                        speak(card.value.word); neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 2000); wordInput.value = '';
                     } catch(e) { alert("挖掘失败"); } finally { loading.value = false; }
                 }
 
                 function toggleCollect() {
                     const idx = history.value.findIndex(h => h.word === card.value.word && h.lang === card.value.lang);
-                    if (idx !== -1) {
-                        history.value.splice(idx, 1);
-                        card.value.isCollected = false;
-                    } else {
-                        card.value.isCollected = true;
-                        history.value.unshift({...card.value, nextReview: Date.now(), interval: 0});
-                    }
+                    if (idx !== -1) { history.value.splice(idx, 1); card.value.isCollected = false; }
+                    else { card.value.isCollected = true; history.value.unshift({...card.value, nextReview: Date.now(), interval: 0}); }
                     localStorage.setItem('memori-book', JSON.stringify(history.value));
                 }
 
                 function handleSRS(rating) {
-                    let interval = reviewCard.value.interval || 0;
-                    interval = rating === 1 ? 1 : Math.ceil((interval || 1) * 2.5);
-                    reviewCard.value.interval = interval;
-                    reviewCard.value.nextReview = Date.now() + interval * 86400000;
-                    const idx = history.value.findIndex(h => h.id === reviewCard.value.id);
-                    if(idx !== -1) history.value[idx] = {...reviewCard.value};
-                    
-                    if(!reviewCounts.value[currentLang.value]) reviewCounts.value[currentLang.value] = 0;
-                    reviewCounts.value[currentLang.value]++;
-                    
-                    localStorage.setItem('memori-book', JSON.stringify(history.value));
-                    localStorage.setItem('memori-review-counts', JSON.stringify(reviewCounts.value));
-                    nextReview();
+                    let c = reviewCard.value; c.interval = rating === 1 ? 1 : Math.ceil((c.interval || 1) * 2.5);
+                    c.nextReview = Date.now() + c.interval * 86400000;
+                    const idx = history.value.findIndex(h => h.id === c.id); if(idx !== -1) history.value[idx] = {...c};
+                    if(!reviewCounts.value[currentLang.value]) reviewCounts.value[currentLang.value] = 0; reviewCounts.value[currentLang.value]++;
+                    localStorage.setItem('memori-book', JSON.stringify(history.value)); localStorage.setItem('memori-review-counts', JSON.stringify(reviewCounts.value));
+                    if (!reviewQueue.value.length) { mode.value = 'card'; alert("复习完成！"); } else { reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; }
                 }
 
-                function nextReview() {
-                    if (!reviewQueue.value.length) { mode.value = 'card'; return alert("复习完成！"); }
-                    reviewCard.value = reviewQueue.value.shift();
-                    showReviewAnswer.value = false;
-                }
-
-                function speak(t) {
-                    window.speechSynthesis.cancel();
-                    const ut = new SpeechSynthesisUtterance(t);
-                    ut.lang = langConfig[currentLang.value].voice;
-                    window.speechSynthesis.speak(ut);
-                }
+                function speak(t) { window.speechSynthesis.cancel(); const ut = new SpeechSynthesisUtterance(t); ut.lang = langConfig[currentLang.value].voice; window.speechSynthesis.speak(ut); }
 
                 onMounted(() => {
-                    const saved = localStorage.getItem('memori-book');
-                    if(saved) history.value = JSON.parse(saved);
-                    const savedT = localStorage.getItem('memori-timelines-v19');
-                    if(savedT) timelines.value = JSON.parse(savedT);
+                    const saved = localStorage.getItem('memori-book'); if(saved) history.value = JSON.parse(saved);
+                    const savedT = localStorage.getItem('memori-timelines-v19'); if(savedT) timelines.value = JSON.parse(savedT);
                 });
 
                 return {
                     showCover, enterApp:()=>showCover.value=false, currentLang, wordInput, loading, neroState, history, mode, reviewCard, showReviewAnswer, userCat, shibaImages, coverImages, card, langConfig, timelines, newEvent, flowerField, treeStage,
                     generateCard, toggleCollect, handleSRS, speak, switchLang: (l)=>{currentLang.value=l; mode.value='card'}, loadWord: (item)=>{card.value=item; mode.value='card'}, deleteWord: (id)=>{history.value=history.value.filter(h=>h.id!==id); localStorage.setItem('memori-book', JSON.stringify(history.value))},
-                    startReview: () => { const due = history.value.filter(h => h.lang===currentLang.value && h.nextReview <= Date.now()); if(!due.length) return alert("暂无复习任务"); reviewQueue.value=[...due]; mode.value='review'; nextReview(); },
+                    startReview: () => { const due = history.value.filter(h => h.lang===currentLang.value && h.nextReview <= Date.now()); if(!due.length) return alert("暂无复习任务"); reviewQueue.value=[...due]; mode.value='review'; reviewCard.value = reviewQueue.value.shift(); showReviewAnswer.value = false; },
                     addTimelineEvent: () => { timelines.value.asia.push({id:Date.now(), ...newEvent.value}); newEvent.value={year:'', event:'', tag:'🏺'}; },
                     deleteTimelineEvent: (id) => { timelines.value.asia = timelines.value.asia.filter(e=>e.id!==id); },
                     autoMapIcon: () => { if(iconMap[newEvent.value.tag]) newEvent.value.tag = iconMap[newEvent.value.tag]; },
