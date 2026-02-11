@@ -6,138 +6,123 @@
     <title>Memori - 言叶考古学</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        /* 使用您上传的 cover-bg.jpg 作为背景 */
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: url('./cover-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Noto Serif SC', serif;
+        /* 移植您最核心的“中国色”主题变量 */
+        :root {
+            --color-bg-main: #E2E1E4; 
+            --color-text-main: #2D241E; 
+            --color-accent: #8e2626; 
         }
-        .app-container {
-            background: rgba(255, 255, 255, 0.92);
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-            width: 90%;
-            max-width: 550px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .header h1 { font-family: 'Cinzel', serif; color: #8e2626; font-size: 2.8rem; margin: 0; }
-        .header p { color: #555; letter-spacing: 0.3rem; font-size: 0.9rem; margin-top: 5px; }
+        body { margin: 0; font-family: 'Zen Old Mincho', 'Noto Serif SC', serif; background-color: var(--color-bg-main); }
         
-        /* 呼唤您上传的小猫归位 */
-        .mascot-container { margin: 1.5rem 0; }
-        .mascot { width: 100px; height: auto; transition: 0.3s; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); }
-        .mascot:hover { transform: scale(1.1) rotate(5deg); }
+        /* 封面页样式 */
+        .cover-stage {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('./cover-bg.jpg') no-repeat center center;
+            background-size: cover; display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .cover-content { text-align: right; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); padding-right: 50px; }
+        .cover-cat { position: absolute; left: 50px; bottom: 0; height: 80vh; transform: scaleX(-1); }
 
-        .search-area { margin-top: 2rem; }
-        input {
-            width: 100%;
-            padding: 16px 25px;
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-            text-align: center;
-            font-family: 'Noto Serif SC', serif;
-        }
-        input:focus { border-color: #8e2626; background: #fff; }
+        /* 主应用界面 */
+        .app-container { display: flex; width: 100vw; height: 100vh; }
+        .sidebar { width: 280px; background: rgba(255,253,248,0.7); backdrop-filter: blur(10px); padding: 20px; border-right: 1px solid rgba(0,0,0,0.1); }
+        .main-stage { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; }
         
-        button {
-            margin-top: 1.5rem;
-            padding: 14px 50px;
-            background: #8e2626;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.4s;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(142,38,38,0.3);
-        }
-        button:hover { background: #b03030; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(142,38,38,0.4); }
-
-        #result-display { margin-top: 2.5rem; text-align: left; display: none; border-top: 2px solid #8e2626; padding-top: 1.5rem; animation: fadeIn 0.8s; }
-        .etymology-card { background: #fdf5f5; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; color: #444; line-height: 1.6; }
-        .etymology-card strong { color: #8e2626; }
+        /* 搜索框与卡片 */
+        .search-bar { width: 100%; max-width: 600px; display: flex; gap: 10px; margin-bottom: 40px; }
+        input { flex: 1; padding: 15px 25px; border-radius: 30px; border: 1px solid #ddd; outline: none; font-size: 1.1rem; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .loading-text { color: #8e2626; font-style: italic; }
+        .card {
+            width: 400px; height: 550px; background: white; border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; transition: 0.5s;
+        }
+        .card-img { width: 100%; height: 50%; object-fit: cover; background: #eee; }
+        .card-info { padding: 25px; text-align: center; }
+        .main-word { font-size: 2.5rem; color: var(--color-accent); margin: 0; }
+        
+        /* 考古猫/狗图标 */
+        .cat-mascot { position: fixed; bottom: 20px; right: 20px; width: 120px; cursor: pointer; transition: 0.3s; }
+        .cat-mascot:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <h1>Memori</h1>
-            <p>言 葉 の 考 古 学</p>
-        </div>
-
-        <div class="mascot-container">
-            <img src="./my-cat.png" class="mascot" alt="考古猫" onerror="this.src='./cover-cat.png'">
-        </div>
-
-        <div class="search-area">
-            <input type="text" id="wordInput" placeholder="请输入想要考古的词汇...">
-            <br>
-            <button onclick="dig()">探索起源 <i class="fas fa-hammer"></i></button>
-        </div>
-
-        <div id="result-display">
-            <div id="status" class="loading-text">正在清理沙尘，准备出土...</div>
-            <div id="detail" style="display:none;">
-                <h2 id="resWord" style="color:#8e2626; margin:0;"></h2>
-                <p id="resMeaning"></p>
-                <div class="etymology-card">
-                    <strong><i class="fas fa-monument"></i> 考古词源：</strong><br>
-                    <span id="resEtymology"></span>
-                </div>
-                <p style="font-size:0.85rem; color:#888;" id="resEnglish"></p>
+    <div id="app">
+        <div v-if="showCover" class="cover-stage">
+            <img src="./cover-cat.png" class="cover-cat" alt="Cat">
+            <div class="cover-content">
+                <h1 style="font-size: 5rem; margin:0;">Memori</h1>
+                <p style="font-size: 1.5rem; letter-spacing: 0.3em;">言葉の考古学</p>
+                <button @click="showCover = false" style="margin-top:40px; padding: 15px 40px; border-radius: 5px; border:none; background:#8e2626; color:white; cursor:pointer; font-weight:bold;">探索を始める</button>
             </div>
+        </div>
+
+        <div v-else class="app-container">
+            <aside class="sidebar">
+                <h2 style="color:#8e2626;">{{ currentLang === 'jp' ? '🇯🇵 日语' : '🇨🇳 汉语' }}</h2>
+                <div style="margin-top:20px;">已收藏: {{ history.length }} 词</div>
+                <div style="margin-top:auto;">
+                    <img src="https://img.icons8.com/color/96/shiba-inu.png" style="width:100px;">
+                </div>
+            </aside>
+
+            <main class="main-stage">
+                <div class="search-bar">
+                    <input v-model="wordInput" @keyup.enter="generateCard" placeholder="输入想要考古的词汇...">
+                    <button @click="generateCard" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#8e2626;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+
+                <div v-if="card.word" class="card">
+                    <img :src="card.imageUrl || './cover-bg.jpg'" class="card-img">
+                    <div class="card-info">
+                        <h2 class="main-word">{{ card.word }}</h2>
+                        <p style="color:#888;">[{{ card.reading }}]</p>
+                        <div style="text-align:left; margin-top:20px; background:#f9f9f9; padding:15px; border-radius:10px;">
+                            <strong>考古词源：</strong><br>{{ card.etymology }}
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <img src="./my-cat.png" class="cat-mascot" @click="pokeMascot">
         </div>
     </div>
 
     <script>
-        async function dig() {
-            const word = document.getElementById('wordInput').value;
-            const display = document.getElementById('result-display');
-            const status = document.getElementById('status');
-            const detail = document.getElementById('detail');
+        const { createApp, ref, onMounted } = Vue;
 
-            if (!word) return;
+        createApp({
+            setup() {
+                const showCover = ref(true);
+                const currentLang = ref('jp');
+                const wordInput = ref('');
+                const history = ref([]);
+                const card = ref({});
 
-            display.style.display = 'block';
-            detail.style.display = 'none';
-            status.style.display = 'block';
+                // 核心：生成卡片并对接您的云端后端
+                async function generateCard() {
+                    if (!wordInput.value) return;
+                    try {
+                        const response = await fetch(`/api/openai?word=${encodeURIComponent(wordInput.value)}`);
+                        const data = await response.json();
+                        // 自动生成符合考古氛围的配图
+                        const prompt = `ancient manuscript style of ${wordInput.value}`;
+                        card.value = {
+                            ...data,
+                            imageUrl: `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=800&height=1000&nologo=true`
+                        };
+                        history.value.push(data);
+                    } catch (e) {
+                        alert('挖掘失败');
+                    }
+                }
 
-            try {
-                // 完美连接已通电的后端路径
-                const response = await fetch(`/api/openai?word=${encodeURIComponent(word)}`);
-                const data = await response.json();
-
-                status.style.display = 'none';
-                detail.style.display = 'block';
-                
-                document.getElementById('resWord').innerHTML = `${data.word} <small style="font-weight:normal; color:#999;">[${data.reading}]</small>`;
-                document.getElementById('resMeaning').innerText = `义项：${data.meaning}`;
-                document.getElementById('resEtymology').innerText = data.etymology;
-                document.getElementById('resEnglish').innerText = `English: ${data.simple_english}`;
-            } catch (err) {
-                status.innerText = '⚠️ 发掘现场发生坍塌，请检查 API 密钥。';
+                return { showCover, currentLang, wordInput, history, card, generateCard };
             }
-        }
+        }).mount('#app');
     </script>
 </body>
 </html>
