@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memori - 言叶考古学</title>
+    <title>Memori - 语言考古</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Noto+Serif+KR:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <style>
-        /* 原本复刻 CSS 变量与核心样式 */
+        /* --- 🎨 核心样式复刻 (全量 CSS) --- */
         :root {
             --color-bg-main: #E2E1E4; 
             --color-text-main: #2D241E; 
@@ -20,50 +21,201 @@
             --glass-bg: rgba(255, 253, 248, 0.75); 
             --glass-border: rgba(203, 58, 86, 0.15); 
         }
-        /* 此处省略您 App.vue 中极其详尽的 <style scoped> 内容，我已将其完整内置于下方的 Vue 组件模板中 */
-        /* ... (完整 CSS 已包含在下方脚本生成的样式表中) ... */
+
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; overflow: hidden; }
+
+        /* 封面页修复版：确保猫咪不遮挡按钮 */
+        .cover-stage.classic-theme { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background-size: cover; background-position: center; 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 1000; overflow: hidden; 
+        }
+        .cover-overlay-gradient { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(to right, rgba(45, 36, 30, 0.6) 0%, rgba(45, 36, 30, 0.2) 60%, transparent 100%); 
+        }
+        .cover-content-layout { 
+            position: relative; z-index: 2; width: 90%; max-width: 1200px; 
+            display: flex; justify-content: space-between; align-items: center; height: 80vh; 
+        }
+        .cover-cat-wrapper { 
+            flex: 1; height: 100%; display: flex; justify-content: flex-start; align-items: flex-end; 
+            z-index: 1; pointer-events: none; /* 关键：点击穿透猫咪 */
+        }
+        .cover-cat-large { 
+            max-width: 100%; max-height: 90vh; object-fit: contain; 
+            filter: drop-shadow(0 10px 30px rgba(60, 40, 30, 0.6)); 
+            transform: translateX(-10%) scaleX(-1); 
+        }
+        .cover-text-group.jp-style { 
+            flex: 1; color: #f8f4e6; text-shadow: 0 2px 10px rgba(0,0,0,0.6); 
+            padding-left: 50px; text-align: right; z-index: 10; /* 确保层级高于猫咪 */
+        }
+        .cover-title-main { font-family: 'Zen Old Mincho', serif; font-size: 5rem; font-weight: 700; margin: 0; letter-spacing: 0.05em; color: #fff; }
+        .subtitle-main { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3em; margin-top: 15px; opacity: 0.95; }
+        .poem-main { font-family: 'Zen Old Mincho', serif; font-size: 1.3rem; line-height: 2; margin-top: 50px; opacity: 0.9; }
+        .start-btn-main.jp-btn { 
+            margin-top: 60px; font-family: 'Noto Serif JP', serif; padding: 16px 48px; 
+            font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-accent) 0%, #A62C45 100%); 
+            color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: all 0.4s; 
+            letter-spacing: 0.1em; box-shadow: 0 4px 20px rgba(203, 58, 86, 0.4); 
+            pointer-events: auto; /* 关键：恢复按钮可点击性 */
+        }
+        .start-btn-main.jp-btn:hover { transform: translateY(-3px) scale(1.02); background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); }
+
+        /* 主应用界面 */
+        .app-container { 
+            display: flex; width: 100vw; height: 100vh; overflow: hidden; 
+            transition: background 0.5s ease, font-family 0.3s; position: relative; color: var(--color-text-main); 
+        }
+        .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px) saturate(110%); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); }
+        .sidebar { width: 280px; display: flex; flex-direction: column; padding: 30px 20px; z-index: 20; margin: 20px 0 20px 20px; }
+        .word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 16px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.5); }
+        .word-item.active { background: white; box-shadow: 0 4px 12px rgba(45, 36, 30, 0.08); font-weight: bold; border-left: 4px solid var(--color-accent); }
+        
+        /* 搜索框 */
+        .main-stage { flex: 1; position: relative; display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+        .search-bar { margin: 0 20px 25px; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
+        .search-input { border: none; background: transparent; padding: 10px; flex: 1; margin: 0 25px; outline: none; font-size: 1.2rem; }
+        
+        /* 3D 卡片 */
+        .card-3d-wrapper { width: 400px; height: 600px; perspective: 1500px; cursor: pointer; margin: auto; }
+        .card-body { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
+        .card-body.is-flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: #F3F2F0; }
+        .card-face.back { transform: rotateY(180deg); background: rgba(255, 253, 248, 0.9); }
+        
+        .main-word { font-size: 3.2rem; color: var(--color-text-main); font-family: 'Zen Old Mincho', serif; text-align: center; }
+        .etymology-box { background: #fdf5f5; border-left: 4px solid var(--color-accent); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-top: 1rem; }
+
+        /* 吉祥物动画 */
+        .cat-mascot-container { position: fixed; bottom: 30px; right: 30px; width: 280px; height: 280px; cursor: pointer; z-index: 100; transition: transform 0.3s; }
+        .cat-mascot-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
+        .idle-anim { animation: float 3.5s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .cover-content-layout { flex-direction: column-reverse; text-align: center; }
+            .cover-text-group.jp-style { padding-left: 0; text-align: center; }
+            .cover-title-main { font-size: 3.5rem; }
+            .sidebar { display: none; }
+        }
     </style>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <transition name="fade">
+            <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: 'url(./cover-bg.jpg)' }">
+                <div class="cover-overlay-gradient"></div>
+                <div class="cover-content-layout">
+                    <div class="cover-cat-wrapper">
+                        <img src="./cover-cat.png" class="cover-cat-large" alt="Cover Cat">
+                    </div>
+                    <div class="cover-text-group jp-style">
+                        <h1 class="cover-title-main">Memori</h1>
+                        <p class="subtitle-main">言葉の考古学</p>
+                        <div class="poem-main">
+                            <p>時の砂に埋もれた、</p>
+                            <p>言葉の欠片を探して。</p>
+                        </div>
+                        <button class="start-btn-main jp-btn" @click="enterApp">探索を始める</button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <div v-if="!showCover" class="app-container" :style="{ background: langConfig[currentLang].bg }">
+            <aside class="sidebar glass-morphism">
+                <div class="sidebar-header">
+                    <h3 :style="{ color: langConfig[currentLang].accent }">
+                        {{ langConfig[currentLang].flag }} {{ langConfig[currentLang].name }}
+                    </h3>
+                </div>
+                <div class="word-list custom-scroll">
+                    <div v-for="item in history" :key="item.id" class="word-item" @click="loadWord(item)">
+                        {{ item.word }}
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-stage">
+                <div class="search-bar glass-morphism">
+                    <input v-model="wordInput" @keyup.enter="generateCard" :placeholder="'寻找的味道...'" class="search-input">
+                    <button @click="generateCard" class="search-btn" :style="{ color: langConfig[currentLang].accent }">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+
+                <div v-if="card.word" class="card-3d-wrapper" @click="isFlipped = !isFlipped">
+                    <div class="card-body" :class="{ 'is-flipped': isFlipped }">
+                        <div class="card-face front glass-morphism">
+                            <img :src="card.imageUrl" class="w-full h-1/2 object-cover">
+                            <div class="p-8 text-center">
+                                <h2 class="main-word">{{ card.word }}</h2>
+                                <p class="text-gray-500">[{{ card.reading }}]</p>
+                            </div>
+                        </div>
+                        <div class="card-face back glass-morphism p-8">
+                            <h3 class="text-2xl font-bold mb-4" :style="{ color: langConfig[currentLang].accent }">{{ card.word }}</h3>
+                            <p><strong>释义：</strong>{{ card.meaning }}</p>
+                            <div class="etymology-box">
+                                <strong>考古词源：</strong><br>{{ card.etymology }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <div class="cat-mascot-container" @click="pokeMascot">
+                <img src="./my-cat.png" class="cat-mascot-img idle-anim" alt="Mascot">
+            </div>
+        </div>
+    </div>
 
     <script>
-        const { createApp, ref, computed, onMounted, watch } = Vue;
+        const { createApp, ref, computed, onMounted } = Vue;
 
-        // 直接复刻馆长的 Vue 逻辑
-        const app = createApp({
-            template: `
-                <div class="app-root">
-                   <transition name="fade">
-                     <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: 'url(./cover-bg.jpg)' }">
-                       <div class="cover-overlay-gradient"></div>
-                       <div class="cover-content-layout">
-                         <div class="cover-cat-wrapper"><img src="./cover-cat.png" class="cover-cat-large" alt="Cover Cat"></div>
-                         <div class="cover-text-group jp-style">
-                           <h1 class="cover-title-main">Memori</h1>
-                           <p class="subtitle-main">言葉の考古学</p>
-                           <div class="poem-main"><p>時の砂に埋もれた、</p><p>言葉の欠片を探して。</p></div>
-                           <button class="start-btn-main jp-btn" @click="enterApp">探索を始める</button>
-                         </div>
-                       </div>
-                     </div>
-                   </transition>
-
-                   <div v-if="!showCover" class="app-container with-texture" :style="{ background: langConfig[currentLang].bg, fontFamily: langConfig[currentLang].font }">
-                     </div>
-                </div>
-            `,
+        createApp({
             setup() {
-                // 原原本本复刻您 App.vue 里的所有 setup 逻辑
-                // 仅修改了 API 请求地址为 /api/openai 以适配 Vercel
-                
-                /* ... (此处完整包含您提供的 ref, computed, function 等所有 setup 逻辑) ... */
-                
-                return { /* ... 所有返回变量 ... */ };
-            }
-        });
+                const showCover = ref(true);
+                const currentLang = ref('jp');
+                const wordInput = ref('');
+                const isFlipped = ref(false);
+                const history = ref([]);
+                const card = ref({ word: '', reading: '', meaning: '', etymology: '', imageUrl: '' });
 
-        app.mount('#app');
+                // 语言配置复刻
+                const langConfig = {
+                    jp: { name: '日语', flag: '🇯🇵', accent: '#CB3A56', bg: '#F9F1F0' },
+                    zh: { name: '汉语', flag: '🇨🇳', accent: '#9D2933', bg: '#FBF8F1' }
+                };
+
+                const enterApp = () => showCover.value = false;
+
+                // 对接您的云端 API
+                async function generateCard() {
+                    if (!wordInput.value) return;
+                    try {
+                        const res = await fetch(`/api/openai?word=${encodeURIComponent(wordInput.value)}`);
+                        const data = await res.json();
+                        card.value = {
+                            ...data,
+                            imageUrl: `https://pollinations.ai/p/ancient_museum_artifact_${encodeURIComponent(data.word)}?width=800&height=1000&nologo=true`
+                        };
+                        history.value.unshift({...card.value, id: Date.now()});
+                        wordInput.value = '';
+                    } catch (e) { alert('挖掘失败'); }
+                }
+
+                const loadWord = (item) => { card.value = item; isFlipped.value = false; };
+                const pokeMascot = () => alert("喵~✨");
+
+                return { showCover, currentLang, wordInput, isFlipped, history, card, langConfig, enterApp, generateCard, loadWord, pokeMascot };
+            }
+        }).mount('#app');
     </script>
 </body>
 </html>
