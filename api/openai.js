@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // CORS 设置
+  // CORS 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,9 +9,9 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
     const { word, lang, type } = req.body; // type: 'full' | 'enrich'
 
-    // 语种全称映射
+    // 语种映射
     const langMap = {
-      cjp: "Classical Japanese (Bungo, with historical kana usage)",
+      cjp: "Classical Japanese (Bungo, historical context)",
       lzh: "Classical Chinese (Literary Chinese)",
       lat: "Latin",
       jp: "Modern Japanese",
@@ -23,49 +23,45 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
 
-    // 核心 Prompt 设计
-    let systemPrompt = `You are a professional linguist, etymologist, and historian. 
-    Target Language: ${targetLang}.
-    User Query: "${word}".
+    let systemPrompt = `You are an expert Etymologist and Lexicographer. 
+    User Query: "${word}" in ${targetLang}.
     
-    Task: Provide a JSON response. NO markdown formatting.
+    Output JSON ONLY. No markdown.
     `;
 
     if (type === 'enrich') {
-      // 模式 A: 局部补全 (Local Hit -> Enrich)
+      // 补全模式：只查词源和例句
       systemPrompt += `
-      Focus ONLY on deep Etymology and diverse Sentences.
+      Task: Provide deep academic background and high-quality examples.
       
       Requirements:
-      1. **Etymology**: Explain the origin/root in CHINESE and ${targetLang}. Reach Wikipedia academic depth. Mention historical shifts if any.
-      2. **Sentences**: Provide 2-3 examples. MUST choose from: Famous Quotes, Ancient Poems, Historical Texts, or Complex Grammar structures. Include native text and Chinese translation.
+      1. **Etymology**: 200+ words. Trace roots (PIE, Proto-Sino-Tibetan, etc.). Bilingual explanation (Chinese + ${targetLang}). Mention historical shifts.
+      2. **Examples**: 2-3 sentences. MUST be from: Famous Literature, Ancient Texts, Historical Events, or Philosophers. No simple daily conversation.
       
-      Output JSON Structure:
+      Structure:
       {
-        "etymology": "Detailed bilingual etymology...",
-        "examples": [
-          {"text": "Native sentence", "cn": "Chinese translation"}
-        ]
+        "etymology": "Detailed string...",
+        "examples": [{"text": "Native text", "cn": "Chinese translation"}]
       }`;
     } else {
-      // 模式 B: 全量发掘 (Full Discovery)
+      // 全量模式
       systemPrompt += `
-      Generate a complete dictionary card.
+      Task: Create a comprehensive dictionary entry.
       
       Requirements:
-      1. **Meaning**: Clear definition in Chinese.
-      2. **Reading**: Pronunciation (IPA, Kana, or Pinyin).
-      3. **Etymology**: Detailed academic origin (Bilingual: Chinese + Native).
-      4. **Sentences**: 2-3 High-quality examples (Quotes/History/Literature).
+      1. **Meaning**: Professional definition in Chinese.
+      2. **Reading**: IPA, Kana, or Pinyin.
+      3. **Etymology**: Wikipedia-level academic depth.
+      4. **Examples**: 2-3 High-quality quotes/historical text.
       
-      *CRITICAL FOR CJK*: For Chinese/Japanese/Korean words in the "meaning" or "examples", if there are difficult words, wrap them in simple text (Frontend will handle regex wrapping, or you can wrap key terms in <span class='interactive-word'>...</span> if you want specific highlighting).
-      
-      Output JSON Structure:
+      Structure:
       {
         "word": "${word}",
         "reading": "...",
         "meaning": "...",
         "etymology": "...",
+        "simple_english": "Quick translation",
+        "word_details": "Part of speech / JLPT level / Era",
         "examples": [{"text": "...", "cn": "..."}]
       }`;
     }
@@ -77,7 +73,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", // 或 gpt-4o
+        model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: systemPrompt }],
         response_format: { type: "json_object" }
       })
