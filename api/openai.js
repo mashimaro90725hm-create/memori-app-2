@@ -20,19 +20,17 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
     
-    // 词源控制
+    // 词源控制 (欧美系显示)
     const needsEtymology = ['en', 'de', 'it', 'lat'].includes(lang);
 
-    // --- 核心 Prompt ---
     let systemPrompt = `You are a professional Lexicographer and Etymologist.
     Target Language: ${targetLang}.
     User Query: "${word}".
     
     CRITICAL INSTRUCTION (Mutual Search):
-    1. If the User Query is in CHINESE, but Target Language is NOT Chinese:
+    1. If Query is in CHINESE but Target is NOT Chinese:
        - FIRST, translate "${word}" into ${targetLang}.
        - THEN, create the dictionary entry for the TRANSLATED word.
-       - Example: User searches "苹果" in English -> You output data for "Apple".
     
     2. **Examples Constraint**:
        - The "text" field MUST be in ${targetLang} (NOT Chinese).
@@ -48,7 +46,7 @@ export default async function handler(req, res) {
         "pinyin": ${lang === 'zh' ? '"Pinyin with tones"' : 'null'},
         "reading": "IPA/Kana",
         "meaning": "Rich, Encyclopedic definition in Chinese (Wikipedia level)",
-        "etymology": ${needsEtymology ? '"Detailed academic origin narrative..."' : 'null'},
+        "etymology": ${needsEtymology ? '"Detailed academic origin narrative (in Chinese)..."' : 'null'},
         "word_details": "Part of speech / Origin",
         "examples": [
           {"text": "Sentence IN ${targetLang}", "cn": "Chinese Translation"}
