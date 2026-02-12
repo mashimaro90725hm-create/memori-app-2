@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
     
-    // 5. 判定是否为欧美语系 (需要词源)
+    // 5. 词源控制 (欧美系显示，CJK不显示)
     const needsEtymology = ['en', 'de', 'it', 'lat'].includes(lang);
 
     let systemPrompt = `You are a strict Etymologist and Lexicographer.
@@ -31,15 +31,13 @@ export default async function handler(req, res) {
     Task: Provide a JSON response ONLY.
     
     CRITICAL INSTRUCTION:
-    1. **Translation**: If Query is Chinese & Target is NOT Chinese -> Translate first.
-    2. **Examples**: Provide 2-3 prestigious sentences (Literature, History) with Chinese translation.
+    1. **Examples**: MANDATORY. Provide 2-3 prestigious sentences (Literature, History) with Chinese translation.
     `;
 
-    // 5. 词源控制逻辑
     if (needsEtymology) {
-      systemPrompt += `3. **Etymology**: MUST quote/adapt a narrative style similar to Wikipedia in the target language (translated to Chinese). Focus on PIE roots/history.`;
+      systemPrompt += `2. **Etymology**: MUST quote/adapt a narrative style similar to Wikipedia in the target language (translated to Chinese).`;
     } else {
-      systemPrompt += `3. **Etymology**: Do NOT provide etymology field. Return null or empty string.`;
+      systemPrompt += `2. **Etymology**: Do NOT provide etymology field. Return null.`;
     }
 
     if (type === 'enrich') {
