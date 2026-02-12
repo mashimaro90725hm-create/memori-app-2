@@ -10,7 +10,6 @@ export default async function handler(req, res) {
 
     const langMap = {
       jp: "Modern Japanese",
-      cjp: "Classical Japanese (Bungo)",
       kr: "Korean",
       zh: "Modern Chinese (Mandarin)",
       en: "English",
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
     
-    // 词源控制 (欧美系显示)
+    // 5. 欧美语系显示词源，CJK不显示
     const needsEtymology = ['en', 'de', 'it', 'lat'].includes(lang);
 
     let systemPrompt = `You are a professional Lexicographer and Etymologist.
@@ -28,13 +27,11 @@ export default async function handler(req, res) {
     User Query: "${word}".
     
     CRITICAL INSTRUCTION (Mutual Search):
-    1. If Query is in CHINESE but Target is NOT Chinese:
+    1. If the User Query is in CHINESE, but Target Language is NOT Chinese:
        - FIRST, translate "${word}" into ${targetLang}.
        - THEN, create the dictionary entry for the TRANSLATED word.
     
-    2. **Examples Constraint**:
-       - The "text" field MUST be in ${targetLang} (NOT Chinese).
-       - The "cn" field is the Chinese translation.
+    2. **Examples**: Provide 2-3 prestigious sentences (Literature, History) in ${targetLang} with **Chinese translation**.
     
     Output JSON ONLY. Format:
     `;
@@ -46,7 +43,7 @@ export default async function handler(req, res) {
         "pinyin": ${lang === 'zh' ? '"Pinyin with tones"' : 'null'},
         "reading": "IPA/Kana",
         "meaning": "Rich, Encyclopedic definition in Chinese (Wikipedia level)",
-        "etymology": ${needsEtymology ? '"Detailed academic origin narrative (in Chinese)..."' : 'null'},
+        "etymology": ${needsEtymology ? '"Detailed academic origin narrative (translated to Chinese)..."' : 'null'},
         "word_details": "Part of speech / Origin",
         "examples": [
           {"text": "Sentence IN ${targetLang}", "cn": "Chinese Translation"}
@@ -55,8 +52,8 @@ export default async function handler(req, res) {
     } else {
       systemPrompt += `
       {
-        "etymology": ${needsEtymology ? '"Detailed narrative..."' : 'null'},
-        "examples": [{"text": "Native Sentence", "cn": "Translation"}]
+        "etymology": ${needsEtymology ? '"Detailed narrative (in Chinese)..."' : 'null'},
+        "examples": [{"text": "Native Sentence", "cn": "Chinese Translation"}]
       }`;
     }
 
