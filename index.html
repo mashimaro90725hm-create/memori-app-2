@@ -45,7 +45,7 @@
         .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 4px 20px -1px rgba(45, 36, 30, 0.05); border-radius: 20px; }
         .artistic-border { border-radius: 20px; }
 
-        /* 6. 背景装饰小图标 */
+        /* 装饰小图标 */
         .bg-deco { position: absolute; font-size: 8rem; color: var(--color-accent); opacity: 0.03; pointer-events: none; z-index: 0; }
         .deco-1 { top: 10%; left: 35%; transform: rotate(-15deg); }
         .deco-2 { bottom: 15%; left: 40%; transform: rotate(10deg); }
@@ -63,7 +63,6 @@
         .start-btn:hover { background: #fff; color: var(--color-text-main); transform: scale(1.05); box-shadow: 0 0 40px rgba(255,255,255,0.5); border-color: #fff; }
         
         .cover-cat-wrapper { flex: 1; height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; padding-right: 50px; }
-        /* 5. 封面猫猫水平翻转 (scaleX -1) */
         .cover-cat { max-height: 85vh; object-fit: contain; filter: drop-shadow(0 10px 40px rgba(0,0,0,0.6)); transform: scaleX(-1); }
 
         /* 卷首语 */
@@ -73,11 +72,10 @@
         .enter-main-btn { background: none; border: none; font-size: 2.2rem; color: var(--color-accent); cursor: pointer; transition: transform 0.3s; opacity: 0.8; }
         .enter-main-btn:hover { transform: scale(1.2); opacity: 1; }
 
-        /* 4. 侧边栏 (再拓宽) */
-        .sidebar { width: 400px; display: flex; flex-direction: column; padding: 35px 30px; z-index: 20; margin: 25px 0 25px 25px; }
+        /* 侧边栏 (Sidebar) */
+        .sidebar { width: 380px; display: flex; flex-direction: column; padding: 35px 30px; z-index: 20; margin: 25px 0 25px 25px; }
         .sidebar-header { padding-bottom: 18px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
         .sidebar-header h3 { font-size: 1.3rem; font-weight: bold; margin: 0; }
-        .add-dict-btn { cursor: pointer; color: var(--color-accent); font-size: 0.9rem; transition: transform 0.2s; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; }
         
         .word-list { flex: 1; overflow-y: auto; padding: 20px 0; }
         .word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.6); border-left: 4px solid transparent; }
@@ -87,17 +85,20 @@
         .del-icon { opacity: 0; transition: opacity 0.2s; color: #aaa; cursor: pointer; }
         .word-item:hover .del-icon { opacity: 1; }
         
-        .sidebar-footer { padding-top: 25px; border-top: 1px solid var(--glass-border); display: flex; flex-direction: row; gap: 15px; justify-content: space-between; align-items: flex-end; position: relative; }
-        /* 8. Shiba 位置与动画 */
+        /* 底部功能区 (修改处：导入按钮移至此处) */
+        .sidebar-footer { padding-top: 25px; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 10px; position: relative; }
         .shiba-mascot { position: absolute; bottom: 100%; right: 10px; width: 110px; cursor: pointer; margin-bottom: 10px; transition: transform 0.2s; }
         .shiba-mascot:hover { transform: rotate(5deg) scale(1.05); }
-        .nav-btn { flex: 1; padding: 15px 0; border: 1px solid var(--glass-border); border-radius: 12px; text-align: center; cursor: pointer; background: rgba(255,255,255,0.6); transition: all 0.2s; font-weight: bold; font-size: 1rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .nav-btn:hover { background: white; color: var(--color-accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        .nav-row { display: flex; gap: 10px; width: 100%; }
+        .nav-btn { flex: 1; padding: 12px 0; border: 1px solid var(--glass-border); border-radius: 12px; text-align: center; cursor: pointer; background: rgba(255,255,255,0.6); transition: all 0.2s; font-weight: bold; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .nav-btn:hover { background: white; color: var(--color-accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .import-btn { width: 100%; padding: 12px 0; border: 1px dashed var(--glass-border); border-radius: 12px; text-align: center; cursor: pointer; background: rgba(255,255,255,0.4); color: #666; transition: all 0.2s; font-size: 0.95rem; }
+        .import-btn:hover { background: white; color: var(--color-accent); border-color: var(--color-accent); }
 
-        /* 6. 猫将军 (右侧大图) */
+        /* 猫将军 (右侧大图) */
         .cat-mascot-container { position: fixed; bottom: 40px; right: 40px; width: 350px; height: 350px; cursor: pointer; z-index: 100; transition: transform 0.1s; }
         .cat-mascot-container:active { transform: scale(0.95); }
-        /* 2. 主页猫猫水平翻转 */
         .cat-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 15px 40px rgba(0,0,0,0.2)); }
         .meow-bubble { position: absolute; top: 0; right: 60%; background: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; animation: popIn 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); white-space: nowrap; font-size: 1.2rem; }
 
@@ -112,28 +113,23 @@
         .search-input { flex: 1; background: transparent; border: none; padding: 15px; outline: none; font-family: inherit; font-size: 1.2rem; color: var(--color-text-main); }
         .search-btn { border: none; background: transparent; cursor: pointer; font-size: 1.4rem; color: var(--color-accent); }
 
-        /* 5. 单词卡 (更小一点 + 翻转修正) */
+        /* 卡片模式 */
         .content-area { flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; padding-bottom: 50px; perspective: 1500px; }
-        /* 尺寸缩小 */
         .card-3d { width: 450px; height: 580px; position: relative; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; position: absolute; top: 0; left: 0; }
         .card-inner.flipped { transform: rotateY(180deg); }
-        /* 1. 翻转修正：绝对定位确保不位移 */
         .card-face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backface-visibility: hidden; background: #fffdf9; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 15px 50px rgba(45, 36, 30, 0.1); padding: 35px; }
         
         .front-content { background-image: radial-gradient(#e5e5e5 1px, transparent 1px); background-size: 18px 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .front-content::after { content: ""; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 1px solid rgba(45,36,30,0.05); pointer-events: none; border-radius: 12px; }
         
         .main-word { font-size: 3.5rem; margin-bottom: 10px; color: var(--color-text-main); line-height: 1.1; letter-spacing: -0.02em; font-weight: normal; }
-        /* 字体策略应用 */
         .lang-en .main-word, .lang-de .main-word, .lang-it .main-word, .lang-lat .main-word { font-weight: 700; }
         
-        /* 7. 汉语拼音 */
         .pinyin { font-size: 1.1rem; color: #8d6e63; margin-bottom: 5px; font-family: sans-serif; }
         .pronunciation { font-size: 1.1rem; color: var(--color-accent); font-family: sans-serif; margin-bottom: 25px; font-weight: 300; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
         .meaning { font-size: 1.2rem; line-height: 1.8; max-width: 95%; font-weight: 500; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; }
         
-        /* 5. 收藏星星 */
         .card-actions { position: absolute; top: 20px; right: 20px; z-index: 20; }
         .star-btn { font-size: 1.5rem; color: #ccc; transition: all 0.2s; cursor: pointer; background: white; padding: 8px; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
         .star-btn:hover { transform: scale(1.1); }
@@ -146,7 +142,6 @@
         .section-header { font-size: 0.9rem; font-weight: bold; color: var(--color-accent); margin: 20px 0 10px; border-bottom: 2px solid rgba(203,58,86,0.1); padding-bottom: 5px; display: inline-block; }
         .etymology { font-size: 0.95rem; line-height: 1.8; text-align: justify; color: #555; margin-bottom: 20px; }
         
-        /* 4. 例句 */
         .example-item { margin-bottom: 15px; padding: 12px; background: rgba(45,36,30,0.03); border-radius: 8px; border-left: 3px solid var(--color-accent); position: relative; }
         .ex-text { font-size: 1.05rem; margin-bottom: 6px; color: #222; line-height: 1.5; padding-right: 20px; }
         .ex-cn { font-size: 0.9rem; opacity: 0.7; }
@@ -180,7 +175,6 @@
         .event-header { display: flex; align-items: center; gap: 10px; }
         .country-tag { font-size: 0.85rem; font-weight: 800; color: var(--color-accent); background: rgba(203,58,86,0.08); padding: 4px 8px; border-radius: 4px; letter-spacing: 1px; }
         .event-text { font-size: 1.1rem; line-height: 1.5; font-weight: bold; }
-        /* 7. 备注样式 */
         .event-note { font-size: 0.9rem; color: #666; font-style: italic; margin-left: 2px; }
         .delete-event { opacity: 0; cursor: pointer; color: #aaa; margin-left: auto; font-size: 0.9rem; }
         .event-card:hover .delete-event { opacity: 1; }
@@ -249,7 +243,6 @@
             <aside class="sidebar glass-morphism artistic-border">
                 <div class="sidebar-header">
                     <h3>{{ currentLangConfig.flag }} {{ currentLangConfig.name }}</h3>
-                    <div class="add-dict-btn" @click="showImportModal = true"><i class="fa-solid fa-plus"></i> 离线库</div>
                 </div>
                 <div class="word-list custom-scroll">
                     <div v-for="item in filteredHistory" :key="item.id" 
@@ -265,12 +258,11 @@
                     <div class="shiba-mascot" @click="pokeMascot">
                         <img :src="shibaImages[neroState]" class="shiba-img" alt="Shiba">
                     </div>
-                    <button class="nav-btn" @click="mode = 'gallery'">
-                        <i class="fa-solid fa-book-bookmark"></i> 单词本
-                    </button>
-                    <button class="nav-btn" @click="mode = 'history'">
-                        <i class="fa-solid fa-timeline"></i> 历史年表
-                    </button>
+                    <button class="import-btn" @click="showImportModal = true"><i class="fa-solid fa-folder-plus"></i> 导入离线辞典</button>
+                    <div class="nav-row">
+                        <button class="nav-btn" @click="mode = 'gallery'"><i class="fa-solid fa-book-bookmark"></i> 单词本</button>
+                        <button class="nav-btn" @click="mode = 'history'"><i class="fa-solid fa-timeline"></i> 历史年表</button>
+                    </div>
                 </div>
             </aside>
 
@@ -433,7 +425,7 @@
         const { createApp, ref, computed, onMounted } = Vue;
 
         class DictionaryDB {
-            constructor() { this.dbName = 'MemoriDB_V10_Final'; this.db = null; }
+            constructor() { this.dbName = 'MemoriDB_V10_1'; this.db = null; }
             async open() {
                 return new Promise((resolve) => {
                     const req = indexedDB.open(this.dbName, 1);
@@ -493,21 +485,21 @@
                 
                 const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
                 const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
-                const shibaImages = { idle: './shiba/idle.gif', happy: './shiba/happy.gif', run: './shiba/run.gif' }; // 8. 柴犬三态
+                const shibaImages = { idle: './shiba/idle.gif', happy: './shiba/happy.gif', run: './shiba/run.gif' };
                 const neroState = ref('idle');
                 const meowing = ref(false);
                 const meowAudio = new Audio('https://cdn.pixabay.com/audio/2022/03/24/audio_34b333a432.mp3');
 
                 const langOrder = ['jp', 'cjp', 'kr', 'zh', 'en', 'de', 'it', 'lat'];
                 const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', code: 'ja-JP', bg: '#F9F1F0' },
-                    cjp: { name: '古典日语', flag: '🏯', code: 'ja-JP', bg: '#EBE6DF' },
-                    kr: { name: '韩语', flag: '🇰🇷', code: 'ko-KR', bg: '#F7EFF2' },
-                    zh: { name: '汉语', flag: '🇨🇳', code: 'zh-CN', bg: '#FBF8F1' },
-                    en: { name: '英语', flag: '🇬🇧', code: 'en-US', bg: '#E6E8EB' },
-                    de: { name: '德语', flag: '🇩🇪', code: 'de-DE', bg: '#E8ECEB' },
-                    it: { name: '意语', flag: '🇮🇹', code: 'it-IT', bg: '#F8F4E8' },
-                    lat: { name: '拉丁语', flag: '🏛️', code: 'it-IT', bg: '#EAE8E6' }
+                    jp: { name: '日语', flag: '🇯🇵', code: 'ja-JP' },
+                    cjp: { name: '古典日语', flag: '🏯', code: 'ja-JP' },
+                    kr: { name: '韩语', flag: '🇰🇷', code: 'ko-KR' },
+                    zh: { name: '汉语', flag: '🇨🇳', code: 'zh-CN' },
+                    en: { name: '英语', flag: '🇬🇧', code: 'en-US' },
+                    de: { name: '德语', flag: '🇩🇪', code: 'de-DE' },
+                    it: { name: '意语', flag: '🇮🇹', code: 'it-IT' },
+                    lat: { name: '拉丁语', flag: '🏛️', code: 'it-IT' }
                 };
                 const currentLangConfig = computed(() => langConfig[currentLang.value]);
 
@@ -577,7 +569,7 @@
                     loading.value = true; 
                     mode.value = 'card'; 
                     isFlipped.value = false;
-                    neroState.value = 'run'; // 8. 搜索时柴犬奔跑
+                    neroState.value = 'run';
 
                     const query = wordInput.value.trim();
                     const lang = currentLang.value;
@@ -587,7 +579,7 @@
                         card.value = { ...local, id: Date.now(), lang, isLocal: true, isCollected: false };
                         fetchEnrichment(query, lang);
                         loading.value = false;
-                        neroState.value = 'happy'; // 命中时开心
+                        neroState.value = 'happy';
                         setTimeout(() => neroState.value = 'idle', 2000);
                         return;
                     }
@@ -624,696 +616,6 @@
                     } catch (e) { console.log('补全失败'); }
                 }
 
-                function formatInteractiveText(text) {
-                    if (currentLang.value === 'kr') {
-                        return text.replace(/([가-힣]+)/g, '<span class="interactive" onclick="document.dispatchEvent(new CustomEvent(\'search\', {detail:\'$1\'}))">$1</span>');
-                    }
-                    return text;
-                }
-                document.addEventListener('search', (e) => { wordInput.value = e.detail; handleSearch(); });
-
-                function startReview() {
-                    const now = Date.now();
-                    reviewQueue.value = filteredHistory.value.filter(w => !w.nextReview || w.nextReview <= now);
-                    if(reviewQueue.value.length === 0) { alert('暂无待复习单词'); return; }
-                    mode.value = 'review';
-                    nextReview();
-                }
-                function nextReview() {
-                    if (reviewQueue.value.length === 0) { reviewCard.value = null; return; }
-                    reviewCard.value = reviewQueue.value.shift();
-                    showReviewAnswer.value = false;
-                }
-                function handleSRS(level) {
-                    const days = level === 1 ? 1 : level === 2 ? 3 : 7;
-                    const idx = history.value.findIndex(h => h.id === reviewCard.value.id);
-                    if (idx > -1) {
-                        history.value[idx].nextReview = Date.now() + (days * 86400000);
-                        saveHistory();
-                    }
-                    nextReview();
-                }
-
-                function saveHistory() { localStorage.setItem('memori-book', JSON.stringify(history.value)); }
-                function speak(text, lang) { 
-                    const u = new SpeechSynthesisUtterance(text);
-                    u.lang = langConfig[lang]?.code || 'en-US';
-                    window.speechSynthesis.speak(u); 
-                }
-                function handleFileSelect(e) { importFile.value = e.target.files[0]; }
-                async function executeImport() {
-                    if (!importFile.value) return;
-                    const r = new FileReader();
-                    r.onload = async (e) => {
-                        const json = JSON.parse(e.target.result);
-                        await db.bulkAdd(importLang.value, Array.isArray(json)?json:[]);
-                        alert('导入成功'); showImportModal.value = false;
-                    };
-                    r.readAsText(importFile.value);
-                }
-
-                function enterIntro() { showCover.value = false; showIntro.value = true; }
-                function enterApp() { showIntro.value = false; mode.value = 'history'; }
-                function switchLang(key) { currentLang.value = key; mode.value = 'card'; }
-                function loadWord(item) { card.value = item; mode.value = 'card'; isFlipped.value = false; }
-                function deleteWord(id) { 
-                    if(confirm('删除此词？')) {
-                        history.value = history.value.filter(i => i.id !== id); 
-                        saveHistory(); 
-                    }
-                }
-                function toggleCollect() { 
-                    if(!card.value) return; 
-                    card.value.isCollected = !card.value.isCollected;
-                    const idx = history.value.findIndex(h => h.word === card.value.word && h.lang === card.value.lang);
-                    if (idx === -1 && card.value.isCollected) history.value.unshift(card.value);
-                    else if (idx > -1) history.value[idx].isCollected = card.value.isCollected;
-                    saveHistory();
-                }
-                function pokeMascot() { neroState.value = 'happy'; setTimeout(()=>neroState.value='idle', 1000); }
-                function handleMascotUpload(e) { 
-                    const f = e.target.files[0]; 
-                    if(f) { const r = new FileReader(); r.onload=ev=>{ userCat.value=ev.target.result; localStorage.setItem('memori-user-cat', ev.target.result); }; r.readAsDataURL(f); }
-                }
-                function playMeow() {
-                    meowing.value = true;
-                    meowAudio.play();
-                    setTimeout(() => meowing.value = false, 1000);
-                }
-
-                return {
-                    showCover, showIntro, enterIntro, enterApp, currentLang, wordInput, loading, neroState, isFlipped, history, card, mode, showImportModal, historyTab, newEvent,
-                    langConfig, coverImages, shibaImages, userCat, filteredHistory, sortedTimelines, langOrder, currentLangConfig,
-                    handleSearch, speak, handleFileSelect, executeImport, formatInteractiveText,
-                    switchLang, loadWord, deleteWord, toggleCollect, pokeMascot, handleMascotUpload,
-                    addTimelineEvent, deleteTimelineEvent,
-                    startReview, nextReview, handleSRS, reviewQueue, reviewCard, showReviewAnswer, dueCount,
-                    playMeow, meowing
-                }
-            }
-        }).mount('#app');
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>忆栖 · Memori</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-    <style>
-        /* --- 🖋️ 1. 全局本地字体 (Local Font Strategy) --- */
-        @font-face {
-            font-family: 'LocalMain';
-            /* 请确保 cutez-JPN.woff2 文件在 assets/fonts/ 目录下 */
-            src: url('./assets/fonts/cutez-JPN.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        /* --- 🏮 忆栖配色 V9 --- */
-        :root {
-          --color-bg-main: #E2E1E4; 
-          --color-text-main: #2D241E; 
-          --color-accent: #CB3A56; 
-          --color-accent-hover: #EF7A82; 
-          --glass-bg: rgba(255, 253, 248, 0.95); 
-          --glass-border: rgba(203, 58, 86, 0.15); 
-          
-          /* 字体策略：除韩语外，全部使用 LocalMain */
-          --font-global: "LocalMain", "SimSun", serif; 
-          --font-kr: "Noto Serif KR", serif;
-        }
-
-        /* 🎨 基础设置 */
-        * { box-sizing: border-box; }
-        body { margin: 0; overflow: hidden; background-color: var(--color-bg-main); font-family: var(--font-global); color: var(--color-text-main); }
-
-        .app-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; transition: background 0.8s ease; position: relative; }
-        .app-container.with-texture::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; mix-blend-mode: multiply; }
-
-        .glass-morphism { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 4px 20px -1px rgba(45, 36, 30, 0.05); border-radius: 20px; }
-        .artistic-border { border-radius: 20px; }
-
-        /* 封面页 */
-        .cover-stage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .cover-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(45, 36, 30, 0.4) 0%, rgba(255,255,255,0.1) 50%, rgba(45, 36, 30, 0.4) 100%); }
-        .cover-content { position: relative; z-index: 2; width: 95%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; height: 90vh; }
-        
-        .cover-text { flex: 1; color: #fff; text-shadow: 0 4px 20px rgba(0,0,0,0.6); padding-left: 80px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; }
-        /* 1. 封面字体放大 */
-        .cover-title { font-size: 8rem; font-weight: bold; margin: 0; letter-spacing: 0.02em; color: #fff; line-height: 1.1; }
-        .subtitle { font-size: 2rem; margin-top: 20px; opacity: 0.9; letter-spacing: 0.4em; }
-        /* 1. Start 按钮 */
-        .start-btn { margin-top: 80px; padding: 18px 70px; font-size: 1.8rem; background: rgba(255,255,255,0.15); color: #fff; border: 2px solid rgba(255,255,255,0.8); border-radius: 50px; cursor: pointer; transition: all 0.4s; letter-spacing: 3px; backdrop-filter: blur(5px); }
-        .start-btn:hover { background: #fff; color: var(--color-text-main); transform: scale(1.05); box-shadow: 0 0 40px rgba(255,255,255,0.5); border-color: #fff; }
-        
-        /* 2. 猫平移至右侧 + 水平翻转 */
-        .cover-cat-wrapper { flex: 1; height: 100%; display: flex; align-items: flex-end; justify-content: flex-end; padding-right: 50px; }
-        /* 根据需求水平翻转 (之前是 scaleX(-1)，现在去掉负号即翻转，或者保持 scaleX(1) 为原图方向。这里设为 scaleX(1) 以响应“翻转一下”) */
-        .cover-cat { max-height: 85vh; object-fit: contain; filter: drop-shadow(0 10px 40px rgba(0,0,0,0.6)); transform: scaleX(1); }
-
-        /* 卷首语 */
-        .intro-stage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fffcf7; z-index: 1500; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--color-text-main); }
-        .intro-container { max-width: 600px; padding: 40px; position: relative; animation: fadeInUser 1.5s ease-out; }
-        .intro-text { font-size: 1.3rem; line-height: 2.4; letter-spacing: 0.05em; margin-bottom: 40px; white-space: pre-line; }
-        .enter-main-btn { background: none; border: none; font-size: 2.2rem; color: var(--color-accent); cursor: pointer; transition: transform 0.3s; opacity: 0.8; }
-        .enter-main-btn:hover { transform: scale(1.2); opacity: 1; }
-
-        /* 6. 侧边栏 (Sidebar) - 拓宽 */
-        .sidebar { width: 380px; display: flex; flex-direction: column; padding: 35px 30px; z-index: 20; margin: 25px 0 25px 25px; }
-        .sidebar-header { padding-bottom: 18px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h3 { font-size: 1.3rem; font-weight: bold; margin: 0; }
-        .add-dict-btn { cursor: pointer; color: var(--color-accent); font-size: 0.9rem; transition: transform 0.2s; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; }
-        
-        .word-list { flex: 1; overflow-y: auto; padding: 20px 0; }
-        .word-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: rgba(255, 253, 248, 0.6); border-left: 4px solid transparent; }
-        .word-item.active { background: white; border-left-color: var(--color-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: bold; }
-        .word-item:hover { background: rgba(255, 255, 255, 0.9); transform: translateX(3px); }
-        .local-icon { font-size: 0.7rem; color: #8d6e63; margin-left: 5px; opacity: 0.7; }
-        
-        .sidebar-footer { padding-top: 25px; border-top: 1px solid var(--glass-border); display: flex; flex-direction: row; gap: 15px; justify-content: space-between; align-items: flex-end; position: relative; }
-        .shiba-mascot { position: absolute; bottom: 100%; right: 10px; width: 110px; cursor: pointer; margin-bottom: 10px; transition: transform 0.2s; }
-        .shiba-mascot:hover { transform: rotate(5deg) scale(1.05); }
-        .nav-btn { flex: 1; padding: 15px 0; border: 1px solid var(--glass-border); border-radius: 12px; text-align: center; cursor: pointer; background: rgba(255,255,255,0.6); transition: all 0.2s; font-weight: bold; font-size: 1rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .nav-btn:hover { background: white; color: var(--color-accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-
-        /* 6. 猫将军 (右侧大图) */
-        .cat-mascot-container { position: fixed; bottom: 40px; right: 40px; width: 350px; height: 350px; cursor: pointer; z-index: 100; transition: transform 0.1s; }
-        .cat-mascot-container:active { transform: scale(0.95); }
-        .cat-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 15px 40px rgba(0,0,0,0.2)); }
-        .meow-bubble { position: absolute; top: 0; right: 60%; background: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; animation: popIn 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); white-space: nowrap; font-size: 1.2rem; }
-
-        /* Main Stage */
-        .main-stage { flex: 1; display: flex; flex-direction: column; padding: 30px; z-index: 10; position: relative; }
-        
-        /* Language Bar */
-        .search-bar { margin: 0 20px 30px; padding: 15px 25px; display: flex; align-items: center; justify-content: space-between; }
-        .lang-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 2px; margin-right: 20px; }
-        .lang-pill { padding: 10px 20px; border-radius: 10px; background: rgba(255,255,255,0.5); cursor: pointer; white-space: nowrap; font-size: 1rem; transition: all 0.2s; border: 1px solid transparent; }
-        .lang-pill.active { background: white; color: var(--color-accent); font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-color: var(--glass-border); transform: scale(1.05); }
-        .input-group { flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.6); border-radius: 12px; padding: 0 20px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
-        .search-input { flex: 1; background: transparent; border: none; padding: 15px; outline: none; font-family: inherit; font-size: 1.2rem; color: var(--color-text-main); }
-        .search-btn { border: none; background: transparent; cursor: pointer; font-size: 1.4rem; color: var(--color-accent); }
-
-        /* 5. 单词卡 (纯文字·雅致·缩小版) */
-        .content-area { flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; padding-bottom: 50px; }
-        /* 尺寸微调缩小 */
-        .card-3d { width: 480px; height: 620px; perspective: 1500px; cursor: pointer; }
-        .card-inner { width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; position: relative; }
-        .card-inner.flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #fffdf9; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 15px 50px rgba(45, 36, 30, 0.1); padding: 40px; }
-        
-        /* Front Face */
-        .front-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; background-image: radial-gradient(#e5e5e5 1px, transparent 1px); background-size: 18px 18px; }
-        .front-content::after { content: ""; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 1px solid rgba(45,36,30,0.05); pointer-events: none; border-radius: 12px; }
-        
-        .main-word { font-size: 4rem; margin-bottom: 10px; color: var(--color-text-main); line-height: 1.1; letter-spacing: -0.02em; font-weight: normal; }
-        /* 7. 汉语拼音样式 */
-        .pinyin { font-size: 1.2rem; color: #8d6e63; margin-bottom: 5px; font-family: sans-serif; }
-        .pronunciation { font-size: 1.2rem; color: var(--color-accent); font-family: sans-serif; margin-bottom: 30px; font-weight: 300; letter-spacing: 1px; }
-        .meaning { font-size: 1.3rem; line-height: 1.8; max-width: 95%; font-weight: 500; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; }
-        
-        /* 5. 收藏按钮 */
-        .card-actions { position: absolute; top: 20px; right: 20px; z-index: 20; }
-        .star-btn { font-size: 1.5rem; color: #ccc; transition: all 0.2s; cursor: pointer; background: white; padding: 10px; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .star-btn:hover { transform: scale(1.1); }
-        .star-btn.active { color: #f59e0b; }
-
-        /* Back Face */
-        .card-face.back { transform: rotateY(180deg); background: #fffefb; }
-        .back-scroll { overflow-y: auto; height: 100%; padding-right: 5px; }
-        .section-header { font-size: 0.9rem; font-weight: bold; color: var(--color-accent); margin: 25px 0 10px; border-bottom: 2px solid rgba(203,58,86,0.1); padding-bottom: 5px; display: inline-block; }
-        .etymology { font-size: 1rem; line-height: 1.8; text-align: justify; color: #555; margin-bottom: 20px; }
-        
-        /* 4. & 5. 例句增强 (带语音) */
-        .example-item { margin-bottom: 20px; padding: 15px; background: rgba(45,36,30,0.03); border-radius: 8px; border-left: 3px solid var(--color-accent); position: relative; }
-        .ex-text { font-size: 1.15rem; margin-bottom: 8px; color: #222; line-height: 1.6; }
-        .ex-cn { font-size: 0.95rem; opacity: 0.7; }
-        .ex-audio-btn { position: absolute; top: 10px; right: 10px; color: var(--color-accent); cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
-        .ex-audio-btn:hover { opacity: 1; transform: scale(1.1); }
-
-        /* Gallery Mode */
-        .gallery-view { width: 100%; height: 100%; padding: 40px; display: flex; flex-direction: column; }
-        .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; overflow-y: auto; padding-bottom: 30px; }
-        .gallery-card { background: white; padding: 25px; border-radius: 12px; cursor: pointer; transition: all 0.2s; position: relative; border: 1px solid rgba(0,0,0,0.05); text-align: center; }
-        .gallery-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-color: var(--glass-border); }
-        .gallery-card h4 { font-size: 1.6rem; font-weight: bold; margin-bottom: 8px; }
-        .review-btn-main { background: var(--color-accent); color: white; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(203,58,86,0.3); }
-
-        /* Review Overlay */
-        .review-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,253,248,0.98); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .review-card { width: 550px; padding: 50px; background: white; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 20px 60px rgba(0,0,0,0.05); text-align: center; border-radius: 20px; }
-        .srs-controls { display: flex; gap: 15px; justify-content: center; margin-top: 40px; }
-        .srs-btn { padding: 12px 30px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
-
-        /* Timeline Mode */
-        .history-view { width: 100%; height: 100%; padding: 30px; display: flex; flex-direction: column; }
-        .history-controls { margin-bottom: 30px; background: rgba(255,255,255,0.6); padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        .timeline-input-row { display: flex; gap: 15px; margin-top: 15px; }
-        .t-input { padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); outline: none; font-size: 1rem; }
-        .timeline-container { flex: 1; overflow-y: auto; padding-left: 30px; position: relative; }
-        .timeline-line { position: absolute; left: 110px; top: 0; bottom: 0; width: 1px; background: var(--color-accent); opacity: 0.3; }
-        .year-group { display: flex; margin-bottom: 40px; align-items: flex-start; }
-        .year-label { width: 110px; text-align: right; padding-right: 30px; font-weight: bold; font-size: 1.4rem; color: var(--color-accent); position: relative; top: 5px; }
-        .events-list { flex: 1; display: flex; flex-direction: column; gap: 15px; }
-        
-        .event-card { background: white; padding: 18px 25px; border-radius: 8px; position: relative; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 20px; transition: transform 0.2s; }
-        .event-card:hover { transform: translateX(8px); box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .event-dot { position: absolute; left: -36px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; background: #fff; border: 4px solid var(--color-accent); border-radius: 50%; }
-        .country-tag { font-size: 0.85rem; font-weight: 800; color: var(--color-accent); background: rgba(203,58,86,0.08); padding: 4px 8px; border-radius: 4px; letter-spacing: 1px; }
-        .event-text { font-size: 1.1rem; line-height: 1.5; }
-        .delete-event { opacity: 0; cursor: pointer; color: #aaa; margin-left: auto; font-size: 0.9rem; }
-        .event-card:hover .delete-event { opacity: 1; }
-
-        /* Modal */
-        .modal-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-body { background: white; width: 450px; padding: 40px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 20px 60px rgba(0,0,0,0.1); border-radius: 20px; }
-
-        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUser { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
-        .fade-enter-from, .fade-leave-to { opacity: 0; }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
-    </style>
-</head>
-<body>
-    <div id="app">
-        <Transition name="fade">
-            <div v-if="showCover" class="cover-stage classic-theme" :style="{ backgroundImage: `url(${coverImages.bg})` }">
-                <div class="cover-overlay"></div>
-                <div class="cover-content">
-                    <div class="cover-text">
-                        <h1 class="cover-title">忆栖 · Memori</h1>
-                        <p class="subtitle">言葉の考古学</p>
-                        <button class="start-btn" @click="enterIntro">Start</button>
-                    </div>
-                    <div class="cover-cat-wrapper"><img :src="coverImages.cat" class="cover-cat" alt="Cover Cat"></div>
-                </div>
-            </div>
-        </Transition>
-
-        <Transition name="fade">
-            <div v-if="showIntro" class="intro-stage" @click="enterApp">
-                <div class="intro-container">
-                    <div class="intro-text">
-                        <p>🌿 言葉の庭で、自由に行き来しよう 🌿</p>
-                        <br>
-                        <p>ひとつずつ覚える単語が、小さな花咲かせるように。</p>
-                        <p>このアプリは、日本語・英語・中国語…</p>
-                        <p>何語でもあなたのペースで学べるオアシス。</p>
-                        <br>
-                        <p>📖 「知りたい」が、すぐ葉っぱになる場所 📖</p>
-                        <br>
-                        <p>指先でめくるたび、新しい世界が広がる——</p>
-                        <br>
-                        <p style="color:var(--color-accent); font-weight:bold;">今日は、どの言葉の種を育てますか？</p>
-                    </div>
-                    <button class="enter-main-btn"><i class="fa-solid fa-arrow-right-long"></i></button>
-                </div>
-            </div>
-        </Transition>
-
-        <div v-if="!showCover && !showIntro" class="app-container" :class="'lang-' + currentLang">
-            
-            <aside class="sidebar glass-morphism artistic-border">
-                <div class="sidebar-header">
-                    <h3>{{ currentLangConfig.flag }} {{ currentLangConfig.name }}</h3>
-                    <div class="add-dict-btn" @click="showImportModal = true"><i class="fa-solid fa-plus"></i> 离线库</div>
-                </div>
-                <div class="word-list custom-scroll">
-                    <div v-for="item in filteredHistory" :key="item.id" 
-                         class="word-item" 
-                         :class="{ 'active': mode === 'card' && card && item.id === card.id }"
-                         @click="loadWord(item)">
-                        <span>{{ item.word }}</span>
-                        <i v-if="item.isLocal" class="fa-solid fa-scroll local-icon"></i>
-                        <i class="fa-solid fa-trash del-icon" @click.stop="deleteWord(item.id)"></i>
-                    </div>
-                </div>
-                <div class="sidebar-footer">
-                    <div class="shiba-mascot" @click="pokeMascot">
-                        <img :src="shibaImages[neroState]" class="shiba-img" alt="Shiba">
-                    </div>
-                    <button class="nav-btn" @click="mode = 'gallery'">
-                        <i class="fa-solid fa-book-bookmark"></i> 单词本
-                    </button>
-                    <button class="nav-btn" @click="mode = 'history'">
-                        <i class="fa-solid fa-timeline"></i> 历史年表
-                    </button>
-                </div>
-            </aside>
-
-            <main class="main-stage">
-                <div class="search-bar glass-morphism artistic-border">
-                    <div class="lang-scroll custom-scroll">
-                        <button v-for="key in langOrder" :key="key" 
-                                class="lang-pill" 
-                                :class="{ 'active': currentLang === key }" 
-                                @click="switchLang(key)">
-                            {{ langConfig[key].flag }} {{ langConfig[key].name }}
-                        </button>
-                    </div>
-                    <div class="input-group">
-                        <input v-model="wordInput" @keyup.enter="handleSearch" :placeholder="`在${currentLangConfig.name}中考据 (中外互查)...`" class="search-input">
-                        <button @click="handleSearch" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </div>
-                </div>
-
-                <div class="content-area">
-                    <div v-if="mode === 'card' && card" class="card-3d" @click="isFlipped = !isFlipped">
-                        <div class="card-inner" :class="{ 'flipped': isFlipped }">
-                            <div class="card-face front-content">
-                                <div class="card-actions" @click.stop>
-                                    <div class="star-btn" :class="{active: card.isCollected}" @click="toggleCollect">
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                </div>
-                                <div v-if="card.pinyin" class="pinyin">{{ card.pinyin }}</div>
-                                <h1 class="main-word">{{ card.word }}</h1>
-                                <div class="pronunciation">
-                                    <span>/ {{ card.reading }} /</span>
-                                </div>
-                                <p class="meaning" v-html="card.meaning"></p>
-                                <div style="margin-top:auto; font-size:0.8rem; color:#999;">点击查看考据</div>
-                            </div>
-                            <div class="card-face back">
-                                <div class="back-scroll custom-scroll" @click.stop>
-                                    <div v-if="card.etymology">
-                                        <div class="section-header">🗝️ 词源考据 (Wikipedia)</div>
-                                        <div class="etymology" v-html="card.etymology"></div>
-                                    </div>
-                                    
-                                    <div class="section-header">📜 典籍例句</div>
-                                    <div v-if="card.examples">
-                                        <div v-for="(ex, i) in card.examples" :key="i" class="example-item">
-                                            <div class="ex-text">
-                                                <span v-html="formatInteractiveText(ex.text)"></span>
-                                                <i class="fa-solid fa-volume-high ex-audio-btn" @click.stop="speak(ex.text, card.lang)"></i>
-                                            </div>
-                                            <div class="ex-cn">{{ ex.cn }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div v-if="mode === 'history'" class="history-view glass-morphism artistic-border">
-                        <div class="history-controls">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                                <h2 style="font-size:1.6rem; font-weight:bold;">历史年表</h2>
-                                <div>
-                                    <button class="lang-pill" :class="{active: historyTab==='asia'}" @click="historyTab='asia'">🌏 亚洲</button>
-                                    <button class="lang-pill" :class="{active: historyTab==='europe'}" @click="historyTab='europe'">🏛️ 欧洲</button>
-                                </div>
-                            </div>
-                            <div class="timeline-input-row">
-                                <input v-model="newEvent.year" placeholder="年份" class="t-input" style="width:100px">
-                                <input v-model="newEvent.event" placeholder="事件描述" class="t-input" style="flex:1">
-                                <input v-model="newEvent.tag" placeholder="国别 (JP/CN)" class="t-input" style="width:100px; text-align:center;">
-                                <button class="review-btn-main" style="padding:8px 15px;" @click="addTimelineEvent">添加</button>
-                            </div>
-                        </div>
-                        <div class="timeline-container custom-scroll">
-                            <div class="timeline-line"></div>
-                            <div v-for="group in sortedTimelines" :key="group.year" class="year-group">
-                                <div class="year-label">{{ group.year }}</div>
-                                <div class="events-list">
-                                    <div v-for="item in group.events" :key="item.id" class="event-card">
-                                        <div class="event-dot"></div>
-                                        <span class="country-tag">{{ item.tag }}</span>
-                                        <span class="event-text">{{ item.event }}</span>
-                                        <i class="fa-solid fa-trash delete-event" @click="deleteTimelineEvent(item.id)"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div v-if="mode === 'gallery'" class="gallery-view glass-morphism artistic-border">
-                        <div class="gallery-header">
-                            <h2 style="font-size:1.8rem; font-weight:bold;">我的藏书 ({{ filteredHistory.length }})</h2>
-                            <button class="review-btn-main" @click="startReview">
-                                <i class="fa-solid fa-play"></i> 开始复习 ({{ dueCount }})
-                            </button>
-                        </div>
-                        <div class="gallery-grid custom-scroll">
-                            <div v-for="item in filteredHistory" :key="item.id" class="gallery-card" @click="loadWord(item)">
-                                <h4>{{ item.word }}</h4>
-                                <p style="opacity:0.6; font-size:0.9rem;">{{ item.reading }}</p>
-                                <i v-if="item.isLocal" class="fa-solid fa-scroll" style="position:absolute; bottom:10px; right:10px; color:#ddd;"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div v-if="mode === 'review'" class="review-overlay">
-                        <div v-if="reviewCard" class="review-card">
-                            <h2 style="font-size:3.5rem; margin-bottom:30px;">{{ reviewCard.word }}</h2>
-                            <div v-if="!showReviewAnswer">
-                                <button class="review-btn-main" @click="showReviewAnswer = true">查看释义</button>
-                            </div>
-                            <div v-else>
-                                <p style="font-size:1.2rem; color:var(--color-accent); margin-bottom:15px;">{{ reviewCard.reading }}</p>
-                                <p style="margin-bottom:30px; font-size:1.2rem;">{{ reviewCard.meaning }}</p>
-                                <div class="srs-controls">
-                                    <button class="srs-btn" style="background:#ef4444" @click="handleSRS(1)">忘</button>
-                                    <button class="srs-btn" style="background:#f59e0b" @click="handleSRS(2)">难</button>
-                                    <button class="srs-btn" style="background:#10b981" @click="handleSRS(4)">熟</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else class="text-center">
-                            <h2 style="font-size:2rem; margin-bottom:20px;">今日复习完成 🎉</h2>
-                            <button class="review-btn-main" @click="mode = 'gallery'">返回单词本</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            <div v-if="mode !== 'history' && mode !== 'review'" class="cat-mascot-container" @click="playMeow">
-                <input type="file" ref="mascotInput" @change="handleMascotUpload" accept="image/*" style="display:none">
-                <div class="cat-img-wrapper" @dblclick="$refs.mascotInput.click()" title="双击更换猫咪">
-                    <img :src="userCat" class="cat-img" alt="Cat Mascot">
-                    <div v-if="meowing" class="meow-bubble">喵~ 🐾</div>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="showImportModal" class="modal-mask" @click.self="showImportModal = false">
-            <div class="modal-body">
-                <h3 style="font-size:1.2rem; font-weight:bold; margin-bottom:15px;">📥 导入本地辞典</h3>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px;">目标语种</label>
-                    <select v-model="importLang" class="t-input" style="width:100%;">
-                        <option v-for="key in langOrder" :key="key" :value="key">{{ langConfig[key].name }}</option>
-                    </select>
-                </div>
-                <input type="file" @change="e => importFile = e.target.files[0]" accept=".json">
-                <button class="review-btn-main" style="width:100%; margin-top:20px;" @click="executeImport">确认导入</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const { createApp, ref, computed, onMounted } = Vue;
-
-        // IndexedDB
-        class DictionaryDB {
-            constructor() { this.dbName = 'MemoriDB_V9_Final'; this.db = null; }
-            async open() {
-                return new Promise((resolve) => {
-                    const req = indexedDB.open(this.dbName, 1);
-                    req.onupgradeneeded = (e) => {
-                        const db = e.target.result;
-                        ['jp', 'cjp', 'kr', 'zh', 'en', 'de', 'it', 'lat'].forEach(lang => {
-                            if (!db.objectStoreNames.contains(lang)) db.createObjectStore(lang, { keyPath: 'word' });
-                        });
-                    };
-                    req.onsuccess = (e) => { this.db = e.target.result; resolve(); };
-                });
-            }
-            async find(lang, word) {
-                if (!this.db) await this.open();
-                return new Promise((resolve) => {
-                    if (!this.db.objectStoreNames.contains(lang)) return resolve(null);
-                    const req = this.db.transaction(lang, 'readonly').objectStore(lang).get(word);
-                    req.onsuccess = () => resolve(req.result);
-                    req.onerror = () => resolve(null);
-                });
-            }
-            async bulkAdd(lang, items) {
-                if (!this.db) await this.open();
-                return new Promise((resolve) => {
-                    const tx = this.db.transaction(lang, 'readwrite');
-                    const store = tx.objectStore(lang);
-                    let count = 0;
-                    items.forEach(item => {
-                        store.put({ 
-                            word: item.word || item.wordName, 
-                            reading: item.reading || item.pronunciation || '',
-                            meaning: item.meaning || item.wordDesc,
-                            isLocal: true
-                        });
-                        count++;
-                    });
-                    tx.oncomplete = () => resolve(count);
-                });
-            }
-        }
-
-        createApp({
-            setup() {
-                const db = new DictionaryDB();
-                const showCover = ref(true);
-                const showIntro = ref(false);
-                const currentLang = ref('jp');
-                const wordInput = ref('');
-                const loading = ref(false);
-                const isFlipped = ref(false);
-                const history = ref([]);
-                const card = ref(null);
-                const mode = ref('history'); 
-                const showImportModal = ref(false);
-                const importLang = ref('jp');
-                const importFile = ref(null);
-                
-                const coverImages = { bg: './cover-bg.jpg', cat: './cover-cat.png' };
-                const userCat = ref(localStorage.getItem('memori-user-cat') || './my-cat.png');
-                const shibaImages = { idle: './shiba/idle.gif', happy: './shiba/happy.gif' };
-                const neroState = ref('idle');
-                const meowing = ref(false);
-                const meowAudio = new Audio('https://cdn.pixabay.com/audio/2022/03/24/audio_34b333a432.mp3');
-
-                // 6. 语种顺序调整
-                const langOrder = ['jp', 'cjp', 'kr', 'zh', 'en', 'de', 'it', 'lat'];
-                const langConfig = {
-                    jp: { name: '日语', flag: '🇯🇵', code: 'ja-JP' },
-                    cjp: { name: '古典日语', flag: '🏯', code: 'ja-JP' },
-                    kr: { name: '韩语', flag: '🇰🇷', code: 'ko-KR' },
-                    zh: { name: '汉语', flag: '🇨🇳', code: 'zh-CN' }, // 7. 改名为汉语
-                    en: { name: '英语', flag: '🇬🇧', code: 'en-US' },
-                    de: { name: '德语', flag: '🇩🇪', code: 'de-DE' },
-                    it: { name: '意语', flag: '🇮🇹', code: 'it-IT' },
-                    lat: { name: '拉丁语', flag: '🏛️', code: 'it-IT' }
-                };
-                const currentLangConfig = computed(() => langConfig[currentLang.value]);
-
-                const filteredHistory = computed(() => history.value.filter(item => item.lang === currentLang.value && item.isCollected));
-                
-                const dueCount = computed(() => filteredHistory.value.filter(w => !w.nextReview || w.nextReview <= Date.now()).length);
-                const reviewQueue = ref([]);
-                const reviewCard = ref(null);
-                const showReviewAnswer = ref(false);
-
-                const historyTab = ref('asia');
-                const timelines = ref({
-                    asia: [
-                        { id: 1, year: 'BC 7000', event: '河姆渡文化', tag: 'CN' },
-                        { id: 2, year: '1868', event: '明治维新', tag: 'JP' }
-                    ],
-                    europe: [
-                        { id: 3, year: 'BC 27', event: '罗马帝国建立', tag: 'IT' },
-                        { id: 4, year: '1789', event: '法国大革命', tag: 'FR' }
-                    ]
-                });
-                const newEvent = ref({ year: '', event: '', tag: 'CN' });
-
-                function parseYear(y) {
-                    let num = parseInt(y.replace(/[^0-9]/g, ''));
-                    if (y.toUpperCase().includes('BC') || y.includes('前') || y.includes('-')) num = -num;
-                    return num;
-                }
-                const sortedTimelines = computed(() => {
-                    const list = timelines.value[historyTab.value];
-                    const sorted = [...list].sort((a, b) => parseYear(a.year) - parseYear(b.year) || a.id - b.id);
-                    const grouped = [];
-                    sorted.forEach(item => {
-                        const last = grouped[grouped.length - 1];
-                        if (last && last.year === item.year) last.events.push(item);
-                        else grouped.push({ year: item.year, events: [item] });
-                    });
-                    return grouped;
-                });
-
-                function addTimelineEvent() {
-                    if (!newEvent.value.year || !newEvent.value.event) return;
-                    timelines.value[historyTab.value].push({ id: Date.now(), ...newEvent.value });
-                    newEvent.value = { year: '', event: '', tag: 'CN' };
-                    saveTimelines();
-                }
-                function deleteTimelineEvent(id) {
-                    if(confirm('删除此事件？')) {
-                        timelines.value[historyTab.value] = timelines.value[historyTab.value].filter(t => t.id !== id);
-                        saveTimelines();
-                    }
-                }
-                function saveTimelines() { localStorage.setItem('memori-timelines', JSON.stringify(timelines.value)); }
-
-                onMounted(async () => {
-                    await db.open();
-                    const saved = localStorage.getItem('memori-book');
-                    if (saved) history.value = JSON.parse(saved);
-                    const savedTime = localStorage.getItem('memori-timelines');
-                    if (savedTime) timelines.value = JSON.parse(savedTime);
-                    const img = new Image(); img.src = coverImages.bg;
-                    img.onerror = () => coverImages.bg = 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1600&q=80';
-                });
-
-                // 3. 中外互查逻辑
-                async function handleSearch() {
-                    if (!wordInput.value.trim()) return;
-                    loading.value = true; mode.value = 'card'; isFlipped.value = false;
-                    const query = wordInput.value.trim();
-                    const lang = currentLang.value;
-
-                    const local = await db.find(lang, query);
-                    if (local) {
-                        card.value = { ...local, id: Date.now(), lang, isLocal: true, isCollected: false };
-                        fetchEnrichment(query, lang);
-                        loading.value = false;
-                        return;
-                    }
-
-                    try {
-                        const res = await fetch('/api/openai', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ word: query, lang: lang, type: 'full' })
-                        });
-                        const data = await res.json();
-                        card.value = { id: Date.now(), ...data, lang: lang, isLocal: false, isCollected: false };
-                    } catch (e) { alert('挖掘失败'); }
-                    loading.value = false;
-                }
-
-                async function fetchEnrichment(word, lang) {
-                    try {
-                        const res = await fetch('/api/openai', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ word, lang, type: 'enrich' })
-                        });
-                        const data = await res.json();
-                        if (card.value.word === word) {
-                            card.value.etymology = data.etymology;
-                            card.value.examples = data.examples;
-                        }
-                    } catch (e) { console.log('补全失败'); }
-                }
-
-                // 5. 仅韩语交互
                 function formatInteractiveText(text) {
                     if (currentLang.value === 'kr') {
                         return text.replace(/([가-힣]+)/g, '<span class="interactive" onclick="document.dispatchEvent(new CustomEvent(\'search\', {detail:\'$1\'}))">$1</span>');
