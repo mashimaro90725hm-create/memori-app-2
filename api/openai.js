@@ -8,12 +8,12 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
     const { word, lang, type } = req.body;
 
+    // 语种全称映射
     const langMap = {
       jp: "Modern Japanese",
       cjp: "Classical Japanese (Bungo)",
       kr: "Korean",
-      zh: "Modern Chinese",
-      lzh: "Classical Chinese",
+      zh: "Modern Chinese (Mandarin)",
       en: "English",
       de: "German",
       it: "Italian",
@@ -21,44 +21,42 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
     
-    // 5. 词源控制 (欧美系显示，CJK不显示)
+    // 5. 判定是否为欧美语系 (需要词源)
     const needsEtymology = ['en', 'de', 'it', 'lat'].includes(lang);
 
-    let systemPrompt = `You are a strict Etymologist and Lexicographer.
+    // --- 核心 Prompt: 中外互查 + 纯正例句 ---
+    let systemPrompt = `You are a professional Lexicographer and Etymologist.
     Target Language: ${targetLang}.
     User Query: "${word}".
     
-    Task: Provide a JSON response ONLY.
+    CRITICAL INSTRUCTION (Mutual Search):
+    1. If the User Query is in CHINESE, but Target Language is NOT Chinese:
+       - FIRST, translate "${word}" into ${targetLang}.
+       - THEN, create the dictionary entry for the TRANSLATED word.
+       - Example: User searches "苹果" in English -> You output data for "Apple".
     
-    CRITICAL INSTRUCTION:
-    1. **Examples**: MANDATORY. Provide 2-3 prestigious sentences (Literature, History) with Chinese translation.
+    Output JSON ONLY. Format:
     `;
 
-    if (needsEtymology) {
-      systemPrompt += `2. **Etymology**: MUST quote/adapt a narrative style similar to Wikipedia in the target language (translated to Chinese).`;
-    } else {
-      systemPrompt += `2. **Etymology**: Do NOT provide etymology field. Return null.`;
-    }
-
-    if (type === 'enrich') {
+    // 全量模式
+    if (type !== 'enrich') {
       systemPrompt += `
-      Mode: Enrichment.
-      JSON Structure:
       {
-        "etymology": ${needsEtymology ? '"Detailed Wikipedia-style narrative..."' : 'null'},
-        "examples": [{"text": "Native Sentence", "cn": "Chinese Translation"}]
+        "word": "The word in ${targetLang}",
+        "pinyin": ${lang === 'zh' ? '"Pinyin with tones"' : 'null'},
+        "reading": "IPA/Kana",
+        "meaning": "Rich, Encyclopedic definition in Chinese (Wikipedia level)",
+        "etymology": ${needsEtymology ? '"Detailed academic origin narrative..."' : 'null'},
+        "examples": [
+          {"text": "Sentence IN ${targetLang} (NOT Chinese)", "cn": "Chinese Translation"}
+        ]
       }`;
     } else {
+      // 补全模式
       systemPrompt += `
-      Mode: Full Entry.
-      JSON Structure:
       {
-        "word": "Target Word",
-        "reading": "IPA/Kana/Pinyin",
-        "meaning": "Concise Chinese definition",
-        "etymology": ${needsEtymology ? '"Detailed Wikipedia-style narrative..."' : 'null'},
-        "word_details": "POS / Era",
-        "examples": [{"text": "Native", "cn": "Translation"}]
+        "etymology": ${needsEtymology ? '"Detailed narrative..."' : 'null'},
+        "examples": [{"text": "Native Sentence", "cn": "Translation"}]
       }`;
     }
 
