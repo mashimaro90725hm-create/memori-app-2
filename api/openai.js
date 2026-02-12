@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
     const { word, lang, type } = req.body;
 
-    // 语种全称映射
     const langMap = {
       jp: "Modern Japanese",
       cjp: "Classical Japanese (Bungo)",
@@ -21,10 +20,10 @@ export default async function handler(req, res) {
     };
     const targetLang = langMap[lang] || "English";
     
-    // 5. 判定是否为欧美语系 (需要词源)
+    // 词源控制
     const needsEtymology = ['en', 'de', 'it', 'lat'].includes(lang);
 
-    // --- 核心 Prompt: 中外互查 + 纯正例句 ---
+    // --- 核心 Prompt ---
     let systemPrompt = `You are a professional Lexicographer and Etymologist.
     Target Language: ${targetLang}.
     User Query: "${word}".
@@ -35,10 +34,13 @@ export default async function handler(req, res) {
        - THEN, create the dictionary entry for the TRANSLATED word.
        - Example: User searches "苹果" in English -> You output data for "Apple".
     
+    2. **Examples Constraint**:
+       - The "text" field MUST be in ${targetLang} (NOT Chinese).
+       - The "cn" field is the Chinese translation.
+    
     Output JSON ONLY. Format:
     `;
 
-    // 全量模式
     if (type !== 'enrich') {
       systemPrompt += `
       {
@@ -47,12 +49,12 @@ export default async function handler(req, res) {
         "reading": "IPA/Kana",
         "meaning": "Rich, Encyclopedic definition in Chinese (Wikipedia level)",
         "etymology": ${needsEtymology ? '"Detailed academic origin narrative..."' : 'null'},
+        "word_details": "Part of speech / Origin",
         "examples": [
-          {"text": "Sentence IN ${targetLang} (NOT Chinese)", "cn": "Chinese Translation"}
+          {"text": "Sentence IN ${targetLang}", "cn": "Chinese Translation"}
         ]
       }`;
     } else {
-      // 补全模式
       systemPrompt += `
       {
         "etymology": ${needsEtymology ? '"Detailed narrative..."' : 'null'},
